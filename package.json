@@ -43,6 +43,8 @@
     "unrs-resolver"
   ],
   "trustedDependencies": [
+    "lefthook",
+    "msw",
     "sharp",
     "unrs-resolver"
   ]
