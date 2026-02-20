@@ -17,6 +17,6 @@ export const writerAgent = new Agent({
   id: "writer-agent",
   name: "Writer Agent",
   instructions: WRITER_INSTRUCTIONS,
-  model: "anthropic/claude-3-5-haiku-20241022",
+  model: "openai/gpt-5.2",
   tools: {},
 });

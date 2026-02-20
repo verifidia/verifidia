@@ -71,7 +71,7 @@ const mockArticle: Article = {
     },
   ],
   relatedTopics: ["Cellular respiration", "Chlorophyll"],
-  modelUsed: "gpt-4o-mini",
+  modelUsed: "openai/gpt-5.2",
   systemPromptUsed: "write an encyclopedia article",
   sourcesConsulted: [
     {

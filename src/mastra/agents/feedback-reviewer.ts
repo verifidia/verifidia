@@ -14,7 +14,7 @@ export const feedbackReviewerAgent = new Agent({
   name: "Feedback Reviewer Agent",
   instructions:
     "You are a feedback reviewer for an AI encyclopedia. Analyze user feedback and determine if article improvements are needed. Return valid JSON only with { action: 'apply' | 'dismiss' | 'flag', reasoning: string, suggestedChange?: string }.",
-  model: "openai/gpt-4o-mini",
+  model: "openai/gpt-5.2",
   tools: {},
 });
 

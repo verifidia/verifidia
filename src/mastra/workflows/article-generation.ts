@@ -244,7 +244,7 @@ const persistArticleStep = createStep({
         content: inputData.article.sections,
         citations: inputData.citations,
         relatedTopics: inputData.article.relatedTopics,
-        modelUsed: "anthropic/claude-3-5-haiku-20241022",
+        modelUsed: "openai/gpt-5.2",
         systemPromptUsed: WRITER_INSTRUCTIONS,
         sourcesConsulted: inputData.sources,
         confidenceScore: String(inputData.confidenceScore),

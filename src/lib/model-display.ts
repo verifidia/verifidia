@@ -6,6 +6,7 @@ const MODEL_NAMES: Record<string, string> = {
   "openai/gpt-4o-mini": "GPT-4o Mini (OpenAI)",
   "openai/gpt-4.1": "GPT-4.1 (OpenAI)",
   "openai/gpt-4.1-mini": "GPT-4.1 Mini (OpenAI)",
+  "openai/gpt-5.2": "GPT-5.2 (OpenAI)",
 };
 
 export function getModelDisplayName(modelId: string): string {

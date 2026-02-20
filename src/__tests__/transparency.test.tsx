@@ -5,8 +5,8 @@ import { getModelDisplayName } from "@/lib/model-display";
 
 describe("getModelDisplayName", () => {
   it("returns human-readable name for known model", () => {
-    expect(getModelDisplayName("anthropic/claude-3-5-haiku-20241022")).toBe(
-      "Claude 3.5 Haiku (Anthropic)"
+    expect(getModelDisplayName("openai/gpt-5.2")).toBe(
+      "GPT-5.2 (OpenAI)"
     );
   });
 
@@ -17,7 +17,7 @@ describe("getModelDisplayName", () => {
 
 describe("TransparencyPanel", () => {
   const defaultProps = {
-    modelUsed: "anthropic/claude-3-5-haiku-20241022",
+    modelUsed: "openai/gpt-5.2",
     systemPromptUsed: "You are an encyclopedic writer...",
     sourcesConsulted: [{ title: "Wikipedia", url: "https://wikipedia.org" }],
     confidenceScore: 0.85,
@@ -30,7 +30,7 @@ describe("TransparencyPanel", () => {
     render(<TransparencyPanel {...defaultProps} />);
 
     expect(screen.getByText("How was this made?")).toBeInTheDocument();
-    expect(screen.queryByText("Claude 3.5 Haiku (Anthropic)")).not.toBeInTheDocument();
+    expect(screen.queryByText("GPT-5.2 (OpenAI)")).not.toBeInTheDocument();
   });
 
   it("expands panel on click", () => {
@@ -38,7 +38,7 @@ describe("TransparencyPanel", () => {
 
     fireEvent.click(screen.getByText("How was this made?").closest("button")!);
 
-    expect(screen.getByText("Claude 3.5 Haiku (Anthropic)")).toBeInTheDocument();
+    expect(screen.getByText("GPT-5.2 (OpenAI)")).toBeInTheDocument();
   });
 
   it("shows confidence score as percentage", () => {
