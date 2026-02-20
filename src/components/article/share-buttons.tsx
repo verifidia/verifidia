@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Copy, Check, Share2 } from "lucide-react";
+import { IconCopyFill18, IconCheckFill18, IconShareRightFill18 } from "nucleo-ui-fill-18";
 
 interface ShareButtonsProps {
   title: string;
@@ -33,7 +33,7 @@ export function ShareButtons({ title, url }: ShareButtonsProps) {
   return (
     <fieldset className="flex items-center gap-2 flex-wrap border-0 p-0 m-0" aria-label="Share article">
       <span className="text-sm text-muted-foreground flex items-center gap-1">
-        <Share2 className="h-4 w-4" />
+        <IconShareRightFill18 className="h-4 w-4" />
         Share:
       </span>
       
@@ -75,9 +75,9 @@ export function ShareButtons({ title, url }: ShareButtonsProps) {
         aria-label="Copy link"
       >
         {copied ? (
-          <><Check className="h-3 w-3 mr-1" /> Copied!</>
+          <><IconCheckFill18 className="h-3 w-3 mr-1" /> Copied!</>
         ) : (
-          <><Copy className="h-3 w-3 mr-1" /> Copy link</>
+          <><IconCopyFill18 className="h-3 w-3 mr-1" /> Copy link</>
         )}
       </Button>
     </fieldset>

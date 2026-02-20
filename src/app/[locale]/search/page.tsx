@@ -34,7 +34,13 @@ type SearchContentProps = {
 
 async function SearchContent({ locale, searchParams }: SearchContentProps) {
   const { q } = await searchParams;
-  const generateRoute = q ? await getArticleRoute(q, locale) : "/generate";
+  
+  let generateRoute = "/generate";
+  try {
+    generateRoute = q ? await getArticleRoute(q, locale) : "/generate";
+  } catch (error) {
+    console.error("Error getting article route:", error);
+  }
 
   let results: Array<{
     slug: string;

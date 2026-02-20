@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { Check, Loader2 } from "lucide-react";
+import { IconCheckFill18, IconLoaderFill18 } from "nucleo-ui-fill-18";
 import { useLocale } from "next-intl";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -67,7 +67,7 @@ export function GenerationStream({ topic }: GenerationStreamProps) {
                     }`}
                     aria-hidden
                   >
-                    {isDone ? <Check className="h-4 w-4" /> : isActive ? <Loader2 className="h-4 w-4 animate-spin" /> : index + 1}
+                    {isDone ? <IconCheckFill18 className="h-4 w-4" /> : isActive ? <IconLoaderFill18 className="h-4 w-4 animate-spin" /> : index + 1}
                   </span>
 
                   <p

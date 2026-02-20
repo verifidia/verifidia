@@ -1,7 +1,7 @@
 "use client";
 
 import { type FormEvent, useState } from "react";
-import { Search } from "lucide-react";
+import { IconMagnifierFill18 } from "nucleo-ui-fill-18";
 import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "@/i18n/routing";
@@ -31,7 +31,7 @@ export function SearchBar({ onSearch, locale }: SearchBarProps) {
   return (
     <form onSubmit={handleSubmit} className="mx-auto w-full max-w-3xl">
       <div className="relative">
-        <Search
+        <IconMagnifierFill18
           aria-hidden
           className="text-muted-foreground pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2"
         />

@@ -150,7 +150,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   await connection();
   const { locale, slug } = await params;
   const t = await getTranslations({ locale, namespace: "article" });
-  const article = await getArticleBySlug(slug, locale);
+  
+  let article: Article | null = null;
+  try {
+    article = await getArticleBySlug(slug, locale);
+  } catch (error) {
+    console.error("Error fetching article for metadata:", error);
+  }
 
   if (!article) {
     return {
@@ -169,7 +175,14 @@ export default async function ArticlePage({ params }: PageProps) {
   await connection();
   const { locale, slug } = await params;
   const t = await getTranslations({ locale, namespace: "article" });
-  const article = await getArticleBySlug(slug, locale);
+  
+  let article: Article | null = null;
+  try {
+    article = await getArticleBySlug(slug, locale);
+  } catch (error) {
+    // Handle database errors gracefully by showing not-found page
+    console.error("Error fetching article:", error);
+  }
 
   if (!article) {
     return (

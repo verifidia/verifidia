@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ChevronDown, ListTree } from "lucide-react";
+import { IconChevronDownFill18, IconListTreeFill18 } from "nucleo-ui-fill-18";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import type { ArticleSection } from "@/types/article";
@@ -85,10 +85,10 @@ export function TableOfContents({ sections, title }: TableOfContentsProps) {
           aria-expanded={isOpen}
         >
           <span className="inline-flex items-center gap-2">
-            <ListTree className="size-4 text-[var(--color-trust)]" />
+            <IconListTreeFill18 className="size-4 text-[var(--color-trust)]" />
             {title}
           </span>
-          <ChevronDown
+          <IconChevronDownFill18
             className={cn("size-4 transition-transform", isOpen && "rotate-180")}
           />
         </button>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Search } from "lucide-react";
+import { IconMagnifierFill18 } from "nucleo-ui-fill-18";
 import { useLocale } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "@/i18n/routing";
@@ -87,7 +87,7 @@ export function SearchInput({
   return (
     <div className="relative w-full">
       <div className="relative">
-        <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+        <IconMagnifierFill18 className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
         <Input
           value={query}
           onChange={(e) => {

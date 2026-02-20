@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ThumbsDown, ThumbsUp, MessageSquarePlus } from "lucide-react";
+import { IconThumbsDownFill18, IconThumbsUpFill18, IconMessagePlusFill18 } from "nucleo-ui-fill-18";
 import { Button } from "@/components/ui/button";
 
 type ArticleFeedbackProps = {
@@ -76,7 +76,7 @@ export function ArticleFeedback({ articleId }: ArticleFeedbackProps) {
           onClick={() => void sendQuickFeedback("thumbs_up")}
           disabled={isSubmitting}
         >
-          <ThumbsUp className="mr-1 h-4 w-4" />
+          <IconThumbsUpFill18 className="mr-1 h-4 w-4" />
           Yes
         </Button>
         <Button
@@ -86,7 +86,7 @@ export function ArticleFeedback({ articleId }: ArticleFeedbackProps) {
           onClick={() => void sendQuickFeedback("thumbs_down")}
           disabled={isSubmitting}
         >
-          <ThumbsDown className="mr-1 h-4 w-4" />
+          <IconThumbsDownFill18 className="mr-1 h-4 w-4" />
           No
         </Button>
         <Button
@@ -96,7 +96,7 @@ export function ArticleFeedback({ articleId }: ArticleFeedbackProps) {
           onClick={() => setIsExpanded((current) => !current)}
           disabled={isSubmitting}
         >
-          <MessageSquarePlus className="mr-1 h-4 w-4" />
+          <IconMessagePlusFill18 className="mr-1 h-4 w-4" />
           Add details
         </Button>
       </div>

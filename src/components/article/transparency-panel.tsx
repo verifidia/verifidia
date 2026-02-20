@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, ChevronUp, Info } from "lucide-react";
+import { IconChevronDownFill18, IconChevronUpFill18, IconCircleInfoFill18 } from "nucleo-ui-fill-18";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getModelDisplayName } from "@/lib/model-display";
@@ -53,13 +53,13 @@ export function TransparencyPanel({
         aria-expanded={isOpen}
       >
         <span className="flex items-center gap-2 font-medium">
-          <Info className="h-4 w-4" />
+          <IconCircleInfoFill18 className="h-4 w-4" />
           How was this made?
         </span>
         {isOpen ? (
-          <ChevronUp className="h-4 w-4" />
+          <IconChevronUpFill18 className="h-4 w-4" />
         ) : (
-          <ChevronDown className="h-4 w-4" />
+          <IconChevronDownFill18 className="h-4 w-4" />
         )}
       </Button>
 

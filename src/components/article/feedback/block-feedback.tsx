@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Flag } from "lucide-react";
+import { IconFlagFill18 } from "nucleo-ui-fill-18";
 import { Popover } from "radix-ui";
 import { Button } from "@/components/ui/button";
 
@@ -60,7 +60,7 @@ export function BlockFeedback({ articleId, blockIndex }: BlockFeedbackProps) {
             className="h-7 w-7 rounded-full opacity-0 transition-opacity group-hover:opacity-100"
             aria-label="Report feedback for this section"
           >
-            <Flag className="h-4 w-4" />
+            <IconFlagFill18 className="h-4 w-4" />
           </Button>
         </Popover.Trigger>
         <Popover.Portal>

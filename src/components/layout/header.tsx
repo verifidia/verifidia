@@ -1,6 +1,7 @@
 "use client";
 
-import { Menu, Moon, Sun } from "lucide-react";
+import Image from "next/image";
+import { IconMenuFill18, IconMoonFill18, IconSunFill18 } from "nucleo-ui-fill-18";
 import { useLocale, useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
@@ -17,7 +18,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { localeNames, locales, type Locale } from "@/i18n/config";
+import { localeFlagIcons, localeNames, locales, type Locale } from "@/i18n/config";
 import { Link, usePathname, useRouter } from "@/i18n/routing";
 
 const navItems = [
@@ -34,6 +35,8 @@ export function Header() {
 
   const nextTheme = resolvedTheme === "dark" ? "light" : "dark";
 
+  const CurrentFlagIcon = localeFlagIcons[locale];
+
   const switchLocale = (nextLocale: Locale) => {
     router.replace(pathname, { locale: nextLocale });
   };
@@ -43,9 +46,7 @@ export function Header() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-3">
           <Link href="/" className="inline-flex items-center gap-2 font-semibold tracking-tight">
-            <span aria-hidden className="text-lg leading-none">
-              📖
-            </span>
+            <Image src="/logo.png" alt="Verifidia" width={24} height={24} />
             <span>Verifidia</span>
           </Link>
 
@@ -61,16 +62,21 @@ export function Header() {
         <div className="hidden items-center gap-2 md:flex">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" aria-label={t("changeLanguage")}>
+              <Button variant="outline" size="sm" aria-label={t("changeLanguage")} className="gap-1.5">
+                <CurrentFlagIcon className="size-4 shrink-0" />
                 {locale.toUpperCase()}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              {locales.map((nextLocale) => (
-                <DropdownMenuItem key={nextLocale} onSelect={() => switchLocale(nextLocale)}>
-                  {nextLocale.toUpperCase()} - {localeNames[nextLocale]}
-                </DropdownMenuItem>
-              ))}
+              {locales.map((nextLocale) => {
+                const FlagIcon = localeFlagIcons[nextLocale];
+                return (
+                  <DropdownMenuItem key={nextLocale} onSelect={() => switchLocale(nextLocale)}>
+                    <FlagIcon className="size-4 shrink-0" />
+                    {nextLocale.toUpperCase()} - {localeNames[nextLocale]}
+                  </DropdownMenuItem>
+                );
+              })}
             </DropdownMenuContent>
           </DropdownMenu>
 
@@ -80,7 +86,7 @@ export function Header() {
             onClick={() => setTheme(nextTheme)}
             aria-label="Toggle theme"
           >
-            {resolvedTheme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
+            {resolvedTheme === "dark" ? <IconSunFill18 className="size-4" /> : <IconMoonFill18 className="size-4" />}
           </Button>
 
           <Button variant="default" size="sm">
@@ -95,13 +101,13 @@ export function Header() {
             onClick={() => setTheme(nextTheme)}
             aria-label="Toggle theme"
           >
-            {resolvedTheme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
+            {resolvedTheme === "dark" ? <IconSunFill18 className="size-4" /> : <IconMoonFill18 className="size-4" />}
           </Button>
 
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="outline" size="icon" aria-label="Open navigation menu">
-                <Menu className="size-4" />
+                <IconMenuFill18 className="size-4" />
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[280px] p-6">
@@ -128,11 +134,15 @@ export function Header() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    {locales.map((nextLocale) => (
-                      <DropdownMenuItem key={nextLocale} onSelect={() => switchLocale(nextLocale)}>
-                        {nextLocale.toUpperCase()} - {localeNames[nextLocale]}
-                      </DropdownMenuItem>
-                    ))}
+                    {locales.map((nextLocale) => {
+                      const FlagIcon = localeFlagIcons[nextLocale];
+                      return (
+                        <DropdownMenuItem key={nextLocale} onSelect={() => switchLocale(nextLocale)}>
+                          <FlagIcon className="size-4 shrink-0" />
+                          {nextLocale.toUpperCase()} - {localeNames[nextLocale]}
+                        </DropdownMenuItem>
+                      );
+                    })}
                   </DropdownMenuContent>
                 </DropdownMenu>
 
