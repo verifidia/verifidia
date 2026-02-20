@@ -1,0 +1,82 @@
+"use client";
+
+import { useState, type FormEvent } from "react";
+import { useTranslations } from "next-intl";
+import { authClient } from "@/lib/auth-client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+type EmailFormProps = {
+  type: "sign-in" | "sign-up";
+  onSuccess: (email: string) => void;
+};
+
+export function EmailForm({ type, onSuccess }: EmailFormProps) {
+  const t = useTranslations("auth");
+  const commonT = useTranslations("common");
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const trimmedEmail = email.trim();
+    if (!trimmedEmail) {
+      setError("Please enter your email address.");
+      return;
+    }
+
+    setError(null);
+    setIsLoading(true);
+
+    const otpType = type === "sign-up" ? "email-verification" : "sign-in";
+
+    try {
+      const response = await authClient.emailOtp.sendVerificationOtp({
+        email: trimmedEmail,
+        type: otpType,
+      });
+
+      if (response.error) {
+        throw new Error(response.error.message ?? commonT("error"));
+      }
+
+      onSuccess(trimmedEmail);
+    } catch (submitError) {
+      setError(
+        submitError instanceof Error ? submitError.message : commonT("error")
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <form className="space-y-4" onSubmit={handleSubmit}>
+      <div className="space-y-2">
+        <label className="text-sm font-medium" htmlFor="auth-email">
+          {t("email")}
+        </label>
+        <Input
+          autoComplete="email"
+          id="auth-email"
+          inputMode="email"
+          onChange={(event) => setEmail(event.target.value)}
+          placeholder="you@example.com"
+          required
+          type="email"
+          value={email}
+        />
+      </div>
+      {error ? (
+        <p className="text-sm text-destructive" role="alert">
+          {error}
+        </p>
+      ) : null}
+      <Button className="w-full" disabled={isLoading} type="submit">
+        {isLoading ? commonT("loading") : t("sendCode")}
+      </Button>
+    </form>
+  );
+}

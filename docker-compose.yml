@@ -1,0 +1,14 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    ports:
+      - "2026:5432"
+    environment:
+      POSTGRES_USER: verifidia
+      POSTGRES_PASSWORD: verifidia
+      POSTGRES_DB: verifidia
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

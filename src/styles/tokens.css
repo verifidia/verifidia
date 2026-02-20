@@ -1,0 +1,41 @@
+/* Verifidia Design Tokens */
+
+:root {
+  /* Typography */
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
+
+  /* Type scale */
+  --text-article-title: 2rem;      /* 32px - article h1 */
+  --text-article-h2: 1.5rem;       /* 24px - section headings */
+  --text-article-h3: 1.25rem;      /* 20px - sub-sections */
+  --text-article-body: 1rem;       /* 16px - body text */
+  --text-article-caption: 0.875rem; /* 14px - captions, citations */
+  --text-article-code: 0.875rem;   /* 14px - inline code */
+
+  /* Brand colors */
+  --color-trust: hsl(213, 94%, 39%);     /* Trust blue - primary */
+  --color-trust-light: hsl(213, 94%, 95%); /* Soft blue background */
+  --color-verified: hsl(142, 71%, 35%);  /* Verification green */
+  --color-warning: hsl(38, 92%, 45%);    /* Warning amber */
+  --color-danger: hsl(0, 72%, 51%);      /* Danger red */
+
+  /* Article layout */
+  --article-max-width: 720px;
+  --article-toc-width: 240px;
+  --article-gap: 2rem;
+  --article-padding: 1.5rem;
+
+  /* Confidence indicators */
+  --confidence-high: hsl(142, 71%, 35%);
+  --confidence-medium: hsl(38, 92%, 45%);
+  --confidence-low: hsl(0, 72%, 51%);
+}
+
+.dark {
+  --color-trust: hsl(213, 94%, 65%);
+  --color-trust-light: hsl(213, 94%, 12%);
+  --color-verified: hsl(142, 71%, 55%);
+  --color-warning: hsl(38, 92%, 65%);
+  --color-danger: hsl(0, 72%, 65%);
+}
