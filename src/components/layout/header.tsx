@@ -22,10 +22,7 @@ import {
 import { localeFlagIcons, localeNames, locales, type Locale } from "@/i18n/config";
 import { Link, usePathname, useRouter } from "@/i18n/routing";
 
-const navItems = [
-  { href: "/", key: "home" as const },
-  { href: "/about", key: "about" as const },
-];
+const navItems = [{ href: "/", key: "home" as const }];
 
 export function Header() {
   const t = useTranslations("nav");

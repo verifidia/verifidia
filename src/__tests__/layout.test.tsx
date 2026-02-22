@@ -11,7 +11,6 @@ vi.mock("next-intl", () => {
   const messages = {
     nav: {
       home: "Home",
-      about: "About",
       signIn: "Sign in",
       changeLanguage: "Change language",
     },

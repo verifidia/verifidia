@@ -2,7 +2,7 @@
 
 :root {
   /* Typography */
-  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-sans: 'Sunghyun Sans', system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
 
   /* Type scale */
