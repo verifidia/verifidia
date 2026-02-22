@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetTitle,
   SheetTrigger,
@@ -22,7 +21,6 @@ import {
 import { localeFlagIcons, localeNames, locales, type Locale } from "@/i18n/config";
 import { Link, usePathname, useRouter } from "@/i18n/routing";
 
-const navItems = [{ href: "/", key: "home" as const }];
 
 export function Header() {
   const t = useTranslations("nav");
@@ -48,13 +46,6 @@ export function Header() {
             <span>Verifidia</span>
           </Link>
 
-          <nav className="hidden items-center gap-1 md:flex" aria-label="Primary navigation">
-            {navItems.map((item) => (
-              <Button key={item.href} asChild variant="ghost" size="sm">
-                <Link href={item.href}>{t(item.key)}</Link>
-              </Button>
-            ))}
-          </nav>
         </div>
 
         <div className="hidden items-center gap-2 md:flex">
@@ -110,18 +101,6 @@ export function Header() {
             <SheetContent side="right" className="w-70 p-6">
               <SheetTitle className="mb-4">Verifidia</SheetTitle>
 
-              <nav className="flex flex-col gap-2" aria-label="Mobile navigation">
-                {navItems.map((item) => (
-                  <SheetClose asChild key={item.href}>
-                    <Link
-                      href={item.href}
-                      className="rounded-md px-3 py-2 text-sm font-medium hover:bg-accent"
-                    >
-                      {t(item.key)}
-                    </Link>
-                  </SheetClose>
-                ))}
-              </nav>
 
               <div className="mt-6 space-y-3">
                 <DropdownMenu>
