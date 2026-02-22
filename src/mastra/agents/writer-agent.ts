@@ -1,4 +1,5 @@
 import { Agent } from "@mastra/core/agent";
+import { modelConfig } from "../model";
 import { SAFETY_CONSTRAINTS } from "@/lib/safety";
 
 export const WRITER_INSTRUCTIONS = `You are an encyclopedic writer for Verifidia, an open-source AI encyclopedia. ${SAFETY_CONSTRAINTS}
@@ -17,6 +18,6 @@ export const writerAgent = new Agent({
   id: "writer-agent",
   name: "Writer Agent",
   instructions: WRITER_INSTRUCTIONS,
-  model: "openai/gpt-5.2",
+  model: modelConfig,
   tools: {},
 });

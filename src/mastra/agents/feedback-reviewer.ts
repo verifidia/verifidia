@@ -1,4 +1,5 @@
 import { Agent } from "@mastra/core/agent";
+import { modelConfig } from "../model";
 import { z } from "zod";
 
 export const feedbackReviewSchema = z.object({
@@ -14,7 +15,7 @@ export const feedbackReviewerAgent = new Agent({
   name: "Feedback Reviewer Agent",
   instructions:
     "You are a feedback reviewer for an AI encyclopedia. Analyze user feedback and determine if article improvements are needed. Return valid JSON only with { action: 'apply' | 'dismiss' | 'flag', reasoning: string, suggestedChange?: string }.",
-  model: "openai/gpt-5.2",
+  model: modelConfig,
   tools: {},
 });
 
