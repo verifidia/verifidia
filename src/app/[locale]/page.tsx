@@ -21,7 +21,7 @@ export default async function HomePage({ params }: HomePageProps) {
   return (
     <div className="space-y-14 py-8 sm:space-y-16 sm:py-12">
       <section className="mx-auto max-w-4xl space-y-6 text-center">
-        <p className="text-primary text-sm font-semibold tracking-[0.14em] uppercase">{t("title")}</p>
+        <p className="text-primary text-sm font-semibold tracking-widest uppercase">{t("title")}</p>
         <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
           The Open AI Encyclopedia
         </h1>

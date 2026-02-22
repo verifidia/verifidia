@@ -14,11 +14,11 @@
   --text-article-code: 0.875rem;   /* 14px - inline code */
 
   /* Brand colors */
-  --color-trust: hsl(213, 94%, 39%);     /* Trust blue - primary */
-  --color-trust-light: hsl(213, 94%, 95%); /* Soft blue background */
-  --color-verified: hsl(142, 71%, 35%);  /* Verification green */
-  --color-warning: hsl(38, 92%, 45%);    /* Warning amber */
-  --color-danger: hsl(0, 72%, 51%);      /* Danger red */
+  --trust: hsl(213, 94%, 39%);           /* Trust blue - primary */
+  --trust-light: hsl(213, 94%, 95%);     /* Soft blue background */
+  --verified: hsl(142, 71%, 35%);        /* Verification green */
+  --warning: hsl(38, 92%, 45%);          /* Warning amber */
+  --danger: hsl(0, 72%, 51%);            /* Danger red */
 
   /* Article layout */
   --article-max-width: 720px;
@@ -33,9 +33,9 @@
 }
 
 .dark {
-  --color-trust: hsl(213, 94%, 65%);
-  --color-trust-light: hsl(213, 94%, 12%);
-  --color-verified: hsl(142, 71%, 55%);
-  --color-warning: hsl(38, 92%, 65%);
-  --color-danger: hsl(0, 72%, 65%);
+  --trust: hsl(213, 94%, 65%);
+  --trust-light: hsl(213, 94%, 12%);
+  --verified: hsl(142, 71%, 55%);
+  --warning: hsl(38, 92%, 65%);
+  --danger: hsl(0, 72%, 65%);
 }

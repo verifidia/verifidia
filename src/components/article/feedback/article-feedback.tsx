@@ -107,7 +107,7 @@ export function ArticleFeedback({ articleId }: ArticleFeedbackProps) {
             value={content}
             onChange={(event) => setContent(event.target.value)}
             placeholder="Tell us what was missing, unclear, or inaccurate"
-            className="focus-visible:ring-ring/50 min-h-24 w-full rounded-md border bg-transparent px-3 py-2 text-sm outline-none focus-visible:ring-[3px]"
+            className="focus-visible:ring-ring/50 min-h-24 w-full rounded-md border bg-transparent px-3 py-2 text-sm outline-none focus-visible:ring"
           />
           <div className="flex justify-end">
             <Button type="button" size="sm" onClick={() => void sendDetailedFeedback()}>

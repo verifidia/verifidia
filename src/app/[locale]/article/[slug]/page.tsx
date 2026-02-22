@@ -186,12 +186,12 @@ export default async function ArticlePage({ params }: PageProps) {
 
   if (!article) {
     return (
-      <main className="mx-auto flex min-h-[60vh] w-full max-w-4xl flex-col items-start justify-center px-4 py-16 sm:px-6 lg:px-8">
+      <main className="mx-auto flex min-h-screen w-full max-w-4xl flex-col items-start justify-center px-4 py-16 sm:px-6 lg:px-8">
         <h1 className="text-3xl font-semibold tracking-tight">{t("notFound")}</h1>
         <p className="mt-3 text-muted-foreground">{t("notFoundMessage")}</p>
         <Link
           href="/"
-          className="mt-6 inline-flex rounded-md bg-[var(--color-trust)] px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
+          className="mt-6 inline-flex rounded-md bg-trust px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
         >
           {t("searchInstead")}
         </Link>

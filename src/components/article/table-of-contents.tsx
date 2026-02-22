@@ -63,7 +63,7 @@ export function TableOfContents({ sections, title }: TableOfContentsProps) {
             className={cn(
               "block rounded-md px-3 py-2 leading-snug transition-colors hover:bg-accent",
               activeSectionId === item.id
-                ? "bg-[var(--color-trust-light)] font-medium text-[var(--color-trust)]"
+                ? "bg-trust-light font-medium text-trust"
                 : "text-muted-foreground"
             )}
             onClick={() => setIsOpen(false)}
@@ -85,7 +85,7 @@ export function TableOfContents({ sections, title }: TableOfContentsProps) {
           aria-expanded={isOpen}
         >
           <span className="inline-flex items-center gap-2">
-            <IconListTreeFill18 className="size-4 text-[var(--color-trust)]" />
+            <IconListTreeFill18 className="size-4 text-trust" />
             {title}
           </span>
           <IconChevronDownFill18
@@ -97,7 +97,7 @@ export function TableOfContents({ sections, title }: TableOfContentsProps) {
 
         <div className="hidden lg:block">
           <p className="px-2 pb-2 text-sm font-semibold">{title}</p>
-          <ScrollArea className="max-h-[calc(100vh-9rem)] pr-2">{links}</ScrollArea>
+          <ScrollArea className="max-h-svh pr-2">{links}</ScrollArea>
         </div>
       </div>
     </aside>

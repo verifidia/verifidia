@@ -107,7 +107,7 @@ export function Header() {
                 <IconMenuFill18 className="size-4" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[280px] p-6">
+            <SheetContent side="right" className="w-70 p-6">
               <SheetTitle className="mb-4">Verifidia</SheetTitle>
 
               <nav className="flex flex-col gap-2" aria-label="Mobile navigation">

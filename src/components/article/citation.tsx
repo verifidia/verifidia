@@ -18,10 +18,10 @@ export function Citation({ index, citation }: CitationProps) {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <sup className="ml-1 align-super text-[0.75rem] leading-none">
+          <sup className="ml-1 align-super text-xs leading-none">
             <a
               href={`#ref-${index}`}
-              className="font-medium text-[var(--color-trust)] no-underline hover:underline"
+              className="font-medium text-trust no-underline hover:underline"
               aria-label={`Reference ${index}`}
             >
               [{index}]
@@ -38,7 +38,7 @@ export function Citation({ index, citation }: CitationProps) {
             href={citation.url}
             target="_blank"
             rel="noreferrer"
-            className="mt-2 block text-xs font-medium text-[var(--color-trust)] underline decoration-dotted underline-offset-2"
+            className="mt-2 block text-xs font-medium text-trust underline decoration-dotted underline-offset-2"
           >
             {citation.url}
           </a>

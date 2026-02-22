@@ -78,7 +78,7 @@ export function BlockFeedback({ articleId, blockIndex }: BlockFeedbackProps) {
                 <select
                   value={feedbackType}
                   onChange={(event) => setFeedbackType(event.target.value as BlockFeedbackType)}
-                  className="focus-visible:ring-ring/50 border-input h-9 w-full rounded-md border bg-transparent px-2 text-sm outline-none focus-visible:ring-[3px]"
+                  className="focus-visible:ring-ring/50 border-input h-9 w-full rounded-md border bg-transparent px-2 text-sm outline-none focus-visible:ring"
                 >
                   {Object.entries(feedbackTypeLabels).map(([value, label]) => (
                     <option key={value} value={value}>
@@ -93,7 +93,7 @@ export function BlockFeedback({ articleId, blockIndex }: BlockFeedbackProps) {
                   value={content}
                   onChange={(event) => setContent(event.target.value)}
                   placeholder="Describe what should be improved"
-                  className="focus-visible:ring-ring/50 min-h-24 w-full rounded-md border bg-transparent px-3 py-2 text-sm outline-none focus-visible:ring-[3px]"
+                  className="focus-visible:ring-ring/50 min-h-24 w-full rounded-md border bg-transparent px-3 py-2 text-sm outline-none focus-visible:ring"
                 />
               </label>
               <div className="flex justify-end">

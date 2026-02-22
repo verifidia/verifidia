@@ -44,12 +44,12 @@ export function ArticleView({ article }: ArticleViewProps) {
             <ConfidenceBanner score={article.confidenceScore} />
           </div>
 
-          <div className="mt-6 rounded-xl border border-[color:var(--color-trust)]/20 bg-[var(--color-trust-light)] px-5 py-4 shadow-sm">
+          <div className="mt-6 rounded-xl border border-trust/20 bg-trust-light px-5 py-4 shadow-sm">
             <p className="text-base leading-relaxed text-foreground/95">{article.summary}</p>
           </div>
         </header>
 
-        <div className="mt-10 grid gap-8 lg:grid-cols-[var(--article-toc-width)_minmax(0,1fr)] lg:gap-12">
+        <div className="mt-10 grid gap-8 lg:grid-cols-article lg:gap-12">
           <TableOfContents sections={article.sections} title={t("tableOfContents")} />
 
           <div className="space-y-10">
@@ -67,7 +67,7 @@ export function ArticleView({ article }: ArticleViewProps) {
                 >
                   <h2 className="text-2xl font-semibold tracking-tight">{section.heading}</h2>
 
-                  <div className="mt-4 space-y-4 text-[1.05rem] leading-8 text-foreground/90">
+                  <div className="mt-4 space-y-4 text-base leading-8 text-foreground/90">
                     {paragraphs.map((paragraph, paragraphIndex) => (
                       <p key={`${section.heading}-${paragraphIndex}`}>
                         {paragraph}
@@ -105,7 +105,7 @@ export function ArticleView({ article }: ArticleViewProps) {
                       href={citation.url}
                       target="_blank"
                       rel="noreferrer"
-                      className="font-medium text-[var(--color-trust)] underline decoration-dotted underline-offset-2"
+                      className="font-medium text-trust underline decoration-dotted underline-offset-2"
                     >
                       {citation.url}
                     </a>
@@ -126,7 +126,7 @@ export function ArticleView({ article }: ArticleViewProps) {
                   <Badge key={topic} asChild variant="outline" className="rounded-full px-3 py-1">
                     <Link
                       href={`/?q=${encodeURIComponent(topic)}`}
-                      className="text-[var(--color-trust)]"
+                      className="text-trust"
                     >
                       {topic}
                     </Link>
