@@ -86,8 +86,8 @@ export function Header() {
             {resolvedTheme === "dark" ? <IconSunFill18 className="size-4" /> : <IconMoonFill18 className="size-4" />}
           </Button>
 
-          <Button variant="default" size="sm">
-            {t("signIn")}
+          <Button asChild variant="default" size="sm">
+            <Link href="/auth/sign-in">{t("signIn")}</Link>
           </Button>
         </div>
 
@@ -143,8 +143,8 @@ export function Header() {
                   </DropdownMenuContent>
                 </DropdownMenu>
 
-                <Button className="w-full" size="sm">
-                  {t("signIn")}
+                <Button asChild className="w-full" size="sm">
+                  <Link href="/auth/sign-in">{t("signIn")}</Link>
                 </Button>
               </div>
             </SheetContent>
