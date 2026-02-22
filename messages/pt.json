@@ -91,11 +91,5 @@
     "back": "Voltar",
     "next": "Próximo",
     "beta": "Beta"
-  },
-  "footer": {
-    "openSource": "Código aberto",
-    "poweredByAI": "Desenvolvido com IA",
-    "license": "Licença MIT",
-    "github": "GitHub"
   }
 }

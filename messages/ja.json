@@ -91,11 +91,5 @@
     "back": "戻る",
     "next": "次へ",
     "beta": "ベータ"
-  },
-  "footer": {
-    "openSource": "オープンソース",
-    "poweredByAI": "AI搭載",
-    "license": "MITライセンス",
-    "github": "GitHub"
   }
 }

@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
-import { Footer } from "@/components/layout/footer";
+
 import { Header } from "@/components/layout/header";
 import { SearchBar } from "@/components/layout/search-bar";
 
@@ -18,11 +18,7 @@ vi.mock("next-intl", () => {
     search: {
       placeholder: "Search any topic...",
     },
-    footer: {
-      openSource: "Open Source",
-      poweredByAI: "Powered by AI",
-      license: "MIT License",
-    },
+
   } as const;
 
   return {
@@ -58,11 +54,7 @@ describe("Layout shell components", () => {
     expect(markup).toContain("Verifidia");
   });
 
-  it("Footer renders copyright text", () => {
-    const markup = renderToStaticMarkup(<Footer locale="en" />);
 
-    expect(markup).toContain("© 2026 Verifidia — MIT License");
-  });
 
   it("SearchBar renders input element", () => {
     const markup = renderToStaticMarkup(<SearchBar />);

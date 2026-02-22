@@ -3,7 +3,7 @@ import { getMessages } from "next-intl/server";
 import { connection } from "next/server";
 import { notFound } from "next/navigation";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Footer } from "@/components/layout/footer";
+
 import { Header } from "@/components/layout/header";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -53,7 +53,7 @@ export default async function LocaleLayout({
                 <main className="min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 py-10">
                   {children}
                 </main>
-                <Footer locale={locale as Locale} />
+
               </div>
             </TooltipProvider>
           </ThemeProvider>

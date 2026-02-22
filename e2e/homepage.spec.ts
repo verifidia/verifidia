@@ -59,12 +59,7 @@ test.describe("Homepage", () => {
     await expect(brandLink).toHaveAttribute("href", /\/en\/?$/);
   });
 
-  test("footer displays copyright and locale", async ({ page }) => {
-    const footer = page.getByRole("contentinfo");
-    await expect(footer).toBeVisible();
-    await expect(footer.getByText(/© 2026 Verifidia/)).toBeVisible();
-    await expect(footer.getByText("Locale: EN")).toBeVisible();
-  });
+
 
   test("search bar navigates to search page on Enter key", async ({ page }) => {
     const searchInput = page.getByPlaceholder("Search any topic...");

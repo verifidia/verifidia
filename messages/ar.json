@@ -91,11 +91,5 @@
     "back": "رجوع",
     "next": "التالي",
     "beta": "تجريبي"
-  },
-  "footer": {
-    "openSource": "مفتوح المصدر",
-    "poweredByAI": "مدعوم بالذكاء الاصطناعي",
-    "license": "رخصة MIT",
-    "github": "GitHub"
   }
 }
