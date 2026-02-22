@@ -15,11 +15,8 @@ export const auth = betterAuth({
   },
   plugins: [
     emailOTP({
-      async sendVerificationOTP({ email, otp, type }) {
-        const subject =
-          type === "sign-in"
-            ? `${otp} is your Verifidia sign-in code`
-            : `${otp} is your Verifidia verification code`;
+      async sendVerificationOTP({ email, otp }) {
+        const subject = `${otp} is your Verifidia sign-in code`;
 
         const resend = new Resend(process.env.RESEND_API_KEY);
         await resend.emails.send({

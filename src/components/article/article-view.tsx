@@ -6,12 +6,19 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Link } from "@/i18n/routing";
 import { Citation } from "@/components/article/citation";
-import { ConfidenceBanner } from "@/components/article/confidence-banner";
+
+import { RefutableParagraph } from "@/components/article/feedback/refutable-paragraph";
 import { TableOfContents } from "@/components/article/table-of-contents";
 import type { Article } from "@/types/article";
 
+type RelatedTopicLink = {
+  name: string;
+  href: string;
+};
+
 type ArticleViewProps = {
   article: Article;
+  relatedTopicLinks: RelatedTopicLink[];
 };
 
 function formatGeneratedDate(date: Date, locale: string) {
@@ -21,7 +28,7 @@ function formatGeneratedDate(date: Date, locale: string) {
   }).format(date);
 }
 
-export function ArticleView({ article }: ArticleViewProps) {
+export function ArticleView({ article, relatedTopicLinks }: ArticleViewProps) {
   const t = useTranslations("article");
 
   const generatedDate = useMemo(
@@ -37,16 +44,8 @@ export function ArticleView({ article }: ArticleViewProps) {
             {article.title}
           </h1>
           <p className="mt-3 text-sm text-muted-foreground">
-            {t("generatedAt", { date: generatedDate })}
+            {t("generatedAt", { date: generatedDate })} · {article.summary}
           </p>
-
-          <div className="mt-5">
-            <ConfidenceBanner score={article.confidenceScore} />
-          </div>
-
-          <div className="mt-6 rounded-xl border border-trust/20 bg-trust-light px-5 py-4 shadow-sm">
-            <p className="text-base leading-relaxed text-foreground/95">{article.summary}</p>
-          </div>
         </header>
 
         <div className="mt-10 grid gap-8 lg:grid-cols-article lg:gap-12">
@@ -69,7 +68,12 @@ export function ArticleView({ article }: ArticleViewProps) {
 
                   <div className="mt-4 space-y-4 text-base leading-8 text-foreground/90">
                     {paragraphs.map((paragraph, paragraphIndex) => (
-                      <p key={`${section.heading}-${paragraphIndex}`}>
+                      <RefutableParagraph
+                        key={`${section.heading}-${paragraphIndex}`}
+                        articleId={article.id}
+                        sectionIndex={sectionIndex}
+                        paragraphIndex={paragraphIndex}
+                      >
                         {paragraph}
                         {paragraphIndex === 0 &&
                           section.citations.map((citationIndex) => {
@@ -77,7 +81,6 @@ export function ArticleView({ article }: ArticleViewProps) {
                             if (!citation) {
                               return null;
                             }
-
                             return (
                               <Citation
                                 key={`${section.heading}-${citationIndex}`}
@@ -86,7 +89,7 @@ export function ArticleView({ article }: ArticleViewProps) {
                               />
                             );
                           })}
-                      </p>
+                      </RefutableParagraph>
                     ))}
                   </div>
                 </section>
@@ -122,13 +125,13 @@ export function ArticleView({ article }: ArticleViewProps) {
             <section>
               <h2 className="text-xl font-semibold tracking-tight">{t("relatedTopics")}</h2>
               <div className="mt-4 flex flex-wrap gap-2">
-                {article.relatedTopics.map((topic) => (
-                  <Badge key={topic} asChild variant="outline" className="rounded-full px-3 py-1">
+                {relatedTopicLinks.map((link) => (
+                  <Badge key={link.name} asChild variant="outline" className="rounded-full px-3 py-1">
                     <Link
-                      href={`/?q=${encodeURIComponent(topic)}`}
+                      href={link.href}
                       className="text-trust"
                     >
-                      {topic}
+                      {link.name}
                     </Link>
                   </Badge>
                 ))}

@@ -168,47 +168,41 @@ describe("Message files", () => {
 });
 
 describe("topicToSlug with non-Latin characters", () => {
-  it("handles Chinese characters without crashing", () => {
-    const result = topicToSlug("人工智能");
-    expect(typeof result).toBe("string");
+  it("preserves Chinese characters", () => {
+    expect(topicToSlug("人工智能")).toBe("人工智能");
   });
 
-  it("handles Japanese characters without crashing", () => {
-    const result = topicToSlug("機械学習");
-    expect(typeof result).toBe("string");
+  it("preserves Japanese characters", () => {
+    expect(topicToSlug("機械学習")).toBe("機械学習");
   });
 
-  it("handles Korean characters without crashing", () => {
-    const result = topicToSlug("인공지능");
-    expect(typeof result).toBe("string");
+  it("preserves Korean characters", () => {
+    expect(topicToSlug("인공지능")).toBe("인공지능");
   });
 
-  it("handles Arabic characters without crashing", () => {
-    const result = topicToSlug("الذكاء الاصطناعي");
-    expect(typeof result).toBe("string");
+  it("preserves Arabic characters with space-to-dash", () => {
+    expect(topicToSlug("الذكاء الاصطناعي")).toBe("الذكاء-الاصطناعي");
   });
 
-  it("handles Hindi characters without crashing", () => {
-    const result = topicToSlug("कृत्रिम बुद्धिमत्ता");
-    expect(typeof result).toBe("string");
+  it("preserves Hindi characters with space-to-dash", () => {
+    expect(topicToSlug("कृत्रिम बुद्धिमत्ता")).toBe("कृत्रिम-बुद्धिमत्ता");
   });
 
-  it("handles mixed Latin and non-Latin characters", () => {
+  it("preserves mixed Latin and non-Latin characters", () => {
     const result = topicToSlug("AI 人工智能 Technology");
-    expect(typeof result).toBe("string");
-    expect(result).toContain("ai");
-    expect(result).toContain("technology");
+    expect(result).toBe("ai-人工智能-technology");
   });
-
   it("handles empty string", () => {
-    const result = topicToSlug("");
-    expect(typeof result).toBe("string");
+    expect(topicToSlug("")).toBe("");
   });
-
   it("produces valid slugs for Latin text", () => {
     expect(topicToSlug("Machine Learning")).toBe("machine-learning");
     expect(topicToSlug("  Quantum Computing  ")).toBe("quantum-computing");
     expect(topicToSlug("AI & ML")).toBe("ai-ml");
+  });
+
+  it("strips leading and trailing dashes", () => {
+    expect(topicToSlug(" -test- ")).toBe("test");
   });
 });
 

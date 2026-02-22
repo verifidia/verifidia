@@ -45,7 +45,7 @@ export function GenerationStream({ topic }: GenerationStreamProps) {
 
 
         <div className="relative">
-          <p className="text-xs tracking-widest text-muted-foreground uppercase">Now generating</p>
+          <p className="text-xs tracking-widest text-muted-foreground uppercase">Now verifying</p>
           <h1 className="mt-3 text-3xl leading-tight font-semibold tracking-tight text-balance sm:text-4xl">
             {topic}
           </h1>
@@ -98,7 +98,7 @@ export function GenerationStream({ topic }: GenerationStreamProps) {
           {step === "error" ? (
             <div className="mt-8 rounded-xl border border-red-300/70 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-300">
               <p className="font-medium">{STEP_LABELS.error}</p>
-              <p className="mt-1">{error ?? "Something went wrong during generation."}</p>
+              <p className="mt-1">{error ?? "Something went wrong during verification."}</p>
             </div>
           ) : null}
         </div>

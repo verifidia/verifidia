@@ -1,9 +1,18 @@
 {
   "home": {
     "title": "Verifidia",
-    "subtitle": "A enciclopédia de IA de código aberto. Pesquise qualquer tema e obtenha um artigo completo com fontes citadas — gerado no seu idioma.",
+    "subtitle": "A enciclopédia verificada de código aberto. Pesquise qualquer tema e obtenha um artigo completo com fontes citadas — verificado no seu idioma.",
     "searchPlaceholder": "Pesquisar qualquer tema...",
-    "trending": "Temas em alta"
+    "trending": "Temas em alta",
+    "recentArticles": "Recently edited",
+    "recentChanges": "Recent changes",
+    "noArticlesYet": "No articles yet. Search a topic to generate one!",
+    "noChangesYet": "No recent changes.",
+    "confidence": "confidence",
+    "hoursAgo": "{hours}h ago",
+    "minutesAgo": "{minutes}m ago",
+    "daysAgo": "{days}d ago",
+    "justNow": "just now"
   },
   "nav": {
     "signIn": "Entrar",
@@ -14,8 +23,8 @@
   "search": {
     "placeholder": "Pesquisar qualquer tema...",
     "noResults": "Nenhum artigo encontrado",
-    "generatePrompt": "Gerar um artigo sobre este tema",
-    "generateButton": "Gerar artigo",
+    "generatePrompt": "Verificar um artigo sobre este tema",
+    "generateButton": "Verificar artigo",
     "searching": "Pesquisando...",
     "results": "{count} resultados encontrados"
   },
@@ -23,8 +32,8 @@
     "tableOfContents": "Índice",
     "references": "Referências",
     "relatedTopics": "Temas relacionados",
-    "generatedAt": "Gerado em {date}",
-    "generatedBy": "Gerado por IA",
+    "generatedAt": "Verificado em {date}",
+    "generatedBy": "Verificado",
     "notFound": "Artigo não encontrado",
     "notFoundMessage": "Ainda não há um artigo sobre este tema.",
     "searchInstead": "Pesquisar este tema",
@@ -50,8 +59,8 @@
     "systemPrompt": "Prompt do sistema",
     "sources": "Fontes consultadas",
     "confidence": "Pontuação de confiabilidade",
-    "generationTime": "Tempo de geração",
-    "generatedAt": "Data de geração",
+    "generationTime": "Tempo de verificação",
+    "generatedAt": "Data de verificação",
     "locale": "Idioma",
     "showPrompt": "Mostrar prompt",
     "hidePrompt": "Ocultar prompt"

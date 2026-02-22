@@ -85,14 +85,19 @@ const mockArticle: Article = {
   status: "completed",
 };
 
+
+const mockRelatedTopicLinks = [
+  { name: "Cellular respiration", href: "/generate/cellular-respiration" },
+  { name: "Chlorophyll", href: "/generate/chlorophyll" },
+];
 describe("article components", () => {
   it("renders ArticleView with article content", () => {
-    render(<ArticleView article={mockArticle} />);
+    render(<ArticleView article={mockArticle} relatedTopicLinks={mockRelatedTopicLinks} />);
 
     expect(
       screen.getByRole("heading", { name: mockArticle.title })
     ).toBeInTheDocument();
-    expect(screen.getByText(mockArticle.summary)).toBeInTheDocument();
+    expect(screen.getByText(mockArticle.summary, { exact: false })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "References" })).toBeInTheDocument();
   });
 

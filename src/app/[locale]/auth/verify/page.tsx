@@ -28,8 +28,6 @@ function VerifyPageContent() {
   const commonT = useTranslations("common");
 
   const email = searchParams.get("email") ?? "";
-  const otpType =
-    searchParams.get("type") === "sign-up" ? "email-verification" : "sign-in";
 
   const [otp, setOtp] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -58,7 +56,7 @@ function VerifyPageContent() {
     setIsLoading(true);
 
     try {
-      const response = await authClient.emailOtp.verifyEmail({ email, otp });
+      const response = await authClient.signIn.emailOtp({ email, otp });
 
       if (response.error) {
         throw new Error(response.error.message ?? commonT("error"));
@@ -86,7 +84,7 @@ function VerifyPageContent() {
     try {
       const response = await authClient.emailOtp.sendVerificationOtp({
         email,
-        type: otpType,
+        type: "sign-in",
       });
 
       if (response.error) {

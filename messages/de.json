@@ -1,9 +1,18 @@
 {
   "home": {
     "title": "Verifidia",
-    "subtitle": "Die Open-Source-KI-Enzyklopädie. Suchen Sie nach einem beliebigen Thema und erhalten Sie einen umfassenden, quellenbasierten Artikel — generiert in Ihrer Sprache.",
+    "subtitle": "Die verifizierte Open-Source-Enzyklopädie. Suchen Sie nach einem beliebigen Thema und erhalten Sie einen umfassenden, quellenbasierten Artikel — verifiziert in Ihrer Sprache.",
     "searchPlaceholder": "Thema suchen...",
-    "trending": "Trendthemen"
+    "trending": "Trendthemen",
+    "recentArticles": "Recently edited",
+    "recentChanges": "Recent changes",
+    "noArticlesYet": "No articles yet. Search a topic to generate one!",
+    "noChangesYet": "No recent changes.",
+    "confidence": "confidence",
+    "hoursAgo": "{hours}h ago",
+    "minutesAgo": "{minutes}m ago",
+    "daysAgo": "{days}d ago",
+    "justNow": "just now"
   },
   "nav": {
     "signIn": "Anmelden",
@@ -14,8 +23,8 @@
   "search": {
     "placeholder": "Thema suchen...",
     "noResults": "Keine Artikel gefunden",
-    "generatePrompt": "Einen Artikel zu diesem Thema erstellen",
-    "generateButton": "Artikel erstellen",
+    "generatePrompt": "Einen Artikel zu diesem Thema verifizieren",
+    "generateButton": "Artikel verifizieren",
     "searching": "Suche läuft...",
     "results": "{count} Ergebnisse gefunden"
   },
@@ -23,8 +32,8 @@
     "tableOfContents": "Inhaltsverzeichnis",
     "references": "Quellenangaben",
     "relatedTopics": "Verwandte Themen",
-    "generatedAt": "Generiert am {date}",
-    "generatedBy": "Von KI generiert",
+    "generatedAt": "Verifiziert am {date}",
+    "generatedBy": "Verifiziert",
     "notFound": "Artikel nicht gefunden",
     "notFoundMessage": "Zu diesem Thema gibt es noch keinen Artikel.",
     "searchInstead": "Danach suchen",
@@ -50,8 +59,8 @@
     "systemPrompt": "System-Prompt",
     "sources": "Konsultierte Quellen",
     "confidence": "Zuverlässigkeitsbewertung",
-    "generationTime": "Generierungszeit",
-    "generatedAt": "Generiert am",
+    "generationTime": "Verifizierungszeit",
+    "generatedAt": "Verifiziert am",
     "locale": "Sprache",
     "showPrompt": "Prompt anzeigen",
     "hidePrompt": "Prompt ausblenden"

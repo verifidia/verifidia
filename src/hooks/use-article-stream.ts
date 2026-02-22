@@ -10,13 +10,13 @@ export type GenerationStep =
   | "error";
 
 export const STEP_LABELS: Record<GenerationStep, string> = {
-  idle: "Preparing generation",
+  idle: "Preparing verification",
   researching: "Researching sources",
   generating: "Writing article",
   citing: "Formatting citations",
   scoring: "Scoring confidence",
-  complete: "Generation complete",
-  error: "Generation failed",
+  complete: "Verification complete",
+  error: "Verification failed",
 };
 
 export const STEP_ORDER: GenerationStep[] = [
@@ -102,12 +102,12 @@ export function useArticleStream(topic: string, locale: string) {
         const payload = (await response.json().catch(() => ({}))) as GenerateResponse;
 
         if (!response.ok) {
-          throw new Error(payload.error ?? "Generation failed");
+          throw new Error(payload.error ?? "Verification failed");
         }
 
         const generatedSlug = extractSlug(payload);
         if (!generatedSlug) {
-          throw new Error("Generation completed without a slug");
+          throw new Error("Verification completed without a slug");
         }
 
         clearProgressTimer();
@@ -119,7 +119,7 @@ export function useArticleStream(topic: string, locale: string) {
         }
 
         clearProgressTimer();
-        setError(err instanceof Error ? err.message : "Generation failed");
+        setError(err instanceof Error ? err.message : "Verification failed");
         setStep("error");
       }
     },

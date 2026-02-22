@@ -1,9 +1,18 @@
 {
   "home": {
     "title": "Verifidia",
-    "subtitle": "오픈소스 AI 백과사전. 어떤 주제든 검색하면 출처가 포함된 종합적인 문서를 만들어 드려요 — 원하는 언어로.",
+    "subtitle": "오픈소스 검증 백과사전. 어떤 주제든 검색하면 출처가 포함된 종합적인 문서를 만들어 드려요 — 원하는 언어로 검증됨.",
     "searchPlaceholder": "주제를 검색하세요...",
-    "trending": "인기 주제"
+    "trending": "인기 주제",
+    "recentArticles": "Recently edited",
+    "recentChanges": "Recent changes",
+    "noArticlesYet": "No articles yet. Search a topic to generate one!",
+    "noChangesYet": "No recent changes.",
+    "confidence": "confidence",
+    "hoursAgo": "{hours}h ago",
+    "minutesAgo": "{minutes}m ago",
+    "daysAgo": "{days}d ago",
+    "justNow": "just now"
   },
   "nav": {
     "signIn": "로그인",
@@ -14,8 +23,8 @@
   "search": {
     "placeholder": "주제를 검색하세요...",
     "noResults": "검색 결과가 없어요",
-    "generatePrompt": "이 주제로 문서를 만들어 볼까요?",
-    "generateButton": "문서 만들기",
+    "generatePrompt": "이 주제로 문서를 검증해 볼까요?",
+    "generateButton": "문서 검증하기",
     "searching": "검색 중...",
     "results": "{count}개의 결과를 찾았어요"
   },
@@ -23,8 +32,8 @@
     "tableOfContents": "목차",
     "references": "참고 문헌",
     "relatedTopics": "관련 주제",
-    "generatedAt": "{date}에 생성됨",
-    "generatedBy": "AI가 생성함",
+    "generatedAt": "{date}에 검증됨",
+    "generatedBy": "검증됨",
     "notFound": "문서를 찾을 수 없어요",
     "notFoundMessage": "이 주제에 대한 문서가 없어요.",
     "searchInstead": "검색해 보기",
@@ -50,8 +59,8 @@
     "systemPrompt": "시스템 프롬프트",
     "sources": "참고 자료",
     "confidence": "신뢰도 점수",
-    "generationTime": "생성 소요 시간",
-    "generatedAt": "생성 시점",
+    "generationTime": "검증 소요 시간",
+    "generatedAt": "검증 시점",
     "locale": "언어",
     "showPrompt": "프롬프트 보기",
     "hidePrompt": "프롬프트 숨기기"

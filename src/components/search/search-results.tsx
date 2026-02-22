@@ -29,7 +29,7 @@ export function SearchResults({ results, query, locale, generateRoute }: SearchR
           locale={locale}
           className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center rounded-md px-4 py-2"
         >
-          Generate article about &quot;{query}&quot;
+          Verify article about &quot;{query}&quot;
         </Link>
       </div>
     );

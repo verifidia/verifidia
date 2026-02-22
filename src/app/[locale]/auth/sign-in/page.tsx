@@ -22,9 +22,8 @@ export default function LoginPage() {
       <EmailForm
         onSuccess={(email) => {
           const encodedEmail = encodeURIComponent(email);
-          router.push(`/${locale}/auth/verify?email=${encodedEmail}&type=sign-in`);
+          router.push(`/${locale}/auth/verify?email=${encodedEmail}`);
         }}
-        type="sign-in"
       />
 
       <p className="text-center text-sm text-muted-foreground">

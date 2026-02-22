@@ -1,9 +1,18 @@
 {
   "home": {
     "title": "Verifidia",
-    "subtitle": "ओपन-सोर्स AI विश्वकोश। किसी भी विषय को खोजें और स्रोतों सहित एक व्यापक लेख प्राप्त करें — आपकी भाषा में।",
+    "subtitle": "ओपन-सोर्स सत्यापित विश्वकोश। किसी भी विषय को खोजें और स्रोतों सहित एक व्यापक लेख प्राप्त करें — आपकी भाषा में सत्यापित।",
     "searchPlaceholder": "कोई भी विषय खोजें...",
-    "trending": "ट्रेंडिंग विषय"
+    "trending": "ट्रेंडिंग विषय",
+    "recentArticles": "Recently edited",
+    "recentChanges": "Recent changes",
+    "noArticlesYet": "No articles yet. Search a topic to generate one!",
+    "noChangesYet": "No recent changes.",
+    "confidence": "confidence",
+    "hoursAgo": "{hours}h ago",
+    "minutesAgo": "{minutes}m ago",
+    "daysAgo": "{days}d ago",
+    "justNow": "just now"
   },
   "nav": {
     "signIn": "साइन इन",
@@ -14,8 +23,8 @@
   "search": {
     "placeholder": "कोई भी विषय खोजें...",
     "noResults": "कोई लेख नहीं मिला",
-    "generatePrompt": "इस विषय पर एक लेख बनाएं",
-    "generateButton": "लेख बनाएं",
+    "generatePrompt": "इस विषय पर एक लेख सत्यापित करें",
+    "generateButton": "लेख सत्यापित करें",
     "searching": "खोज रहे हैं...",
     "results": "{count} परिणाम मिले"
   },
@@ -23,8 +32,8 @@
     "tableOfContents": "विषय-सूची",
     "references": "संदर्भ",
     "relatedTopics": "संबंधित विषय",
-    "generatedAt": "{date} को बनाया गया",
-    "generatedBy": "AI द्वारा निर्मित",
+    "generatedAt": "{date} को सत्यापित",
+    "generatedBy": "सत्यापित",
     "notFound": "लेख नहीं मिला",
     "notFoundMessage": "इस विषय पर अभी कोई लेख नहीं है।",
     "searchInstead": "इसे खोजें",
@@ -50,8 +59,8 @@
     "systemPrompt": "सिस्टम प्रॉम्प्ट",
     "sources": "परामर्शित स्रोत",
     "confidence": "विश्वसनीयता स्कोर",
-    "generationTime": "निर्माण समय",
-    "generatedAt": "निर्माण तिथि",
+    "generationTime": "सत्यापन समय",
+    "generatedAt": "सत्यापन तिथि",
     "locale": "भाषा",
     "showPrompt": "प्रॉम्प्ट दिखाएं",
     "hidePrompt": "प्रॉम्प्ट छिपाएं"

@@ -7,11 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 type EmailFormProps = {
-  type: "sign-in" | "sign-up";
   onSuccess: (email: string) => void;
 };
 
-export function EmailForm({ type, onSuccess }: EmailFormProps) {
+export function EmailForm({ onSuccess }: EmailFormProps) {
   const t = useTranslations("auth");
   const commonT = useTranslations("common");
   const [email, setEmail] = useState("");
@@ -30,12 +29,11 @@ export function EmailForm({ type, onSuccess }: EmailFormProps) {
     setError(null);
     setIsLoading(true);
 
-    const otpType = type === "sign-up" ? "email-verification" : "sign-in";
 
     try {
       const response = await authClient.emailOtp.sendVerificationOtp({
         email: trimmedEmail,
-        type: otpType,
+        type: "sign-in",
       });
 
       if (response.error) {

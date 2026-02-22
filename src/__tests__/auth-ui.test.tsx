@@ -62,7 +62,7 @@ vi.mock("@/i18n/routing", () => ({
 describe("Auth UI", () => {
   it("EmailForm renders with email input", () => {
     const markup = renderToStaticMarkup(
-      <EmailForm onSuccess={vi.fn()} type="sign-in" />
+      <EmailForm onSuccess={vi.fn()} />
     );
 
     expect(markup).toContain('type="email"');

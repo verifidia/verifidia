@@ -13,7 +13,7 @@ test.describe("Auth pages", () => {
     ).toBeVisible();
   });
 
-  test("signup page renders heading with name and email fields", async ({
+  test("signup page renders heading with email field", async ({
     page,
   }) => {
     await page.goto("/en/auth/sign-up");
@@ -21,7 +21,7 @@ test.describe("Auth pages", () => {
     await expect(
       page.getByRole("heading", { name: /create your account/i })
     ).toBeVisible();
-    await expect(page.getByLabel(/your name|name/i)).toBeVisible();
+    await expect(page.getByText(/enter your email/i)).toBeVisible();
     await expect(page.getByLabel(/email/i)).toBeVisible();
     await expect(
       page.getByRole("button", { name: /send verification code/i })

@@ -68,6 +68,6 @@ describe("SearchResults", () => {
         />
       );
 
-    expect(screen.getByText(/Generate article/)).toBeInTheDocument();
+    expect(screen.getByText(/Verify article/)).toBeInTheDocument();
   });
 });

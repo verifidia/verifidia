@@ -3,6 +3,7 @@ import { db } from "@/db";
 import { articles } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 import { checkCachedTopics } from "@/lib/related-topics";
+import { topicToSlug } from "@/lib/article-router";
 
 export async function GET(
   request: NextRequest,
@@ -27,7 +28,7 @@ export async function GET(
 
     const topics = relatedTopics.map(topic => ({
       name: topic,
-      slug: cachedMap.get(topic) ?? topic.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, ""),
+      slug: cachedMap.get(topic) ?? topicToSlug(topic),
       cached: cachedMap.has(topic),
     }));
 

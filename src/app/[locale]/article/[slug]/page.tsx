@@ -7,6 +7,8 @@ import { Link } from "@/i18n/routing";
 import { db } from "@/db";
 import { articles } from "@/db/schema";
 import { ArticleView } from "@/components/article/article-view";
+import { checkCachedTopics } from "@/lib/related-topics";
+import { topicToSlug } from "@/lib/article-router";
 import type { Article, ArticleCitation, ArticleSection } from "@/types/article";
 
 type PageProps = {
@@ -199,5 +201,13 @@ export default async function ArticlePage({ params }: PageProps) {
     );
   }
 
-  return <ArticleView article={article} />;
+  const cachedMap = await checkCachedTopics(article.relatedTopics, locale);
+  const relatedTopicLinks = article.relatedTopics.map((topic) => ({
+    name: topic,
+    href: cachedMap.has(topic)
+      ? `/article/${cachedMap.get(topic)}`
+      : `/generate/${topicToSlug(topic)}`,
+  }));
+
+  return <ArticleView article={article} relatedTopicLinks={relatedTopicLinks} />;
 }

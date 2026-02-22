@@ -1,9 +1,18 @@
 {
   "home": {
     "title": "Verifidia",
-    "subtitle": "الموسوعة مفتوحة المصدر المدعومة بالذكاء الاصطناعي. ابحث عن أي موضوع واحصل على مقال شامل مع مصادر موثقة — يُنشأ بلغتك.",
+    "subtitle": "الموسوعة الموثّقة مفتوحة المصدر. ابحث عن أي موضوع واحصل على مقال شامل مع مصادر موثقة — يُتحقّق منه بلغتك.",
     "searchPlaceholder": "ابحث عن أي موضوع...",
-    "trending": "المواضيع الرائجة"
+    "trending": "المواضيع الرائجة",
+    "recentArticles": "Recently edited",
+    "recentChanges": "Recent changes",
+    "noArticlesYet": "No articles yet. Search a topic to generate one!",
+    "noChangesYet": "No recent changes.",
+    "confidence": "confidence",
+    "hoursAgo": "{hours}h ago",
+    "minutesAgo": "{minutes}m ago",
+    "daysAgo": "{days}d ago",
+    "justNow": "just now"
   },
   "nav": {
     "signIn": "تسجيل الدخول",
@@ -14,8 +23,8 @@
   "search": {
     "placeholder": "ابحث عن أي موضوع...",
     "noResults": "لم يتم العثور على مقالات",
-    "generatePrompt": "إنشاء مقال حول هذا الموضوع",
-    "generateButton": "إنشاء مقال",
+    "generatePrompt": "التحقق من مقال حول هذا الموضوع",
+    "generateButton": "التحقق من مقال",
     "searching": "جارٍ البحث...",
     "results": "تم العثور على {count} نتيجة"
   },
@@ -23,8 +32,8 @@
     "tableOfContents": "جدول المحتويات",
     "references": "المراجع",
     "relatedTopics": "مواضيع ذات صلة",
-    "generatedAt": "أُنشئ في {date}",
-    "generatedBy": "أُنشئ بواسطة الذكاء الاصطناعي",
+    "generatedAt": "تم التحقق في {date}",
+    "generatedBy": "تم التحقق منه",
     "notFound": "المقال غير موجود",
     "notFoundMessage": "لا يوجد مقال حول هذا الموضوع بعد.",
     "searchInstead": "البحث عن الموضوع",
@@ -50,8 +59,8 @@
     "systemPrompt": "أمر النظام",
     "sources": "المصادر المُستشارة",
     "confidence": "درجة الموثوقية",
-    "generationTime": "وقت الإنشاء",
-    "generatedAt": "تاريخ الإنشاء",
+    "generationTime": "وقت التحقق",
+    "generatedAt": "تاريخ التحقق",
     "locale": "اللغة",
     "showPrompt": "إظهار الأمر",
     "hidePrompt": "إخفاء الأمر"

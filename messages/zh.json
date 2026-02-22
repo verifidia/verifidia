@@ -1,9 +1,18 @@
 {
   "home": {
     "title": "Verifidia",
-    "subtitle": "开源AI百科全书。搜索任意主题，获取带有引用来源的全面文章——以你的语言生成。",
+    "subtitle": "开源验证百科全书。搜索任意主题，获取带有引用来源的全面文章——以你的语言验证。",
     "searchPlaceholder": "搜索任意主题...",
-    "trending": "热门主题"
+    "trending": "热门主题",
+    "recentArticles": "Recently edited",
+    "recentChanges": "Recent changes",
+    "noArticlesYet": "No articles yet. Search a topic to generate one!",
+    "noChangesYet": "No recent changes.",
+    "confidence": "confidence",
+    "hoursAgo": "{hours}h ago",
+    "minutesAgo": "{minutes}m ago",
+    "daysAgo": "{days}d ago",
+    "justNow": "just now"
   },
   "nav": {
     "signIn": "登录",
@@ -14,8 +23,8 @@
   "search": {
     "placeholder": "搜索任意主题...",
     "noResults": "没有找到相关文章",
-    "generatePrompt": "要不要为这个主题生成一篇文章？",
-    "generateButton": "生成文章",
+    "generatePrompt": "要不要为这个主题验证一篇文章？",
+    "generateButton": "验证文章",
     "searching": "搜索中...",
     "results": "找到 {count} 条结果"
   },
@@ -23,8 +32,8 @@
     "tableOfContents": "目录",
     "references": "参考文献",
     "relatedTopics": "相关主题",
-    "generatedAt": "生成于 {date}",
-    "generatedBy": "AI 生成",
+    "generatedAt": "验证于 {date}",
+    "generatedBy": "已验证",
     "notFound": "未找到文章",
     "notFoundMessage": "这个主题还没有文章。",
     "searchInstead": "搜索此主题",
@@ -50,8 +59,8 @@
     "systemPrompt": "系统提示词",
     "sources": "参考来源",
     "confidence": "可信度评分",
-    "generationTime": "生成耗时",
-    "generatedAt": "生成时间",
+    "generationTime": "验证耗时",
+    "generatedAt": "验证时间",
     "locale": "语言",
     "showPrompt": "显示提示词",
     "hidePrompt": "隐藏提示词"

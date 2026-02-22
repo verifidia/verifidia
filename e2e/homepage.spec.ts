@@ -7,10 +7,10 @@ test.describe("Homepage", () => {
 
   test("renders hero heading and tagline", async ({ page }) => {
     await expect(
-      page.getByRole("heading", { name: /the open ai encyclopedia/i })
+      page.getByRole("heading", { name: /the open verified encyclopedia/i })
     ).toBeVisible();
     await expect(
-      page.getByText(/ai-generated articles with full transparency/i)
+      page.getByText(/verified articles with full transparency/i)
     ).toBeVisible();
   });
 
@@ -31,7 +31,7 @@ test.describe("Homepage", () => {
       page.getByRole("heading", { name: /how it works/i })
     ).toBeVisible();
     await expect(page.getByText("Search", { exact: true })).toBeVisible();
-    await expect(page.getByText("Generate", { exact: true })).toBeVisible();
+    await expect(page.getByText("Verify", { exact: true })).toBeVisible();
     await expect(page.getByText("Read", { exact: true })).toBeVisible();
   });
 

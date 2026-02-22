@@ -1,9 +1,18 @@
 {
   "home": {
     "title": "Verifidia",
-    "subtitle": "オープンソースAI百科事典。あらゆるトピックを検索すると、出典付きの包括的な記事が生成されます — お好みの言語で。",
+    "subtitle": "オープンソースの検証済み百科事典。あらゆるトピックを検索すると、出典付きの包括的な記事が提供されます — お好みの言語で検証済み。",
     "searchPlaceholder": "トピックを検索...",
-    "trending": "トレンドのトピック"
+    "trending": "トレンドのトピック",
+    "recentArticles": "Recently edited",
+    "recentChanges": "Recent changes",
+    "noArticlesYet": "No articles yet. Search a topic to generate one!",
+    "noChangesYet": "No recent changes.",
+    "confidence": "confidence",
+    "hoursAgo": "{hours}h ago",
+    "minutesAgo": "{minutes}m ago",
+    "daysAgo": "{days}d ago",
+    "justNow": "just now"
   },
   "nav": {
     "signIn": "ログイン",
@@ -14,8 +23,8 @@
   "search": {
     "placeholder": "トピックを検索...",
     "noResults": "記事が見つかりませんでした",
-    "generatePrompt": "このトピックで記事を作ってみませんか？",
-    "generateButton": "記事を作成",
+    "generatePrompt": "このトピックで記事を検証してみませんか？",
+    "generateButton": "記事を検証",
     "searching": "検索中...",
     "results": "{count}件の結果が見つかりました"
   },
@@ -23,8 +32,8 @@
     "tableOfContents": "目次",
     "references": "参考文献",
     "relatedTopics": "関連トピック",
-    "generatedAt": "{date}に生成",
-    "generatedBy": "AIが生成",
+    "generatedAt": "{date}に検証済み",
+    "generatedBy": "検証済み",
     "notFound": "記事が見つかりません",
     "notFoundMessage": "このトピックの記事はまだありません。",
     "searchInstead": "検索する",
@@ -50,8 +59,8 @@
     "systemPrompt": "システムプロンプト",
     "sources": "参考資料",
     "confidence": "信頼性スコア",
-    "generationTime": "生成時間",
-    "generatedAt": "生成日時",
+    "generationTime": "検証時間",
+    "generatedAt": "検証日時",
     "locale": "言語",
     "showPrompt": "プロンプトを表示",
     "hidePrompt": "プロンプトを非表示"

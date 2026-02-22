@@ -3,8 +3,8 @@ import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Verifidia — The AI Encyclopedia",
-  description: "Open-source AI-generated encyclopedia with full transparency",
+  title: "Verifidia — The Verified Encyclopedia",
+  description: "Open-source verified encyclopedia with full transparency",
   icons: {
     icon: "/favicon.ico",
     apple: "/apple-icon.png",

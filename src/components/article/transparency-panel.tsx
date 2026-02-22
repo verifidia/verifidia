@@ -86,10 +86,10 @@ export function TransparencyPanel({
 
           <div>
             <h4 className="mb-1 text-sm font-semibold tracking-wide text-muted-foreground uppercase">
-              Generation Time
+              Verification Time
             </h4>
             <p className="text-sm">
-              Generated in {generationSecs} seconds on {generatedDate}
+              Verified in {generationSecs} seconds on {generatedDate}
             </p>
           </div>
 
@@ -132,7 +132,7 @@ export function TransparencyPanel({
           </div>
 
           <Badge variant="outline" className="text-xs">
-            Generated in {locale.toUpperCase()}
+            Verified in {locale.toUpperCase()}
           </Badge>
         </div>
       ) : null}

@@ -1,9 +1,18 @@
 {
   "home": {
     "title": "Verifidia",
-    "subtitle": "L'encyclopédie IA open source. Recherchez n'importe quel sujet et obtenez un article complet et sourcé — généré dans votre langue.",
+    "subtitle": "L'encyclopédie vérifiée open source. Recherchez n'importe quel sujet et obtenez un article complet et sourcé — vérifié dans votre langue.",
     "searchPlaceholder": "Rechercher un sujet...",
-    "trending": "Sujets tendance"
+    "trending": "Sujets tendance",
+    "recentArticles": "Recently edited",
+    "recentChanges": "Recent changes",
+    "noArticlesYet": "No articles yet. Search a topic to generate one!",
+    "noChangesYet": "No recent changes.",
+    "confidence": "confidence",
+    "hoursAgo": "{hours}h ago",
+    "minutesAgo": "{minutes}m ago",
+    "daysAgo": "{days}d ago",
+    "justNow": "just now"
   },
   "nav": {
     "signIn": "Se connecter",
@@ -14,8 +23,8 @@
   "search": {
     "placeholder": "Rechercher un sujet...",
     "noResults": "Aucun article trouvé",
-    "generatePrompt": "Générer un article sur ce sujet",
-    "generateButton": "Générer l'article",
+    "generatePrompt": "Vérifier un article sur ce sujet",
+    "generateButton": "Vérifier l'article",
     "searching": "Recherche en cours...",
     "results": "{count} résultats trouvés"
   },
@@ -23,8 +32,8 @@
     "tableOfContents": "Table des matières",
     "references": "Références",
     "relatedTopics": "Sujets connexes",
-    "generatedAt": "Généré le {date}",
-    "generatedBy": "Généré par IA",
+    "generatedAt": "Vérifié le {date}",
+    "generatedBy": "Vérifié",
     "notFound": "Article introuvable",
     "notFoundMessage": "Il n'y a pas encore d'article sur ce sujet.",
     "searchInstead": "Rechercher ce sujet",
@@ -50,8 +59,8 @@
     "systemPrompt": "Prompt système",
     "sources": "Sources consultées",
     "confidence": "Score de fiabilité",
-    "generationTime": "Temps de génération",
-    "generatedAt": "Date de génération",
+    "generationTime": "Temps de vérification",
+    "generatedAt": "Date de vérification",
     "locale": "Langue",
     "showPrompt": "Afficher le prompt",
     "hidePrompt": "Masquer le prompt"

@@ -41,7 +41,7 @@ export function Header() {
     <header className="border-b border-border/80 bg-background">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-3">
-          <Link href="/" className="inline-flex items-center gap-2 font-semibold tracking-tight">
+          <Link href="/" className="inline-flex items-center font-semibold tracking-tight">
             <Image src={logoImg} alt="Verifidia" width={24} height={24} />
             <span>Verifidia</span>
           </Link>

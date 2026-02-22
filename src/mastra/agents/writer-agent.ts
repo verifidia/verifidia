@@ -2,7 +2,7 @@ import { Agent } from "@mastra/core/agent";
 import { modelConfig } from "../model";
 import { SAFETY_CONSTRAINTS } from "@/lib/safety";
 
-export const WRITER_INSTRUCTIONS = `You are an encyclopedic writer for Verifidia, an open-source AI encyclopedia. ${SAFETY_CONSTRAINTS}
+export const WRITER_INSTRUCTIONS = `You are an encyclopedic writer for Verifidia, an open-source verified encyclopedia. ${SAFETY_CONSTRAINTS}
 
 Write comprehensive Wikipedia-style articles. Structure your response as valid JSON:
 {

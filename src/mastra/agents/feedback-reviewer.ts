@@ -14,7 +14,7 @@ export const feedbackReviewerAgent = new Agent({
   id: "feedback-reviewer-agent",
   name: "Feedback Reviewer Agent",
   instructions:
-    "You are a feedback reviewer for an AI encyclopedia. Analyze user feedback and determine if article improvements are needed. Return valid JSON only with { action: 'apply' | 'dismiss' | 'flag', reasoning: string, suggestedChange?: string }.",
+    "You are a feedback reviewer for a verified encyclopedia. Analyze user feedback and determine if article improvements are needed. Return valid JSON only with { action: 'apply' | 'dismiss' | 'flag', reasoning: string, suggestedChange?: string }.",
   model: modelConfig,
   tools: {},
 });

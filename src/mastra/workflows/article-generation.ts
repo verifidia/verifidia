@@ -6,6 +6,7 @@ import { writerAgent, WRITER_INSTRUCTIONS } from "../agents/writer-agent";
 import { citationAgent } from "../agents/citation-agent";
 import { db } from "@/db";
 import { articles } from "@/db/schema";
+import { topicToSlug } from "@/lib/article-router";
 
 const sourceSchema = z.object({
   title: z.string(),
@@ -228,10 +229,7 @@ const persistArticleStep = createStep({
   outputSchema: z.object({ slug: z.string(), title: z.string(), confidenceScore: z.number() }),
   execute: async ({ inputData }) => {
     const startTime = Date.now();
-    const slug = inputData.topic
-      .toLowerCase()
-      .replace(/\s+/g, "-")
-      .replace(/[^a-z0-9-]/g, "");
+    const slug = topicToSlug(inputData.topic);
 
     await db
       .insert(articles)

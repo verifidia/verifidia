@@ -165,7 +165,7 @@ describe("Article Generation", () => {
   });
 
   it("generate route returns 500 when workflow fails", async () => {
-    mockStart.mockRejectedValueOnce(new Error("Generation failed in workflow"));
+    mockStart.mockRejectedValueOnce(new Error("Verification failed in workflow"));
 
     const { POST } = await import("@/app/api/generate/route");
     const request = new Request("http://localhost/api/generate", {
@@ -178,6 +178,6 @@ describe("Article Generation", () => {
     const body = await response.json();
 
     expect(response.status).toBe(500);
-    expect(body).toEqual({ error: "Generation failed in workflow" });
+    expect(body).toEqual({ error: "Verification failed in workflow" });
   });
 });

@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({ error: "Generation timed out" }, { status: 504 });
+    return NextResponse.json({ error: "Verification timed out" }, { status: 504 });
   }
 
   try {
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
     const result = await run.start({ inputData: { topic, locale } });
     return NextResponse.json(result);
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : "Generation failed";
+    const message = error instanceof Error ? error.message : "Verification failed";
     return NextResponse.json({ error: message }, { status: 500 });
   } finally {
     await releaseGenerationLock(topic, locale);
