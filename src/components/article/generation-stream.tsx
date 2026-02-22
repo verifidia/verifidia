@@ -40,7 +40,7 @@ export function GenerationStream({ topic }: GenerationStreamProps) {
   const isGenerating = step !== "complete" && step !== "error";
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-3xl items-center px-4 py-12 sm:px-6">
+    <main className="mx-auto flex  w-full max-w-3xl items-center px-4 py-12 sm:px-6">
       <section className="relative w-full overflow-hidden rounded-3xl border border-border/70 bg-card/90 p-6 shadow-2xl sm:p-8">
 
 

@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10">
+    <main className="relative flex  items-center justify-center overflow-hidden px-4 py-10">
 
       <Card className="relative w-full max-w-100 border-blue-100/80 bg-card/95 backdrop-blur">
         <CardContent className="space-y-8 px-7 py-8">

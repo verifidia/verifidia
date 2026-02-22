@@ -56,9 +56,9 @@ export default async function LocaleLayout({
             disableTransitionOnChange
           >
             <TooltipProvider>
-              <div className="bg-background text-foreground flex min-h-screen flex-col">
+              <div className="bg-background text-foreground flex  flex-col">
                 <Header />
-                <main className="min-h-screen max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 py-10">
+                <main className=" max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 py-10">
                   {children}
                 </main>
 
