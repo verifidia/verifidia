@@ -12,4 +12,5 @@ export const MODEL_ID = "openai/gpt-5.2" as const;
 export const modelConfig = {
   id: MODEL_ID,
   url: process.env.OPENAI_BASE_URL,
+  apiKey: process.env.OPENAI_API_KEY,
 } as const;
