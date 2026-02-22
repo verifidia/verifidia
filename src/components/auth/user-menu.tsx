@@ -33,7 +33,7 @@ export function UserMenu() {
   if (!session?.user) {
     return (
       <Button asChild>
-        <Link href="/auth/login">{navT("signIn")}</Link>
+        <Link href="/auth/sign-in">{navT("signIn")}</Link>
       </Button>
     );
   }
@@ -63,7 +63,7 @@ export function UserMenu() {
             event.preventDefault();
             void (async () => {
               await authClient.signOut();
-              window.location.assign(`/${locale}/auth/login`);
+              window.location.assign(`/${locale}/auth/sign-in`);
             })();
           }}
           variant="destructive"

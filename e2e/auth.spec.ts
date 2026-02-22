@@ -2,8 +2,8 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Auth pages", () => {
   test("login page renders heading and email form", async ({ page }) => {
-    await page.goto("/en/auth/login");
-    await expect(page).toHaveURL(/\/en\/auth\/login/);
+    await page.goto("/en/auth/sign-in");
+    await expect(page).toHaveURL(/\/en\/auth\/sign-in/);
     await expect(
       page.getByRole("heading", { name: /sign in to verifidia/i })
     ).toBeVisible();
@@ -16,8 +16,8 @@ test.describe("Auth pages", () => {
   test("signup page renders heading with name and email fields", async ({
     page,
   }) => {
-    await page.goto("/en/auth/signup");
-    await expect(page).toHaveURL(/\/en\/auth\/signup/);
+    await page.goto("/en/auth/sign-up");
+    await expect(page).toHaveURL(/\/en\/auth\/sign-up/);
     await expect(
       page.getByRole("heading", { name: /create your account/i })
     ).toBeVisible();
@@ -42,18 +42,18 @@ test.describe("Auth pages", () => {
   });
 
   test("login page links to signup page", async ({ page }) => {
-    await page.goto("/en/auth/login");
+    await page.goto("/en/auth/sign-in");
     const signupLink = page.getByRole("link", {
       name: /create account|sign up/i,
     });
     await signupLink.click();
-    await expect(page).toHaveURL(/\/en\/auth\/signup/);
+    await expect(page).toHaveURL(/\/en\/auth\/sign-up/);
   });
 
   test("signup page links to login page", async ({ page }) => {
-    await page.goto("/en/auth/signup");
+    await page.goto("/en/auth/sign-up");
     const loginLink = page.getByRole("link", { name: /sign in/i });
     await loginLink.click();
-    await expect(page).toHaveURL(/\/en\/auth\/login/);
+    await expect(page).toHaveURL(/\/en\/auth\/sign-in/);
   });
 });

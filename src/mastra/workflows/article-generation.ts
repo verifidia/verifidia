@@ -49,7 +49,8 @@ const researchStep = createStep({
   outputSchema: z.object({ topic: z.string(), locale: z.string(), sources: z.array(sourceSchema) }),
   execute: async ({ inputData }) => {
     const result = await researchAgent.generate(
-      `Research the topic: "${inputData.topic}". Find authoritative sources and key facts.`
+      `Research the topic: "${inputData.topic}". Find authoritative sources and key facts.`,
+      { providerOptions: { openai: { store: true } } }
     );
 
     let sources: Array<{ title: string; url: string; snippet: string }> = [];

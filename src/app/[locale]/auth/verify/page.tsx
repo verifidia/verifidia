@@ -109,7 +109,7 @@ function VerifyPageContent() {
         <h1 className="text-2xl font-semibold tracking-tight">Enter your code</h1>
         <p className="text-sm text-muted-foreground">Missing email. Please restart the sign-in flow.</p>
         <Button asChild className="w-full">
-          <Link href="/auth/login">{t("signIn")}</Link>
+          <Link href="/auth/sign-in">{t("signIn")}</Link>
         </Button>
       </section>
     );

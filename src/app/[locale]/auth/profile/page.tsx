@@ -25,7 +25,7 @@ function ProfilePageContent() {
 
   useEffect(() => {
     if (!isPending && !session?.user) {
-      router.replace(`/${locale}/auth/login`);
+      router.replace(`/${locale}/auth/sign-in`);
     }
   }, [isPending, locale, router, session?.user]);
 
@@ -60,7 +60,7 @@ function ProfilePageContent() {
         onClick={() => {
           void (async () => {
             await authClient.signOut();
-            router.replace(`/${locale}/auth/login`);
+            router.replace(`/${locale}/auth/sign-in`);
           })();
         }}
         variant="outline"
