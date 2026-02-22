@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import logoImg from "../../../public/logo.png";
 import { IconMenuFill18, IconMoonFill18, IconSunFill18 } from "nucleo-ui-fill-18";
 import { useLocale, useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
@@ -46,7 +47,7 @@ export function Header() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-3">
           <Link href="/" className="inline-flex items-center gap-2 font-semibold tracking-tight">
-            <Image src="/logo.png" alt="Verifidia" width={24} height={24} />
+            <Image src={logoImg} alt="Verifidia" width={24} height={24} />
             <span>Verifidia</span>
           </Link>
 
@@ -62,9 +63,8 @@ export function Header() {
         <div className="hidden items-center gap-2 md:flex">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" aria-label={t("changeLanguage")} className="gap-1.5">
+              <Button variant="ghost" size="icon" aria-label={t("changeLanguage")}>
                 <CurrentFlagIcon className="size-4 shrink-0" />
-                {locale.toUpperCase()}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
