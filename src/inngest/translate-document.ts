@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { eq, and } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 
 import { db } from '#/db'
 import { documents, documentTranslations } from '#/db/schema'

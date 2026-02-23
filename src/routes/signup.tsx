@@ -36,11 +36,11 @@ function SignupPage() {
     const { error: authError } = await authClient.signUp.email({
       email,
       password,
-      name: name || undefined,
+      name: name || 'Anonymous',
     })
 
     if (authError) {
-      setError(authError.message || m.auth_error_generic())
+      setError(authError.message ?? m.auth_error_generic())
       setSubmitting(false)
       return
     }

@@ -395,3 +395,10 @@
  `window.getSelection()?.removeAllRanges()` clears browser selection when opening the form
  Floating button uses `Math.min()` to prevent overflow past container right edge
  `npx @inlang/paraglide-js compile` regenerates message functions after adding new keys to `messages/en.json`
+
+## T22: Locale-Aware Document Routing + Fallback Notices (2026-02-23)
+- Added locale-aware notices in `src/routes/documents/$documentId.tsx` by comparing requested locale (`search.locale || getLocale()`) with returned locale (`doc.locale`).
+- Added fallback info banner (Nucleo `IconGlobeOutline24`, `border-primary/20`, `bg-primary/5`, `text-sm`) using new i18n key `m.doc_fallback_notice({ shownLocale, requestedLocale })`.
+- Added translation-in-progress edge case handling: when requested translation entry exists with `status === 'translating'`, page shows `m.doc_translation_in_progress()` notice.
+- Updated Translations heading to `m.doc_available_in()` while preserving the existing locale links section behavior.
+- Added `doc_fallback_notice` and `doc_translation_in_progress` to all 23 locale files in `messages/`; build triggers Paraglide compile and validates message function generation.
