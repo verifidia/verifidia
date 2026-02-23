@@ -1,6 +1,13 @@
 import { getLocale, locales, setLocale } from '#/paraglide/runtime'
 import { m } from '#/paraglide/messages'
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '#/components/ui/dropdown-menu'
+import { IconChevronDownOutline18 } from 'nucleo-ui-outline-18'
+import {
   IconUnitedStates,
   IconGermany,
   IconSpain,
@@ -26,7 +33,10 @@ import {
   IconPhilippines,
 } from 'nucleo-flags'
 
-const LOCALE_CONFIG: Record<string, { flag: React.FC<{ className?: string }>; label: string }> = {
+const LOCALE_CONFIG: Record<
+  string,
+  { flag: React.FC<{ className?: string }>; label: string }
+> = {
   en: { flag: IconUnitedStates, label: 'English' },
   de: { flag: IconGermany, label: 'Deutsch' },
   es: { flag: IconSpain, label: 'Español' },
@@ -58,32 +68,38 @@ export default function ParaglideLocaleSwitcher() {
   const CurrentFlag = current?.flag
 
   return (
-    <div className="relative flex items-center text-xs text-muted-foreground hover:text-foreground transition-colors">
-      {CurrentFlag ? (
-        <div className="absolute left-1.5 pointer-events-none flex items-center">
-          <CurrentFlag className="w-4 h-4" />
-        </div>
-      ) : null}
-      <select
-        value={currentLocale}
-        onChange={(e) => setLocale(e.target.value as typeof locales[number])}
-        aria-label={m.locale_label()}
-        className="appearance-none bg-transparent border-none rounded-sm py-1 pl-7 pr-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring cursor-pointer hover:bg-accent transition-colors font-medium"
-      >
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          aria-label={m.locale_label()}
+          className="inline-flex items-center gap-1 h-7 px-1.5 text-xs text-muted-foreground hover:text-foreground hover:bg-accent rounded-sm transition-colors font-medium"
+        >
+          {CurrentFlag && <CurrentFlag className="w-4 h-3 shrink-0" />}
+          <span className="hidden sm:inline">{current?.label}</span>
+          <IconChevronDownOutline18 className="w-3 h-3 opacity-50" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="max-h-72 overflow-y-auto">
         {locales.map((locale: string) => {
           const config = LOCALE_CONFIG[locale]
+          if (!config) return null
+          const Flag = config.flag
+          const isActive = locale === currentLocale
           return (
-            <option key={locale} value={locale} className="bg-background text-foreground">
-              {config?.label ?? locale.toUpperCase()}
-            </option>
+            <DropdownMenuItem
+              key={locale}
+              onSelect={() =>
+                setLocale(locale as (typeof locales)[number])
+              }
+              className={isActive ? 'bg-accent' : ''}
+            >
+              <Flag className="w-4 h-3 shrink-0" />
+              <span>{config.label}</span>
+            </DropdownMenuItem>
           )
         })}
-      </select>
-      <div className="pointer-events-none absolute right-1.5 flex items-center opacity-50">
-        <svg className="fill-current h-2.5 w-2.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true">
-          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-        </svg>
-      </div>
-    </div>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
