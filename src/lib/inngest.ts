@@ -13,6 +13,9 @@ export type Events = {
   'refutation/submitted': {
     data: { refutationId: string; documentId: string }
   }
+  'document/refresh.requested': {
+    data: { documentId: string }
+  }
 }
 
 export const inngest = new Inngest({

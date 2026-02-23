@@ -810,7 +810,7 @@ Max Concurrent: 6 (Wave 3)
 
 ### Wave 3: AI Pipelines (T10-T14) + API Routes (T15)
 
-- [ ] 10. Document Generation Inngest Function
+ [x] 10. Document Generation Inngest Function
 
   **What to do**:
   - Create `src/inngest/generate-document.ts` with an Inngest function triggered by `document/generation.requested` event
@@ -903,7 +903,7 @@ Max Concurrent: 6 (Wave 3)
   **Commit**: YES (group with Wave 3)
   - Message: `feat(pipeline): add generation, fact-check, translation, stale, refutation pipelines`
 
-- [ ] 11. Fact-Checking Pipeline (3-Agent Verification)
+ [x] 11. Fact-Checking Pipeline (3-Agent Verification)
 
   **What to do**:
   - Create `src/inngest/verify-document.ts` with an Inngest function triggered by `document/verification.requested`
@@ -977,7 +977,7 @@ Max Concurrent: 6 (Wave 3)
   **Commit**: YES (group with Wave 3)
   - Message: `feat(pipeline): add generation, fact-check, translation, stale, refutation pipelines`
 
-- [ ] 12. Translation Fan-Out Pipeline
+ [x] 12. Translation Fan-Out Pipeline
 
   **What to do**:
   - Create `src/inngest/translate-document.ts` with an Inngest function triggered by `document/translation.requested`
@@ -1054,7 +1054,7 @@ Max Concurrent: 6 (Wave 3)
   **Commit**: YES (group with Wave 3)
   - Message: `feat(pipeline): add generation, fact-check, translation, stale, refutation pipelines`
 
-- [ ] 13. Stale Content Cron + Keyword Fan-Out
+ [x] 13. Stale Content Cron + Keyword Fan-Out
 
   **What to do**:
   - Create `src/inngest/refresh-stale.ts` with TWO Inngest functions:
@@ -1129,7 +1129,7 @@ Max Concurrent: 6 (Wave 3)
   **Commit**: YES (group with Wave 3)
   - Message: `feat(pipeline): add generation, fact-check, translation, stale, refutation pipelines`
 
-- [ ] 14. Refutation Processing Pipeline
+ [x] 14. Refutation Processing Pipeline
 
   **What to do**:
   - Create `src/inngest/process-refutation.ts` with an Inngest function triggered by `refutation/submitted`
@@ -1206,7 +1206,7 @@ Max Concurrent: 6 (Wave 3)
   **Commit**: YES (group with Wave 3)
   - Message: `feat(pipeline): add generation, fact-check, translation, stale, refutation pipelines`
 
-- [ ] 15. API Routes: Search, Documents, Generation, Refutation
+ [x] 15. API Routes: Search, Documents, Generation, Refutation
 
   **What to do**:
   - Create TanStack Start server handler routes for all API endpoints:

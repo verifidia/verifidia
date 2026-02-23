@@ -141,3 +141,120 @@
  OpenAI client auto-reads OPENAI_API_KEY from env (no explicit config needed)
  Exa client needs explicit `process.env.EXA_API_KEY` passed to constructor
  All AI calls are async/await (non-streaming) as required by project conventions
+
+## T10: Inngest Document Generation Pipeline (2026-02-23)
+- Added `src/inngest/generate-document.ts` with `generateDocument` exported via `inngest.createFunction({ id: 'generate-document' }, { event: 'document/generation.requested' }, ...)`.
+- Implemented a 6-step durable flow using Inngest steps: `research`, `outline`, `draft`, `assemble`, `save`, and `fan-out-verification`.
+- Research step uses Exa wrapper `searchWeb()` with five topic-derived queries, dedupes by URL, and normalizes sources into `{ url, title, snippet }`.
+- Outline and draft steps use `generateStructured()` with inline Zod schemas for typed model output and deterministic parsing.
+- Assemble step composes a single Markdown document and appends `## Sources` with numbered URLs.
+- Save step updates `documents` via Drizzle with `content`, `title`, `status: 'generated'`, and JSON `sources` using `eq(documents.id, documentId)`.
+- Verification fan-out uses `step.sendEvent('fan-out-verification', { name: 'document/verification.requested', data: { documentId } })`.
+- Validation completed: `lsp_diagnostics` clean on changed TypeScript file, em-dash scan clean, and `bun run build` passed.
+
+
+## T11: Translate Document Inngest Function (2026-02-23)
+
+### Completed
+ Created `src/inngest/translate-document.ts` with Inngest function triggered by `document/translation.requested`
+ Three-step pipeline: load-source -> determine-targets -> translate-{locale} fan-out
+ Concurrency limited to 5 (`{ concurrency: { limit: 5 } }`)
+ Each locale gets its own `step.run('translate-{locale}')` for independent retryability
+ Uses `generateStructured()` with zod schema `{ title: string, content: string }`
+ Upserts into `document_translations` with `onConflictDoUpdate` on `(documentId, locale)` unique index
+ Build passes cleanly, zero LSP diagnostics
+
+### Key Patterns
+ Inngest step fan-out: `for (const locale of targetLocales) { await step.run(`translate-${locale}`, ...) }` - each step is independently retryable by Inngest
+ Drizzle upsert: `db.insert(table).values({...}).onConflictDoUpdate({ target: [table.col1, table.col2], set: {...} })`
+ `SUPPORTED_LOCALES.filter()` converts readonly tuple to mutable array - works fine for iteration
+ Do NOT set `searchVector` on documentTranslations - it's `generatedAlwaysAs` (Postgres computed column)
+ Event data has `targetLocale` (singular) but function translates to ALL locales minus canonicalLocale
+ `db.query.documents.findFirst({ where: eq(documents.id, id) })` for relational query style
+
+## T10: Document Verification Inngest Function (2026-02-23)
+- Created `src/inngest/verify-document.ts` with named export `verifyDocument` using `inngest.createFunction` and trigger `document/verification.requested`.
+- Configured function concurrency as `{ limit: 3 }` to reduce OpenAI request pressure.
+- Implemented durable flow with `step.run()` checkpoints: `load-document`, `claim-extraction`, batched `source-verification-batch-*`, `cross-reference`, and `update-status`.
+- Claim extraction uses `generateStructured()` with strict Zod schema for factual claims: `{ text, sectionIndex, confidence }`.
+- Source verification batches claims in groups of 5 and calls `searchWeb()` per claim, returning `{ claimIndex, verified, sources, notes }`.
+- Cross-reference uses `generateStructured()` with Zod schema for `{ overallScore, flaggedClaims, summary }` and evidence-focused scoring guidance.
+- Status update writes `verificationScore`, sets `status` to `verified` when score >= 70 else `flagged`, and stores `flaggedClaims` in `verificationDetails` JSON.
+- Parsed `documents.sources` defensively to support both string URL arrays and object entries with `url` keys.
+
+
+## T13: Stale Document Refresh Functions (2026-02-23)
+
+### Completed
+ Created `src/inngest/refresh-stale.ts` with two Inngest functions
+ Updated `src/lib/inngest.ts` to add `document/refresh.requested` event type
+ LSP diagnostics clean, build passes
+
+### Implementation Details
+ **checkStaleDocuments**: Cron `0 0 * * 0` (weekly Sunday midnight), queries `staleAt < now() AND status = 'verified'`, fans out via `step.sendEvent` array
+ **refreshDocument**: Event-triggered, 5-step workflow: research -> compare -> update -> re-verify -> re-translate
+ `step.sendEvent(stepId, events[])` supports array of events for fan-out (no need to wrap in `step.run`)
+ Section splitting: `/^(?=## )/m` lookahead regex preserves content boundaries for markdown sections
+ Only changed sections are updated (partial merge), not full document regeneration
+ After update: status reset to `generated`, staleAt reset to `now() + interval '30 days'`
+ If no significant updates found, only staleAt timer is reset (no status change)
+ Re-translation fans out to all existing locales in `documentTranslations` table
+ `UpdateComparisonSchema` uses `z.number().int().nonnegative()` for sectionIndex validation
+
+
+## T14: Process Refutation Inngest Function (2026-02-23)
+
+### Completed
+ Created `src/inngest/process-refutation.ts` with 5-step durable pipeline
+ Triggered by `refutation/submitted` event with `{ refutationId, documentId }` data
+ LSP diagnostics clean, `bun run build` passes
+
+### Step Pipeline
+1. `load-context`: Fetch refutation + document from DB, extract 500-char radius around selectedText, set status to `processing`
+2. `research`: Search Exa combining selectedText + category context hint
+3. `evaluate`: GPT structured output with VerdictSchema (verdict, confidence, reasoning, suggestedCorrection, sources)
+4. `update-refutation`: Persist verdict/confidence/reasoning/sources, set status `reviewed`, set resolvedAt
+5. `apply-if-upheld`: Only if verdict=upheld AND confidence>80; replaces selectedText in document content, resets document status to `generated`, sends verification + translation events
+
+### Key Patterns
+ `step.sendEvent` can be called directly at the step level (not nested in `step.run`)
+ Zod schema for structured AI output: `z.enum()` for verdict, `z.number().int().min(0).max(100)` for confidence
+ `CATEGORY_CONTEXT` map provides human-readable hints per refutation category for research queries and evaluation prompts
+ Only `upheld` with confidence > 80 triggers auto-apply; `partially_upheld` stays at `reviewed` status
+ After applying correction: document status reset to `generated` triggers re-verification pipeline
+ `String.replace()` used for single-occurrence text replacement in document content
+
+
+## T15: API Routes and Inngest Registration (2026-02-23)
+
+### Completed
+ Created 4 new API routes and updated inngest serve route
+ All LSP diagnostics clean, `bun run build` passes
+
+### Files Created/Modified
+- `src/routes/api/search.ts` - GET with FTS on documentTranslations.searchVector
+- `src/routes/api/documents/$documentId.ts` - GET with translation fallback
+- `src/routes/api/documents/request.ts` - POST with auth, slug dedup, Inngest event
+- `src/routes/api/documents/$documentId/refute.ts` - POST with auth, Zod validation, Inngest event
+- `src/routes/api/inngest.ts` - Updated to register 6 Inngest functions
+
+### Key Patterns
+ TanStack Start server handlers use `({ request }) => Response` pattern
+ For parameterized routes ($documentId), extract ID from URL: `new URL(request.url).pathname.split('/')[3]`
+ TanStack Router route tree auto-regenerates at build time - `FileRoutesByPath` errors resolve after build
+ Better Auth session: `auth.api.getSession({ headers: request.headers })` returns session or null
+ Drizzle FTS: `sql\`\${col.searchVector} @@ plainto_tsquery('simple', \${q})\`` with raw SQL template
+ Drizzle FTS ranking: `sql\`ts_rank(\${col.searchVector}, plainto_tsquery('simple', \${q})) desc\``
+ Drizzle innerJoin with eq: `.innerJoin(table, eq(fk, pk))`
+ Drizzle insert returning: `.insert(table).values({...}).returning({ id: table.id })` returns array
+ JSON response helper pattern: `const json = (data, status = 200) => new Response(JSON.stringify(data), { status, headers })`
+ Static routes (e.g. `/documents/request`) take priority over dynamic (`/documents/$documentId`) in TanStack Router
+ Having `$documentId.ts` and `$documentId/refute.ts` coexist is valid - parent route file + child directory
+
+### Inngest Functions Registered
+1. generateDocument (generate-document)
+2. verifyDocument (verify-document)
+3. translateDocument (translate-document)
+4. checkStaleDocuments (check-stale-documents)
+5. refreshDocument (refresh-document)
+6. processRefutation (process-refutation)

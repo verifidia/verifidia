@@ -36,7 +36,7 @@ export default function Header() {
         </div>
       </div>
       
-      {/* Mobile search bar */}
+      
       <div className="p-3 border-t border-border md:hidden bg-muted/20">
         <div className="relative w-full">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
