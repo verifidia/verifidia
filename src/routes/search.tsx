@@ -1,7 +1,6 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { z } from 'zod'
 import * as m from '#/paraglide/messages'
-import { Input } from '#/components/ui/input'
 import { Button } from '#/components/ui/button'
 import {
   IconMagnifierOutline18,
@@ -58,8 +57,6 @@ function SearchPage() {
 
   return (
     <div className="max-w-[900px] mx-auto px-6 md:px-16 lg:px-24 py-10 md:py-16">
-      <SearchInput defaultValue={q} />
-
       {q.trim() ? (
         <h2 className="text-lg font-semibold text-foreground mb-4 mt-10">
           {m.search_results_title()}
@@ -80,42 +77,6 @@ function SearchPage() {
         <Pagination page={page} hasMore={hasMore} q={q} locale={locale} />
       ) : null}
     </div>
-  )
-}
-
-function SearchInput({ defaultValue }: { defaultValue: string }) {
-  const navigate = useNavigate()
-
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    const formData = new FormData(e.currentTarget)
-    const query = (formData.get('q') as string) ?? ''
-    navigate({ to: '/search', search: { q: query.trim() } })
-  }
-
-  return (
-    <search className="mb-10">
-      <form onSubmit={handleSubmit}>
-        <div className="flex gap-2 w-full">
-          <div className="relative flex-1">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
-              <IconMagnifierOutline18 className="w-4 h-4" />
-            </div>
-            <Input
-              type="search"
-              name="q"
-              defaultValue={defaultValue}
-              placeholder={m.search_placeholder()}
-              aria-label={m.search_placeholder()}
-              className="pl-10 rounded-sm outline-none focus-visible:shadow-[0_0_0_2px] focus-visible:shadow-ring border-border"
-            />
-          </div>
-          <Button type="submit" variant="default" className="rounded-sm">
-            {m.search_button()}
-          </Button>
-        </div>
-      </form>
-    </search>
   )
 }
 
@@ -234,12 +195,6 @@ function EmptyState() {
 function SearchSkeleton() {
   return (
     <div className="max-w-[900px] mx-auto px-6 md:px-16 lg:px-24 py-10 md:py-16" aria-busy="true">
-      <div className="mb-10">
-        <div className="flex gap-2 w-full">
-          <div className="flex-1 h-9 bg-muted rounded-sm animate-pulse" />
-          <div className="w-20 h-9 bg-muted rounded-sm animate-pulse" />
-        </div>
-      </div>
       <div className="h-6 w-36 bg-muted rounded-sm mb-4 mt-10 animate-pulse" />
       <div className="flex flex-col gap-1">
         {Array.from({ length: 5 }, (_, i) => i + 1).map((id) => (

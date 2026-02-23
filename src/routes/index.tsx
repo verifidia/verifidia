@@ -1,10 +1,6 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
-import { useState } from 'react'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import * as m from '#/paraglide/messages'
-import { Input } from '#/components/ui/input'
-import { Button } from '#/components/ui/button'
 import {
-  IconMagnifierOutline18,
   IconShieldCheckOutline18,
   IconClockOutline18,
   IconGlobeOutline18,
@@ -39,7 +35,6 @@ function HomePage() {
   if (results.length === 0) {
     return (
       <div className="max-w-[900px] mx-auto px-6 md:px-16 lg:px-24 py-10 md:py-16">
-        <HeroSection />
         <EmptyState />
       </div>
     )
@@ -51,8 +46,6 @@ function HomePage() {
 
   return (
     <div className="max-w-[900px] mx-auto px-6 md:px-16 lg:px-24 py-10 md:py-16">
-      <HeroSection />
-
       <section className="flex flex-col gap-1 mt-10">
         <article className="w-full">
           <LeadArticleCard article={leadArticle} />
@@ -83,49 +76,6 @@ function HomePage() {
         </section>
       ) : null}
     </div>
-  )
-}
-
-function HeroSection() {
-  const navigate = useNavigate()
-  const [query, setQuery] = useState('')
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (query.trim()) {
-      navigate({ to: '/search', search: { q: query.trim() } })
-    }
-  }
-
-  return (
-    <section className="mb-10">
-      <div className="pb-6 mb-6">
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground leading-tight">
-          {m.site_title()}
-        </h1>
-        <p className="mt-2 text-base text-muted-foreground leading-relaxed">
-          {m.site_tagline()}
-        </p>
-      </div>
-
-      <form onSubmit={handleSubmit} className="flex gap-2 w-full">
-        <div className="relative flex-1">
-          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
-            <IconMagnifierOutline18 className="w-4 h-4" aria-hidden="true" />
-          </div>
-          <Input
-            type="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder={m.search_placeholder()}
-            className="pl-10 rounded-sm outline-none focus-visible:shadow-[0_0_0_2px] focus-visible:shadow-ring border-border"
-          />
-        </div>
-        <Button type="submit" variant="default" className="rounded-sm">
-          {m.search_button()}
-        </Button>
-      </form>
-    </section>
   )
 }
 
