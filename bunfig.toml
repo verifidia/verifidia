@@ -1,0 +1,2 @@
+[install]
+registry = { url = "https://registry.npmjs.org/", token = "$NUCLEO_LICENSE_KEY" }
