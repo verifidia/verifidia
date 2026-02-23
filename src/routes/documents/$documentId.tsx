@@ -15,6 +15,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Streamdown } from 'streamdown'
 import { RefutationForm } from '#/components/refutation-form'
 import { getApiUrl } from '#/lib/get-api-url'
+import { rehypeCitationChips } from '#/lib/rehype-citation-chips'
 import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
 
@@ -393,8 +394,8 @@ function DocumentView({
     setFormData(null)
   }
   return (
-    <div className="mx-auto max-w-[720px] px-6 py-10 md:px-16 md:py-16 lg:px-24">
-      <h1 className="mb-2 font-bold text-[40px] text-foreground leading-tight tracking-tight">
+    <div className="mx-auto max-w-5xl px-6 py-8 md:px-10 md:py-12">
+      <h1 className="mb-2 font-bold text-4xl text-foreground leading-tight tracking-tight">
         {doc.title ?? doc.topic}
       </h1>
 
@@ -416,7 +417,7 @@ function DocumentView({
         ref={contentRef}
       >
         {doc.content ? (
-          <Streamdown>{doc.content}</Streamdown>
+          <Streamdown rehypePlugins={[rehypeCitationChips]}>{doc.content}</Streamdown>
         ) : (
           <p className="text-muted-foreground italic">
             {m.doc_generating_message()}

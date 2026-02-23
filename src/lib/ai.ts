@@ -26,6 +26,20 @@ interface SearchResult {
   url: string
 }
 
+
+function stripLLMTracking(url: string): string {
+  try {
+    const parsed = new URL(url)
+    if (parsed.searchParams.get('utm_source') === 'openai') {
+      parsed.searchParams.delete('utm_source')
+      return parsed.toString()
+    }
+    return url
+  } catch {
+    return url
+  }
+}
+
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: citation extraction requires nested iteration over response structure
 export function extractCitations(
   response: OpenAI.Responses.Response,
@@ -42,7 +56,7 @@ export function extractCitations(
           for (const annotation of part.annotations ?? []) {
             if (
               annotation.type === 'url_citation' &&
-              !citationMap.has(annotation.url)
+              !citationMap.has(stripLLMTracking(annotation.url))
             ) {
               const start = Math.max(
                 0,
@@ -54,8 +68,9 @@ export function extractCitations(
               )
               const snippet = partText.slice(start, end).trim()
 
-              citationMap.set(annotation.url, {
-                url: annotation.url,
+              const cleanUrl = stripLLMTracking(annotation.url)
+              citationMap.set(cleanUrl, {
+                url: cleanUrl,
                 title: annotation.title ?? '',
                 text: snippet || partText.slice(0, 500),
               })
@@ -153,10 +168,10 @@ export async function generateStructured<T>(
 
   const message = completion.choices[0]?.message
   if (message?.refusal) {
-    throw new Error(`AI refused: ${message.refusal}`)
+    throw new Error(`Request refused: ${message.refusal}`)
   }
   if (!message?.parsed) {
-    throw new Error('AI returned no parsed content')
+    throw new Error('No parsed content returned')
   }
   return message.parsed
 }
@@ -175,7 +190,7 @@ export async function researchAndSynthesize(
   })
 
   if (!response.output_text) {
-    throw new Error('AI returned no content')
+    throw new Error('No content returned')
   }
   return response.output_text
 }
@@ -210,7 +225,7 @@ export async function researchAndSynthesizeDeep(
   })
 
   if (!fallback.output_text) {
-    throw new Error('AI returned no content')
+    throw new Error('No content returned')
   }
   return fallback.output_text
 }

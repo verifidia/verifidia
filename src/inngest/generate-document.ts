@@ -35,7 +35,7 @@ const DraftSchema = z.object({
 type Source = z.infer<typeof SourceSchema>
 
 const WRITER_SYSTEM_PROMPT =
-  'You are an encyclopedic writer. Write in neutral, factual tone. Use short, clear sentences. Cite sources inline as [1], [2]. Do not use em-dashes. Do not use marketing language or superlatives unless directly sourced.'
+  'You are an encyclopedic writer. Write in neutral, factual tone. Use short, clear sentences. Cite sources inline as [1], [2]. Do not use em-dashes. Do not use marketing language or superlatives unless directly sourced. Do not prefix section headings with numbers or letters (no "1)", "2)", "a)", etc.). Headings must be plain descriptive titles.'
 
 export const generateDocument = inngest.createFunction(
   {
@@ -100,8 +100,8 @@ export const generateDocument = inngest.createFunction(
           `Model: ${AI_MODEL}`,
           `Locale: ${locale}`,
           `Topic: ${topic}`,
-          'Create a clear, encyclopedic outline grounded in the provided research sources.',
-          'Return 5 to 8 sections with concrete key points.',
+          'Create a clear, encyclopedic outline grounded in the provided research sources. The document title must be concise like a Wikipedia article title (e.g. "Life", "Photosynthesis", "Climate change"), not a verbose description of the content.',
+          'Return 5 to 8 sections with concrete key points. Section headings must be plain descriptive titles without numbering prefixes (no "1)", "2)", etc.).',
           'Research sources:',
           JSON.stringify(research.sources, null, 2),
         ].join('\n\n'),

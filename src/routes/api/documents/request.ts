@@ -57,7 +57,7 @@ export const Route = createFileRoute('/api/documents/request')({
           const slug = slugify(topic)
 
           if (!slug) {
-            return json({ error: 'Could not generate slug from topic' }, 400)
+            return json({ error: 'Could not create slug from topic' }, 400)
           }
 
           const [existing] = await db

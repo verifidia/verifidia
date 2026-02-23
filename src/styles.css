@@ -181,6 +181,12 @@ code {
     @apply my-1;
   }
 
+
+  .citation-chip {
+    @apply inline-flex items-center justify-center rounded-full bg-accent px-1.5 py-0 font-medium text-muted-foreground text-xs leading-snug align-super cursor-default transition-colors hover:bg-muted hover:text-foreground;
+    font-size: 0.65em;
+  }
+
   /* Smooth transitions for interactive elements */
   button,
   a,
