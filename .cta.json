@@ -1,0 +1,35 @@
+{
+  "projectName": "verifidia",
+  "mode": "file-router",
+  "typescript": true,
+  "tailwind": true,
+  "packageManager": "bun",
+  "git": true,
+  "install": true,
+  "addOnOptions": {
+    "drizzle": {
+      "database": "postgresql"
+    }
+  },
+  "includeExamples": true,
+  "envVarValues": {},
+  "routerOnly": false,
+  "version": 1,
+  "framework": "react-cra",
+  "chosenAddOns": [
+    "tanstack-query",
+    "railway",
+    "ai",
+    "compiler",
+    "db",
+    "drizzle",
+    "form",
+    "mcp",
+    "paraglide",
+    "better-auth",
+    "shadcn",
+    "t3env",
+    "table",
+    "store"
+  ]
+}

@@ -1,5 +1,0 @@
-ignoredBuiltDependencies:
-  - sharp
-  - unrs-resolver
-onlyBuiltDependencies:
-  - nucleo-ui-fill-18
