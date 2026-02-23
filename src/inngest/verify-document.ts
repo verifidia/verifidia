@@ -185,13 +185,12 @@ export const verifyDocument = inngest.createFunction(
       )
     })
 
-    await step.run('update-status', async () => {
+    const { status } = await step.run('update-status', async () => {
       const boundedScore = Math.max(
         0,
         Math.min(100, Math.round(crossReference.overallScore))
       )
       const status = boundedScore >= 70 ? 'verified' : 'flagged'
-
       await db
         .update(documents)
         .set({
@@ -202,6 +201,18 @@ export const verifyDocument = inngest.createFunction(
           },
         })
         .where(eq(documents.id, loadedDocument.documentId))
+      return { status }
     })
+
+    if (status === 'verified') {
+      await step.sendEvent('fan-out-translation', {
+        name: 'document/translation.requested',
+        data: {
+          documentId: event.data.documentId,
+          locale: event.data.locale,
+          targetLocale: event.data.locale,
+        },
+      })
+    }
   }
 )

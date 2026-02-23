@@ -1,6 +1,6 @@
 import { EventSchemas, Inngest } from 'inngest'
 
-export interface Events {
+type Events = {
   'document/generation.requested': {
     data: { topic: string; locale: string; documentId: string }
   }
