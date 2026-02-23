@@ -1,7 +1,7 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "site_title": "Verifidia",
-  "site_tagline": "AI検証済みの知識",
+  "site_tagline": "検証済みの知識",
   "search_placeholder": "トピックを検索...",
   "search_button": "検索",
   "request_button": "この記事をリクエスト",

@@ -1,7 +1,7 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "site_title": "Verifidia",
-  "site_tagline": "Pengetahuan terverifikasi AI",
+  "site_tagline": "Pengetahuan terverifikasi",
   "search_placeholder": "Cari topik...",
   "search_button": "Cari",
   "request_button": "Minta artikel ini",

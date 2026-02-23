@@ -1,7 +1,7 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "site_title": "Verifidia",
-  "site_tagline": "ความรู้ที่ตรวจสอบโดย AI",
+  "site_tagline": "ความรู้ที่ตรวจสอบแล้ว",
   "search_placeholder": "ค้นหาหัวข้อ...",
   "search_button": "ค้นหา",
   "request_button": "ขอบทความนี้",

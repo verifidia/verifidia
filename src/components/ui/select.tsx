@@ -1,5 +1,5 @@
 import * as React from "react"
-import { IconCheckOutline24, IconChevronDownOutline24, IconChevronUpOutline24 } from "nucleo-core-outline-24"
+import { IconCheckOutline18, IconChevronDownOutline18, IconChevronUpOutline18 } from "nucleo-ui-outline-18"
 import { Select as SelectPrimitive } from "radix-ui"
 
 import { cn } from "#/lib/utils"
@@ -42,7 +42,7 @@ function SelectTrigger({
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <IconChevronDownOutline24 className="size-4 opacity-50" />
+        <IconChevronDownOutline18 className="size-4 opacity-50" />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   )
@@ -117,7 +117,7 @@ function SelectItem({
         className="absolute right-2 flex size-3.5 items-center justify-center"
       >
         <SelectPrimitive.ItemIndicator>
-          <IconCheckOutline24 className="size-4" />
+          <IconCheckOutline18 className="size-4" />
         </SelectPrimitive.ItemIndicator>
       </span>
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
@@ -151,7 +151,7 @@ function SelectScrollUpButton({
       )}
       {...props}
     >
-      <IconChevronUpOutline24 className="size-4" />
+      <IconChevronUpOutline18 className="size-4" />
     </SelectPrimitive.ScrollUpButton>
   )
 }
@@ -169,7 +169,7 @@ function SelectScrollDownButton({
       )}
       {...props}
     >
-      <IconChevronDownOutline24 className="size-4" />
+      <IconChevronDownOutline18 className="size-4" />
     </SelectPrimitive.ScrollDownButton>
   )
 }

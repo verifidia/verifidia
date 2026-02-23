@@ -5,17 +5,17 @@ import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
 import { RefutationForm } from '#/components/RefutationForm'
 import {
-  IconCircleCheckOutline24,
-  IconAlertWarningOutline24,
-  IconExternalLinkOutline24,
-  IconGlobeOutline24,
-  IconChevronDownOutline24,
-  IconChevronUpOutline24,
-  IconClockOutline24,
-  IconShieldOutline24,
-  IconQuoteOutline24,
-  IconFlagOutline24,
-} from 'nucleo-core-outline-24'
+  IconCircleCheckOutline18,
+  IconAlertWarningOutline18,
+  IconExternalLinkOutline18,
+  IconGlobeOutline18,
+  IconChevronDownOutline18,
+  IconChevronUpOutline18,
+  IconClockOutline18,
+  IconShieldOutline18,
+  IconQuoteOutline18,
+  IconFlagOutline18,
+} from 'nucleo-ui-outline-18'
 import { getApiUrl } from '#/lib/get-api-url'
 
 interface Source {
@@ -221,7 +221,7 @@ function FailedView({ title, topic }: { title: string | null; topic: string }) {
   return (
     <div className="max-w-3xl mx-auto px-4 py-20 text-center">
       <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-destructive/10 text-destructive-foreground text-sm mb-6">
-        <IconAlertWarningOutline24 className="w-4 h-4" />
+        <IconAlertWarningOutline18 className="w-4 h-4" />
         {m.status_failed()}
       </div>
       <h1 className="text-3xl font-bold tracking-tight mb-3 text-foreground">
@@ -396,7 +396,7 @@ function DocumentView({
               left: selectionData.rect.left,
             }}
           >
-            <IconFlagOutline24 className="w-3.5 h-3.5" />
+            <IconFlagOutline18 className="w-3.5 h-3.5" />
             {m.doc_refute_button()}
           </button>
         ) : null}
@@ -434,18 +434,18 @@ function MetadataBar({ document: doc }: { document: DocumentResponse }) {
 
       {doc.verificationScore !== null ? (
         <span className="inline-flex items-center gap-1.5">
-          <IconShieldOutline24 className="w-4 h-4" />
+          <IconShieldOutline18 className="w-4 h-4" />
           {m.doc_verification_score({ score: String(doc.verificationScore) })}
         </span>
       ) : null}
 
       <span className="inline-flex items-center gap-1.5">
-        <IconGlobeOutline24 className="w-4 h-4" />
+        <IconGlobeOutline18 className="w-4 h-4" />
         {doc.locale.toUpperCase()}
       </span>
 
       <span className="inline-flex items-center gap-1.5">
-        <IconClockOutline24 className="w-4 h-4" />
+        <IconClockOutline18 className="w-4 h-4" />
         {m.doc_last_updated({ date: formatDate(doc.updatedAt) })}
       </span>
     </div>
@@ -469,7 +469,7 @@ function LocaleNotice({
   return (
     <div className="mt-4 rounded-lg border border-primary/20 bg-primary/5 p-3 text-sm text-foreground">
       <p className="inline-flex items-center gap-2">
-        <IconGlobeOutline24 className="h-4 w-4 shrink-0" />
+        <IconGlobeOutline18 className="h-4 w-4 shrink-0" />
         {isTranslationInProgress
           ? m.doc_translation_in_progress()
           : m.doc_fallback_notice({
@@ -501,12 +501,12 @@ function StatusBadge({ status }: { status: DocumentResponse['status'] }) {
     verified: {
       label: m.doc_status_verified(),
       className: 'bg-[#dbeddb] text-[#1a7f37]',
-      icon: <IconCircleCheckOutline24 className="w-3.5 h-3.5" />,
+      icon: <IconCircleCheckOutline18 className="w-3.5 h-3.5" />,
     },
     flagged: {
       label: m.doc_status_flagged(),
       className: 'bg-[#fdecc8] text-[#9a6700]',
-      icon: <IconAlertWarningOutline24 className="w-3.5 h-3.5" />,
+      icon: <IconAlertWarningOutline18 className="w-3.5 h-3.5" />,
     },
     failed: {
       label: m.status_failed(),
@@ -532,7 +532,7 @@ function FlaggedWarning({ claims }: { claims: FlaggedClaim[] }) {
   return (
     <div className="mt-4 rounded-lg border border-chart-4/30 bg-chart-4/5 p-4">
       <div className="flex items-start gap-3">
-        <IconAlertWarningOutline24 className="w-5 h-5 text-chart-4 mt-0.5 shrink-0" />
+        <IconAlertWarningOutline18 className="w-5 h-5 text-chart-4 mt-0.5 shrink-0" />
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium text-foreground">
             {m.doc_flagged_warning()}
@@ -545,9 +545,9 @@ function FlaggedWarning({ claims }: { claims: FlaggedClaim[] }) {
           >
             {m.doc_flagged_claims()} ({claims.length})
             {open ? (
-              <IconChevronUpOutline24 className="w-3 h-3" />
+              <IconChevronUpOutline18 className="w-3 h-3" />
             ) : (
-              <IconChevronDownOutline24 className="w-3 h-3" />
+              <IconChevronDownOutline18 className="w-3 h-3" />
             )}
           </button>
           {open ? (
@@ -585,13 +585,13 @@ function SourcesSection({ sources }: { sources: Source[] }) {
           aria-expanded={open}
           className="flex items-center gap-2 w-full text-left hover:text-foreground/80 transition-colors rounded-sm outline-none focus-visible:ring-ring/50 focus-visible:ring-[3px]"
         >
-          <IconExternalLinkOutline24 className="w-4 h-4" />
+          <IconExternalLinkOutline18 className="w-4 h-4" />
           {m.doc_sources()} ({sources.length})
           <span className="ml-auto">
             {open ? (
-              <IconChevronUpOutline24 className="w-4 h-4 text-muted-foreground" />
+              <IconChevronUpOutline18 className="w-4 h-4 text-muted-foreground" />
             ) : (
-              <IconChevronDownOutline24 className="w-4 h-4 text-muted-foreground" />
+              <IconChevronDownOutline18 className="w-4 h-4 text-muted-foreground" />
             )}
           </span>
         </button>
@@ -643,7 +643,7 @@ function TranslationsSection({
   return (
     <section className="mt-10 border-t border-border pt-6">
       <h2 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3">
-        <IconGlobeOutline24 className="w-4 h-4" />
+        <IconGlobeOutline18 className="w-4 h-4" />
         {m.doc_available_in()}
       </h2>
       <div className="flex flex-wrap gap-2">
@@ -682,7 +682,7 @@ function RefutationsSection({
   return (
     <section className="mt-10 border-t border-border pt-6">
       <h2 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">
-        <IconFlagOutline24 className="w-4 h-4" />
+        <IconFlagOutline18 className="w-4 h-4" />
         {m.doc_refutations()} ({refutations.length})
       </h2>
       <div className="space-y-4">
@@ -700,7 +700,7 @@ function RefutationCard({ refutation: r }: { refutation: DocRefutation }) {
   return (
     <div className="rounded-sm bg-muted p-4">
       <div className="flex gap-2 mb-3">
-        <IconQuoteOutline24 className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+        <IconQuoteOutline18 className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
         <p className="text-sm text-foreground/80 italic line-clamp-3">
           {r.selectedText}
         </p>

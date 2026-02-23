@@ -14,14 +14,14 @@ import {
   SelectValue,
 } from '#/components/ui/select'
 import {
-  IconFlagOutline24,
-  IconQuoteOutline24,
-  IconXmarkOutline24,
-  IconLinkOutline24,
-  IconPenOutline24,
-  IconAlertWarningOutline24,
-  IconCircleCheckOutline24,
-} from 'nucleo-core-outline-24'
+  IconFlagOutline18,
+  IconQuoteOutline18,
+  IconXmarkOutline18,
+  IconLinkOutline18,
+  IconPenOutline18,
+  IconAlertWarningOutline18,
+  IconCircleCheckOutline18,
+} from 'nucleo-ui-outline-18'
 
 interface RefutationFormProps {
   documentId: string
@@ -116,7 +116,7 @@ export function RefutationForm({
     return (
       <div className="border border-border rounded-md bg-card p-6 mt-6 shadow-sm">
         <div className="flex items-center gap-2 text-chart-2">
-          <IconCircleCheckOutline24 className="w-5 h-5" />
+          <IconCircleCheckOutline18 className="w-5 h-5" />
           <p className="text-sm font-medium">{m.refute_success()}</p>
         </div>
       </div>
@@ -127,7 +127,7 @@ export function RefutationForm({
     <div className="border border-border rounded-md bg-card mt-6 shadow-sm">
       <div className="flex items-center justify-between px-4 py-3 border-b border-border">
         <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-          <IconFlagOutline24 className="w-4 h-4" />
+          <IconFlagOutline18 className="w-4 h-4" />
           {m.doc_refute_button()}
         </div>
         <button
@@ -135,13 +135,13 @@ export function RefutationForm({
           onClick={onClose}
           className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
         >
-          <IconXmarkOutline24 className="w-4 h-4" />
+          <IconXmarkOutline18 className="w-4 h-4" />
         </button>
       </div>
 
       <div className="p-4 space-y-4">
         <div className="flex gap-2 rounded-md bg-muted/50 p-3 border-l-2 border-muted-foreground/30">
-          <IconQuoteOutline24 className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+          <IconQuoteOutline18 className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
           <p className="text-sm text-foreground/80 italic line-clamp-4">
             {selectedText}
           </p>
@@ -166,7 +166,7 @@ export function RefutationForm({
 
           <div className="space-y-1.5">
             <Label className="flex items-center gap-1.5">
-              <IconPenOutline24 className="w-3.5 h-3.5" />
+              <IconPenOutline18 className="w-3.5 h-3.5" />
               {m.refute_note_placeholder()}
             </Label>
             <Textarea
@@ -179,7 +179,7 @@ export function RefutationForm({
 
           <div className="space-y-1.5">
             <Label className="flex items-center gap-1.5">
-              <IconLinkOutline24 className="w-3.5 h-3.5" />
+              <IconLinkOutline18 className="w-3.5 h-3.5" />
               {m.refute_source_placeholder()}
             </Label>
             <Input
@@ -196,7 +196,7 @@ export function RefutationForm({
 
           {status === 'error' && errorMessage && (
             <div className="flex items-center gap-2 text-sm text-destructive">
-              <IconAlertWarningOutline24 className="w-4 h-4 shrink-0" />
+              <IconAlertWarningOutline18 className="w-4 h-4 shrink-0" />
               {errorMessage}
             </div>
           )}
@@ -207,7 +207,7 @@ export function RefutationForm({
               disabled={status === 'submitting'}
               className="w-full"
             >
-              <IconFlagOutline24 className="w-4 h-4" />
+              <IconFlagOutline18 className="w-4 h-4" />
               {status === 'submitting'
                 ? m.auth_submitting()
                 : m.refute_submit()}

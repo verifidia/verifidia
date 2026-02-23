@@ -1,7 +1,7 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "site_title": "Verifidia",
-  "site_tagline": "Door AI geverifieerde kennis",
+  "site_tagline": "Geverifieerde kennis",
   "search_placeholder": "Zoek een onderwerp...",
   "search_button": "Zoeken",
   "request_button": "Dit artikel aanvragen",

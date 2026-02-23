@@ -1,7 +1,7 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "site_title": "Verifidia",
-  "site_tagline": "Yapay zeka doğrulamalı bilgi",
+  "site_tagline": "Doğrulanmış bilgi",
   "search_placeholder": "Bir konu arayın...",
   "search_button": "Ara",
   "request_button": "Bu makaleyi talep et",

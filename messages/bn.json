@@ -1,7 +1,7 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "site_title": "Verifidia",
-  "site_tagline": "AI-যাচাইকৃত জ্ঞান",
+  "site_tagline": "যাচাইকৃত জ্ঞান",
   "search_placeholder": "একটি বিষয় অনুসন্ধান করুন...",
   "search_button": "অনুসন্ধান",
   "request_button": "এই নিবন্ধটি অনুরোধ করুন",

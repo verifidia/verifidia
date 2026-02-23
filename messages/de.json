@@ -1,7 +1,7 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "site_title": "Verifidia",
-  "site_tagline": "KI-verifiziertes Wissen",
+  "site_tagline": "Verifiziertes Wissen",
   "search_placeholder": "Nach einem Thema suchen...",
   "search_button": "Suchen",
   "request_button": "Diesen Artikel anfordern",

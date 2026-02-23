@@ -1,7 +1,7 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "site_title": "Verifidia",
-  "site_tagline": "معرفة موثقة بالذكاء الاصطناعي",
+  "site_tagline": "معرفة موثقة",
   "search_placeholder": "البحث عن موضوع...",
   "search_button": "بحث",
   "request_button": "طلب هذا المقال",

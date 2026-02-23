@@ -1,7 +1,7 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "site_title": "Verifidia",
-  "site_tagline": "Tri thức được AI xác minh",
+  "site_tagline": "Tri thức được xác minh",
   "search_placeholder": "Tìm kiếm chủ đề...",
   "search_button": "Tìm kiếm",
   "request_button": "Yêu cầu bài viết này",

@@ -4,12 +4,12 @@ import * as m from '#/paraglide/messages'
 import { Input } from '#/components/ui/input'
 import { Button } from '#/components/ui/button'
 import {
-  IconMagnifierOutline24,
-  IconShieldCheckOutline24,
-  IconClockOutline24,
-  IconGlobeOutline24,
-  IconNewspaperOutline24,
-} from 'nucleo-core-outline-24'
+  IconMagnifierOutline18,
+  IconShieldCheckOutline18,
+  IconClockOutline18,
+  IconGlobeOutline18,
+  IconNewspaperOutline18,
+} from 'nucleo-ui-outline-18'
 import { getApiUrl } from '#/lib/get-api-url'
 
 type ArticleResult = {
@@ -111,7 +111,7 @@ function HeroSection() {
       <form onSubmit={handleSubmit} className="flex gap-2 w-full">
         <div className="relative flex-1">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
-            <IconMagnifierOutline24 className="w-4 h-4" aria-hidden="true" />
+            <IconMagnifierOutline18 className="w-4 h-4" aria-hidden="true" />
           </div>
           <Input
             type="search"
@@ -217,19 +217,19 @@ function ArticleMeta({
     <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
       {article.verificationScore != null ? (
         <span className="inline-flex items-center gap-1.5">
-          <IconShieldCheckOutline24 className="w-3.5 h-3.5" aria-hidden="true" />
+          <IconShieldCheckOutline18 className="w-3.5 h-3.5" aria-hidden="true" />
           {article.verificationScore}/100
         </span>
       ) : null}
 
       <span className="inline-flex items-center gap-1.5">
-        <IconGlobeOutline24 className="w-3.5 h-3.5" aria-hidden="true" />
+        <IconGlobeOutline18 className="w-3.5 h-3.5" aria-hidden="true" />
         {article.locale.toUpperCase()}
       </span>
 
       {formattedDate ? (
         <span className="inline-flex items-center gap-1.5">
-          <IconClockOutline24 className="w-3.5 h-3.5" aria-hidden="true" />
+          <IconClockOutline18 className="w-3.5 h-3.5" aria-hidden="true" />
           {formattedDate}
         </span>
       ) : null}
@@ -241,7 +241,7 @@ function EmptyState() {
   return (
     <div className="text-center py-20 mt-10">
       <div className="inline-flex items-center justify-center w-12 h-12 rounded-sm bg-muted mb-4">
-        <IconNewspaperOutline24 className="w-5 h-5 text-muted-foreground" aria-hidden="true" />
+        <IconNewspaperOutline18 className="w-5 h-5 text-muted-foreground" aria-hidden="true" />
       </div>
       <p className="text-base font-medium text-foreground mb-1">
         {m.home_empty_title()}

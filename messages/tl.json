@@ -1,7 +1,7 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "site_title": "Verifidia",
-  "site_tagline": "Kaalamang na-verify ng AI",
+  "site_tagline": "Na-verify na kaalaman",
   "search_placeholder": "Maghanap ng paksa...",
   "search_button": "Maghanap",
   "request_button": "Hilingin ang artikulong ito",

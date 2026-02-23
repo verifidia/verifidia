@@ -1,7 +1,7 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "site_title": "Verifidia",
-  "site_tagline": "دانش تایید شده توسط هوش مصنوعی",
+  "site_tagline": "دانش تایید شده",
   "search_placeholder": "جستجوی موضوع...",
   "search_button": "جستجو",
   "request_button": "درخواست این مقاله",

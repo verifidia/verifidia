@@ -1,7 +1,7 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "site_title": "Verifidia",
-  "site_tagline": "Знания, проверенные ИИ",
+  "site_tagline": "Проверенные знания",
   "search_placeholder": "Поиск по теме...",
   "search_button": "Поиск",
   "request_button": "Запросить эту статью",

@@ -42,8 +42,33 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     ],
     links: [
       {
+        rel: 'icon',
+        href: '/favicon.ico',
+        type: 'image/x-icon',
+      },
+      {
+        rel: 'icon',
+        href: '/logo192.png',
+        type: 'image/png',
+        sizes: '192x192',
+      },
+      {
+        rel: 'apple-touch-icon',
+        href: '/logo192.png',
+        sizes: '192x192',
+      },
+      {
+        rel: 'manifest',
+        href: '/manifest.json',
+      },
+      {
         rel: 'stylesheet',
         href: appCss,
+      },
+    ],
+    scripts: [
+      {
+        children: `(function(){var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark')}})()`,
       },
     ],
   }),

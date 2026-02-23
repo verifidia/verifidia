@@ -4,12 +4,12 @@ import * as m from '#/paraglide/messages'
 import { Input } from '#/components/ui/input'
 import { Button } from '#/components/ui/button'
 import {
-  IconMagnifierOutline24,
-  IconShieldCheckOutline24,
-  IconChevronLeftOutline24,
-  IconChevronRightOutline24,
-  IconGlobeOutline24,
-} from 'nucleo-core-outline-24'
+  IconMagnifierOutline18,
+  IconShieldCheckOutline18,
+  IconChevronLeftOutline18,
+  IconChevronRightOutline18,
+  IconGlobeOutline18,
+} from 'nucleo-ui-outline-18'
 import { getApiUrl } from '#/lib/get-api-url'
 
 const LIMIT = 20
@@ -99,7 +99,7 @@ function SearchInput({ defaultValue }: { defaultValue: string }) {
         <div className="flex gap-2 w-full">
           <div className="relative flex-1">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
-              <IconMagnifierOutline24 className="w-4 h-4" />
+              <IconMagnifierOutline18 className="w-4 h-4" />
             </div>
             <Input
               type="search"
@@ -148,13 +148,13 @@ function ResultCard({ result }: { result: SearchResult }) {
       <div className="flex items-center gap-4 text-xs text-muted-foreground">
         {result.verificationScore != null ? (
           <span className="inline-flex items-center gap-1.5">
-            <IconShieldCheckOutline24 className="w-3.5 h-3.5" />
+            <IconShieldCheckOutline18 className="w-3.5 h-3.5" />
             {m.search_verification_score({ score: String(result.verificationScore) })}
           </span>
         ) : null}
 
         <span className="inline-flex items-center gap-1.5">
-          <IconGlobeOutline24 className="w-3.5 h-3.5" />
+          <IconGlobeOutline18 className="w-3.5 h-3.5" />
           {result.locale.toUpperCase()}
         </span>
 
@@ -185,7 +185,7 @@ function Pagination({
           search={{ q, locale, page: page - 1 }}
           className="inline-flex items-center gap-1.5 rounded-sm text-sm font-medium text-muted-foreground hover:text-foreground transition-colors outline-none focus-visible:shadow-[0_0_0_2px] focus-visible:shadow-ring py-1 px-2 -ml-2"
         >
-          <IconChevronLeftOutline24 className="w-4 h-4" />
+          <IconChevronLeftOutline18 className="w-4 h-4" />
           {m.page_previous()}
         </Link>
       ) : (
@@ -203,7 +203,7 @@ function Pagination({
           className="inline-flex items-center gap-1.5 rounded-sm text-sm font-medium text-muted-foreground hover:text-foreground transition-colors outline-none focus-visible:shadow-[0_0_0_2px] focus-visible:shadow-ring py-1 px-2 -mr-2"
         >
           {m.page_next()}
-          <IconChevronRightOutline24 className="w-4 h-4" />
+          <IconChevronRightOutline18 className="w-4 h-4" />
         </Link>
       ) : (
         <div />
@@ -216,7 +216,7 @@ function EmptyState() {
   return (
     <output className="block text-center py-20 mt-10">
       <div className="inline-flex items-center justify-center w-12 h-12 rounded-sm bg-muted mb-4">
-        <IconMagnifierOutline24 className="w-5 h-5 text-muted-foreground" />
+        <IconMagnifierOutline18 className="w-5 h-5 text-muted-foreground" />
       </div>
       <p className="text-base font-medium text-foreground mb-1">
         {m.search_no_results()}
