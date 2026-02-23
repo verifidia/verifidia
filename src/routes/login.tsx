@@ -35,22 +35,22 @@ function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-12">
-      <div className="w-full max-w-sm">
+    <div className="flex flex-1 items-center justify-center px-4 py-12">
+      <div className="w-full max-w-[340px]">
         {/* Heading */}
         <div className="mb-8 text-center">
-          <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">
             {m.auth_sign_in_heading()}
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="mt-2 text-sm text-muted-foreground">
             {m.auth_sign_in_subheading()}
           </p>
         </div>
 
         {/* Form */}
-        <form onSubmit={(e) => void handleSubmit(e)} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email">{m.auth_email()}</Label>
+        <form onSubmit={(e) => void handleSubmit(e)} className="space-y-5">
+          <div className="space-y-1.5">
+            <Label htmlFor="email" className="text-xs font-medium text-muted-foreground">{m.auth_email()}</Label>
             <Input
               id="email"
               type="email"
@@ -59,13 +59,14 @@ function LoginPage() {
               required
               autoComplete="email"
               autoFocus
+              className="h-9 bg-transparent border-input rounded-sm shadow-none focus-visible:ring-1 focus-visible:ring-ring"
               aria-invalid={error ? true : undefined}
               aria-describedby={error ? "login-error" : undefined}
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="password">{m.auth_password()}</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="password" className="text-xs font-medium text-muted-foreground">{m.auth_password()}</Label>
             <Input
               id="password"
               type="password"
@@ -73,6 +74,7 @@ function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="current-password"
+              className="h-9 bg-transparent border-input rounded-sm shadow-none focus-visible:ring-1 focus-visible:ring-ring"
               aria-invalid={error ? true : undefined}
               aria-describedby={error ? "login-error" : undefined}
             />
@@ -80,7 +82,7 @@ function LoginPage() {
 
           <div aria-live="polite">
             {error ? (
-              <p id="login-error" className="text-sm text-destructive" role="alert">
+              <p id="login-error" className="text-xs text-destructive font-medium" role="alert">
                 {error}
               </p>
             ) : null}
@@ -88,7 +90,7 @@ function LoginPage() {
 
           <Button
             type="submit"
-            className="w-full"
+            className="w-full h-9 rounded-sm shadow-none font-medium"
             disabled={submitting}
           >
             {submitting ? m.auth_submitting() : m.auth_sign_in()}
@@ -100,7 +102,7 @@ function LoginPage() {
           {m.auth_no_account()}{' '}
           <Link
             to="/signup"
-            className="rounded-sm font-medium text-foreground underline-offset-4 outline-none hover:underline focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+            className="font-medium text-foreground underline underline-offset-4 decoration-border hover:decoration-foreground transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
           >
             {m.auth_no_account_link()}
           </Link>

@@ -355,8 +355,8 @@ function DocumentView({
     setFormData(null)
   }
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 md:py-12">
-      <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-4 text-foreground">
+    <div className="max-w-[720px] mx-auto px-6 md:px-16 lg:px-24 py-10 md:py-16">
+      <h1 className="text-[40px] font-bold leading-tight tracking-tight mb-2 text-foreground">
         {doc.title ?? doc.topic}
       </h1>
 
@@ -375,7 +375,7 @@ function DocumentView({
       <article
         ref={contentRef}
         data-document-content
-        className="relative mt-8 prose prose-zinc dark:prose-invert max-w-none"
+        className="relative mt-8 prose prose-neutral dark:prose-invert max-w-none"
       >
         {doc.content ? (
           <Streamdown>{doc.content}</Streamdown>
@@ -390,7 +390,7 @@ function DocumentView({
             ref={floatingBtnRef}
             type="button"
             onClick={openForm}
-            className="absolute z-10 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full border border-border bg-card text-card-foreground shadow-md hover:bg-accent transition-colors outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+            className="absolute z-10 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full border border-border bg-card text-foreground shadow-sm hover:bg-accent transition-colors outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
             style={{
               top: selectionData.rect.top,
               left: selectionData.rect.left,
@@ -429,7 +429,7 @@ function DocumentView({
 
 function MetadataBar({ document: doc }: { document: DocumentResponse }) {
   return (
-    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground border-b border-border pb-4">
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
       <StatusBadge status={doc.status} />
 
       {doc.verificationScore !== null ? (
@@ -500,12 +500,12 @@ function StatusBadge({ status }: { status: DocumentResponse['status'] }) {
     },
     verified: {
       label: m.doc_status_verified(),
-      className: 'bg-chart-2/15 text-chart-2',
+      className: 'bg-[#dbeddb] text-[#1a7f37]',
       icon: <IconCircleCheckOutline24 className="w-3.5 h-3.5" />,
     },
     flagged: {
       label: m.doc_status_flagged(),
-      className: 'bg-chart-4/15 text-chart-4',
+      className: 'bg-[#fdecc8] text-[#9a6700]',
       icon: <IconAlertWarningOutline24 className="w-3.5 h-3.5" />,
     },
     failed: {
@@ -518,7 +518,7 @@ function StatusBadge({ status }: { status: DocumentResponse['status'] }) {
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-medium ${c.className}`}
+      className={`inline-flex items-center gap-1.5 px-1.5 py-0.5 rounded-sm text-xs font-medium ${c.className}`}
     >
       {c.icon}
       {c.label}
@@ -578,14 +578,14 @@ function SourcesSection({ sources }: { sources: Source[] }) {
 
   return (
     <section className="mt-10 border-t border-border pt-6">
-      <h2 className="text-base font-semibold text-foreground">
+      <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
         <button
           type="button"
           onClick={() => setOpen(!open)}
           aria-expanded={open}
           className="flex items-center gap-2 w-full text-left hover:text-foreground/80 transition-colors rounded-sm outline-none focus-visible:ring-ring/50 focus-visible:ring-[3px]"
         >
-          <IconExternalLinkOutline24 className="w-5 h-5" />
+          <IconExternalLinkOutline24 className="w-4 h-4" />
           {m.doc_sources()} ({sources.length})
           <span className="ml-auto">
             {open ? (
@@ -642,8 +642,8 @@ function TranslationsSection({
 
   return (
     <section className="mt-10 border-t border-border pt-6">
-      <h2 className="flex items-center gap-2 text-base font-semibold text-foreground mb-3">
-        <IconGlobeOutline24 className="w-5 h-5" />
+      <h2 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3">
+        <IconGlobeOutline24 className="w-4 h-4" />
         {m.doc_available_in()}
       </h2>
       <div className="flex flex-wrap gap-2">
@@ -656,10 +656,10 @@ function TranslationsSection({
               to="/documents/$documentId"
               params={{ documentId }}
               search={{ locale: t.locale }}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-md border transition-colors outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] ${
+              className={`inline-flex items-center gap-1.5 px-2 py-1 text-xs rounded-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] ${
                 isCurrent
-                  ? 'border-foreground/20 bg-foreground/5 text-foreground font-medium'
-                  : 'border-border bg-card text-muted-foreground hover:text-foreground hover:border-foreground/20'
+                  ? 'bg-accent text-foreground font-medium'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent'
               }`}
             >
               {t.locale.toUpperCase()}
@@ -681,8 +681,8 @@ function RefutationsSection({
 }) {
   return (
     <section className="mt-10 border-t border-border pt-6">
-      <h2 className="flex items-center gap-2 text-base font-semibold text-foreground mb-4">
-        <IconFlagOutline24 className="w-5 h-5" />
+      <h2 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">
+        <IconFlagOutline24 className="w-4 h-4" />
         {m.doc_refutations()} ({refutations.length})
       </h2>
       <div className="space-y-4">
@@ -698,7 +698,7 @@ function RefutationCard({ refutation: r }: { refutation: DocRefutation }) {
   const verdict = verdictLabel(r.verdict)
 
   return (
-    <div className="rounded-lg border border-border bg-card p-4">
+    <div className="rounded-sm bg-muted p-4">
       <div className="flex gap-2 mb-3">
         <IconQuoteOutline24 className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
         <p className="text-sm text-foreground/80 italic line-clamp-3">
@@ -717,12 +717,12 @@ function RefutationCard({ refutation: r }: { refutation: DocRefutation }) {
 
         {verdict ? (
           <span
-            className={`px-2 py-0.5 rounded font-medium ${
+            className={`px-2 py-0.5 rounded-sm font-medium ${
               r.verdict === 'upheld'
-                ? 'bg-chart-2/15 text-chart-2'
+                ? 'bg-[#dbeddb] text-[#1a7f37]'
                 : r.verdict === 'rejected'
-                  ? 'bg-destructive/10 text-destructive-foreground'
-                  : 'bg-chart-4/15 text-chart-4'
+                  ? 'bg-muted text-muted-foreground'
+                  : 'bg-[#fdecc8] text-[#9a6700]'
             }`}
           >
             {verdict}

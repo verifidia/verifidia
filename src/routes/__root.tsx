@@ -52,14 +52,14 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang={getLocale()}>
+    <html lang={getLocale()} className="h-full">
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body className="h-full flex flex-col antialiased">
         <TanStackQueryProvider>
           <Header />
-          <main className="min-h-screen bg-background">
+          <main className="flex flex-1 flex-col bg-background w-full">
             {children}
           </main>
         </TanStackQueryProvider>

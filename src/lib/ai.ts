@@ -1,31 +1,122 @@
 import OpenAI from 'openai'
-import { zodResponseFormat, zodFunction } from 'openai/helpers/zod'
-import Exa from 'exa-js'
-import { z } from 'zod'
+import { zodResponseFormat } from 'openai/helpers/zod'
 import type { ZodType } from 'zod'
 
 // -- Clients --
 
 export const openai = new OpenAI()
 
-export const exa = new Exa(process.env.EXA_API_KEY)
-
 // -- Constants --
 
 export const AI_MODEL = process.env.OPENAI_MODEL || 'gpt-5.2'
 
-// -- Exa search wrapper --
+const SNIPPET_CONTEXT_CHARS = 150
+
+const WEB_SEARCH_INSTRUCTIONS =
+  'Search the web for current, authoritative sources on the given topic. You MUST cite every source you use with a URL. Do not answer from training data alone — always perform a web search first.'
+
+const RETRY_INSTRUCTIONS =
+  'Your previous search returned no citations. You MUST search the web and cite at least one source URL. Do not respond without performing a web search.'
+
+// -- Citation extraction --
+
+type SearchResult = { url: string; title: string; text: string }
+
+export function extractCitations(
+  response: OpenAI.Responses.Response,
+  limit: number,
+): SearchResult[] {
+  const citationMap = new Map<string, SearchResult>()
+
+  for (const item of response.output) {
+    if (item.type === 'message') {
+      for (const part of item.content) {
+        if (part.type === 'output_text') {
+          const partText = part.text ?? ''
+
+          for (const annotation of part.annotations ?? []) {
+            if (
+              annotation.type === 'url_citation' &&
+              !citationMap.has(annotation.url)
+            ) {
+              const start = Math.max(0, annotation.start_index - SNIPPET_CONTEXT_CHARS)
+              const end = Math.min(partText.length, annotation.end_index + SNIPPET_CONTEXT_CHARS)
+              const snippet = partText.slice(start, end).trim()
+
+              citationMap.set(annotation.url, {
+                url: annotation.url,
+                title: annotation.title ?? '',
+                text: snippet || partText.slice(0, 500),
+              })
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return Array.from(citationMap.values()).slice(0, limit)
+}
+
+// -- Web search via Responses API --
 
 export async function searchWeb(
   query: string,
   options?: { numResults?: number },
 ) {
-  return exa.searchAndContents(query, {
-    numResults: options?.numResults ?? 5,
-    type: 'auto',
-    livecrawl: 'always',
-    text: { maxCharacters: 5000 },
+  const limit = options?.numResults ?? 5
+
+  const response = await openai.responses.create({
+    model: AI_MODEL,
+    instructions: WEB_SEARCH_INSTRUCTIONS,
+    tools: [{ type: 'web_search_preview', search_context_size: 'medium' }],
+    input: query,
   })
+
+  const results = extractCitations(response, limit)
+  if (results.length > 0) return { results }
+
+  const retryResponse = await openai.responses.create({
+    model: AI_MODEL,
+    instructions: RETRY_INSTRUCTIONS,
+    tools: [{ type: 'web_search_preview', search_context_size: 'medium' }],
+    input: query,
+  })
+
+  return { results: extractCitations(retryResponse, limit) }
+}
+
+// -- Deep web search with high reasoning --
+
+export async function searchWebDeep(
+  query: string,
+  options?: { numResults?: number },
+) {
+  const limit = options?.numResults ?? 5
+
+  try {
+    const response = await openai.responses.create({
+      model: AI_MODEL,
+      instructions: WEB_SEARCH_INSTRUCTIONS,
+      tools: [{ type: 'web_search_preview', search_context_size: 'high' }],
+      input: query,
+      reasoning: { effort: 'high' },
+    })
+
+    const results = extractCitations(response, limit)
+    if (results.length > 0) return { results }
+  } catch {
+    // reasoning param unsupported — fall through to retry without it
+  }
+
+  const fallbackResponse = await openai.responses.create({
+    model: AI_MODEL,
+    instructions: RETRY_INSTRUCTIONS,
+    tools: [{ type: 'web_search_preview', search_context_size: 'high' }],
+    input: query,
+  })
+
+  return { results: extractCitations(fallbackResponse, limit) }
 }
 
 // -- Structured output via chat.completions.parse() --
@@ -55,42 +146,54 @@ export async function generateStructured<T>(
   return message.parsed
 }
 
-// -- Research with Exa tool via chat.completions.runTools() --
+// -- Research with web search via Responses API --
 
 export async function researchAndSynthesize(
   query: string,
   systemPrompt: string,
 ): Promise<string> {
-  const runner = openai.chat.completions.runTools({
+  const response = await openai.responses.create({
     model: AI_MODEL,
-    messages: [
-      { role: 'system', content: systemPrompt },
-      { role: 'user', content: query },
-    ],
-    tools: [
-      zodFunction({
-        name: 'search_web',
-        description: 'Search the web for current information on a topic',
-        parameters: z.object({
-          query: z.string().describe('Search query'),
-        }),
-        function: async ({ query: q }: { query: string }) => {
-          const results = await searchWeb(q)
-          return JSON.stringify(
-            results.results.map((r) => ({
-              title: r.title,
-              url: r.url,
-              text: r.text?.slice(0, 2000),
-            })),
-          )
-        },
-      }),
-    ],
+    instructions: systemPrompt,
+    tools: [{ type: 'web_search_preview', search_context_size: 'medium' }],
+    input: query,
   })
 
-  const result = await runner.finalContent()
-  if (!result) {
+  if (!response.output_text) {
     throw new Error('AI returned no content')
   }
-  return result
+  return response.output_text
+}
+
+// -- Deep research with high reasoning --
+
+export async function researchAndSynthesizeDeep(
+  query: string,
+  systemPrompt: string,
+): Promise<string> {
+  try {
+    const response = await openai.responses.create({
+      model: AI_MODEL,
+      instructions: systemPrompt,
+      tools: [{ type: 'web_search_preview', search_context_size: 'high' }],
+      input: query,
+      reasoning: { effort: 'high' },
+    })
+
+    if (response.output_text) return response.output_text
+  } catch {
+    // reasoning param unsupported — fall through
+  }
+
+  const fallback = await openai.responses.create({
+    model: AI_MODEL,
+    instructions: systemPrompt,
+    tools: [{ type: 'web_search_preview', search_context_size: 'high' }],
+    input: query,
+  })
+
+  if (!fallback.output_text) {
+    throw new Error('AI returned no content')
+  }
+  return fallback.output_text
 }

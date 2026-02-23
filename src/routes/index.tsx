@@ -38,7 +38,7 @@ function HomePage() {
 
   if (results.length === 0) {
     return (
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="max-w-[900px] mx-auto px-6 md:px-16 lg:px-24 py-10 md:py-16">
         <HeroSection />
         <EmptyState />
       </div>
@@ -50,24 +50,17 @@ function HomePage() {
   const belowFoldArticles = results.slice(5)
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="max-w-[900px] mx-auto px-6 md:px-16 lg:px-24 py-10 md:py-16">
       <HeroSection />
 
-      <section className="grid grid-cols-1 lg:grid-cols-5 gap-px bg-border mb-10">
-        <article className="lg:col-span-3 bg-background">
+      <section className="flex flex-col gap-1 mt-10">
+        <article className="w-full">
           <LeadArticleCard article={leadArticle} />
         </article>
 
-        <div className="lg:col-span-2 bg-background flex flex-col">
-          {sideArticles.map((article, i) => (
-            <article
-              key={article.id}
-              className={
-                i < sideArticles.length - 1
-                  ? 'border-b border-border'
-                  : ''
-              }
-            >
+        <div className="w-full flex flex-col gap-1">
+          {sideArticles.map((article) => (
+            <article key={article.id}>
               <SideArticleCard article={article} />
             </article>
           ))}
@@ -75,14 +68,14 @@ function HomePage() {
       </section>
 
       {belowFoldArticles.length > 0 ? (
-        <section className="mt-10">
-          <div className="flex items-center gap-3 mb-6 border-b-2 border-foreground pb-2">
-            <h2 className="text-xl font-bold tracking-tight uppercase text-foreground">
+        <section className="mt-12">
+          <div className="flex items-center gap-3 mb-4">
+            <h2 className="text-lg font-semibold text-foreground">
               {m.home_updated()}
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
             {belowFoldArticles.map((article) => (
               <ArticleCard key={article.id} article={article} />
             ))}
@@ -106,16 +99,16 @@ function HeroSection() {
 
   return (
     <section className="mb-10">
-      <div className="border-b-[3px] border-double border-foreground pb-4 mb-6">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter text-foreground leading-none">
+      <div className="pb-6 mb-6">
+        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground leading-tight">
           {m.site_title()}
         </h1>
-        <p className="mt-1.5 text-base text-muted-foreground tracking-wide">
+        <p className="mt-2 text-base text-muted-foreground leading-relaxed">
           {m.site_tagline()}
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="flex gap-2 max-w-xl">
+      <form onSubmit={handleSubmit} className="flex gap-2 w-full">
         <div className="relative flex-1">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
             <IconMagnifierOutline24 className="w-4 h-4" aria-hidden="true" />
@@ -125,10 +118,10 @@ function HeroSection() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={m.search_placeholder()}
-            className="pl-10"
+            className="pl-10 rounded-sm outline-none focus-visible:shadow-[0_0_0_2px] focus-visible:shadow-ring border-border"
           />
         </div>
-        <Button type="submit" variant="default">
+        <Button type="submit" variant="default" className="rounded-sm">
           {m.search_button()}
         </Button>
       </form>
@@ -145,18 +138,18 @@ function LeadArticleCard({ article }: { article: ArticleResult }) {
       to="/documents/$documentId"
       params={{ documentId: article.id }}
       search={{ locale: undefined }}
-      className="group block p-6 lg:p-8 h-full rounded-sm outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+      className="group block py-3 px-3 -mx-3 rounded-sm transition-colors duration-75 hover:bg-accent outline-none focus-visible:shadow-[0_0_0_2px] focus-visible:shadow-ring"
     >
-      <span className="inline-block text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">
+      <span className="inline-block text-xs font-medium tracking-wide text-muted-foreground mb-2">
         {m.home_recent()}
       </span>
 
-      <h2 className="text-2xl sm:text-3xl font-bold leading-tight text-foreground group-hover:text-primary/80 transition-colors mb-3">
+      <h2 className="text-lg font-semibold text-foreground mb-1">
         {article.title || m.untitled()}
       </h2>
 
       {excerpt ? (
-        <p className="text-base text-muted-foreground leading-relaxed mb-5 max-w-prose">
+        <p className="text-base text-muted-foreground leading-relaxed mb-2 max-w-prose">
           {excerpt}
         </p>
       ) : null}
@@ -174,27 +167,13 @@ function SideArticleCard({ article }: { article: ArticleResult }) {
       to="/documents/$documentId"
       params={{ documentId: article.id }}
       search={{ locale: undefined }}
-      className="group block px-5 py-4 lg:pl-6 rounded-sm outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+      className="group block py-2 px-3 -mx-3 rounded-sm transition-colors duration-75 hover:bg-accent outline-none focus-visible:shadow-[0_0_0_2px] focus-visible:shadow-ring"
     >
-      <h3 className="text-sm font-semibold leading-snug text-foreground group-hover:text-primary/80 transition-colors mb-1.5 line-clamp-2">
+      <h3 className="text-base font-medium text-foreground mb-1">
         {article.title || m.untitled()}
       </h3>
 
-      <div className="flex items-center gap-3 text-xs text-muted-foreground">
-        {article.verificationScore != null ? (
-          <span className="inline-flex items-center gap-1">
-            <IconShieldCheckOutline24 className="w-3 h-3" aria-hidden="true" />
-            {article.verificationScore}/100
-          </span>
-        ) : null}
-
-        {formattedDate ? (
-          <span className="inline-flex items-center gap-1">
-            <IconClockOutline24 className="w-3 h-3" aria-hidden="true" />
-            {formattedDate}
-          </span>
-        ) : null}
-      </div>
+      <ArticleMeta article={article} formattedDate={formattedDate} />
     </Link>
   )
 }
@@ -209,19 +188,19 @@ function ArticleCard({ article }: { article: ArticleResult }) {
         to="/documents/$documentId"
         params={{ documentId: article.id }}
         search={{ locale: undefined }}
-        className="group block border-t border-border pt-4 rounded-sm outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+        className="group block py-2 px-3 -mx-3 rounded-sm transition-colors duration-75 hover:bg-accent outline-none focus-visible:shadow-[0_0_0_2px] focus-visible:shadow-ring"
       >
-        <h3 className="text-base font-semibold leading-snug text-foreground group-hover:text-primary/80 transition-colors mb-1.5 line-clamp-2">
+        <h3 className="text-base font-medium text-foreground mb-1 truncate">
           {article.title || m.untitled()}
         </h3>
 
         {excerpt ? (
-          <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 mb-3">
+          <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-2">
             {excerpt}
           </p>
         ) : null}
 
-        <ArticleMeta article={article} formattedDate={formattedDate} size="sm" />
+        <ArticleMeta article={article} formattedDate={formattedDate} />
       </Link>
     </article>
   )
@@ -230,32 +209,28 @@ function ArticleCard({ article }: { article: ArticleResult }) {
 function ArticleMeta({
   article,
   formattedDate,
-  size = 'base',
 }: {
   article: ArticleResult
   formattedDate: string | null
-  size?: 'sm' | 'base'
 }) {
-  const iconClass = size === 'sm' ? 'w-3 h-3' : 'w-3.5 h-3.5'
-
   return (
-    <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+    <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
       {article.verificationScore != null ? (
-        <span className="inline-flex items-center gap-1">
-          <IconShieldCheckOutline24 className={iconClass} aria-hidden="true" />
+        <span className="inline-flex items-center gap-1.5">
+          <IconShieldCheckOutline24 className="w-3.5 h-3.5" aria-hidden="true" />
           {article.verificationScore}/100
         </span>
       ) : null}
 
-      <span className="inline-flex items-center gap-1">
-        <IconGlobeOutline24 className={iconClass} aria-hidden="true" />
+      <span className="inline-flex items-center gap-1.5">
+        <IconGlobeOutline24 className="w-3.5 h-3.5" aria-hidden="true" />
         {article.locale.toUpperCase()}
       </span>
 
       {formattedDate ? (
-        <span className="inline-flex items-center gap-1">
-          <IconClockOutline24 className={iconClass} aria-hidden="true" />
-          {m.doc_last_updated({ date: formattedDate })}
+        <span className="inline-flex items-center gap-1.5">
+          <IconClockOutline24 className="w-3.5 h-3.5" aria-hidden="true" />
+          {formattedDate}
         </span>
       ) : null}
     </div>
@@ -264,11 +239,11 @@ function ArticleMeta({
 
 function EmptyState() {
   return (
-    <div className="text-center py-20">
-      <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-muted mb-5">
-        <IconNewspaperOutline24 className="w-6 h-6 text-muted-foreground" aria-hidden="true" />
+    <div className="text-center py-20 mt-10">
+      <div className="inline-flex items-center justify-center w-12 h-12 rounded-sm bg-muted mb-4">
+        <IconNewspaperOutline24 className="w-5 h-5 text-muted-foreground" aria-hidden="true" />
       </div>
-      <p className="text-base font-medium text-foreground mb-1.5">
+      <p className="text-base font-medium text-foreground mb-1">
         {m.home_empty_title()}
       </p>
       <p className="text-sm text-muted-foreground max-w-sm mx-auto">

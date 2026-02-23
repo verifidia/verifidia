@@ -114,7 +114,7 @@ export function RefutationForm({
 
   if (status === 'success') {
     return (
-      <div className="border border-border rounded-lg bg-card p-6 mt-6">
+      <div className="border border-border rounded-md bg-card p-6 mt-6 shadow-sm">
         <div className="flex items-center gap-2 text-chart-2">
           <IconCircleCheckOutline24 className="w-5 h-5" />
           <p className="text-sm font-medium">{m.refute_success()}</p>
@@ -124,7 +124,7 @@ export function RefutationForm({
   }
 
   return (
-    <div className="border border-border rounded-lg bg-card mt-6">
+    <div className="border border-border rounded-md bg-card mt-6 shadow-sm">
       <div className="flex items-center justify-between px-4 py-3 border-b border-border">
         <div className="flex items-center gap-2 text-sm font-medium text-foreground">
           <IconFlagOutline24 className="w-4 h-4" />
