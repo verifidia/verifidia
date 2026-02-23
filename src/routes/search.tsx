@@ -100,7 +100,7 @@ function ResultCard({ result }: { result: SearchResult }) {
       className="group -mx-3 block rounded-sm px-3 py-2 outline-none transition-colors duration-75 hover:bg-accent focus-visible:shadow-[0_0_0_2px] focus-visible:shadow-ring"
       params={{ documentId: result.id }}
       search={{ locale: undefined }}
-      to="/documents/$documentId"
+      to="/$documentId"
     >
       <h3 className="mb-1 font-medium text-base text-foreground">
         {result.title || m.untitled()}
@@ -205,8 +205,9 @@ function EmptyState({ query, locale }: { query: string; locale: string }) {
 
       if (res.ok && data?.documentId) {
         navigate({
-          to: '/documents/$documentId',
+          to: '/$documentId',
           params: { documentId: data.documentId },
+          search: { locale: undefined },
         })
         return
       }

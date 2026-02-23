@@ -10,6 +10,7 @@ import {
   timestamp,
   uniqueIndex,
 } from 'drizzle-orm/pg-core'
+import { ulid } from 'ulidx'
 
 const tsvector = customType<{ data: string }>({
   dataType() {
@@ -20,7 +21,7 @@ const tsvector = customType<{ data: string }>({
 const idColumn = (name: string) =>
   text(name)
     .primaryKey()
-    .$defaultFn(() => crypto.randomUUID())
+    .$defaultFn(() => ulid())
 
 export const user = pgTable('user', {
   id: idColumn('id'),

@@ -66,7 +66,7 @@ interface DocumentResponse {
   topic: string
   translations: Translation[]
   updatedAt: string
-  verificationDetails: Record<string, unknown> | FlaggedClaim[] | null
+  verificationDetails: { flaggedClaims: FlaggedClaim[] } | FlaggedClaim[] | null
   verificationScore: number | null
 }
 
@@ -164,7 +164,7 @@ function refutationStatusLabel(status: string): string {
   return map[status]?.() ?? status
 }
 
-export const Route = createFileRoute('/documents/$documentId')({
+export const Route = createFileRoute('/$documentId')({
   validateSearch: (search: Record<string, unknown>) => ({
     locale: (search.locale as string) || undefined,
   }),
@@ -455,6 +455,7 @@ function DocumentView({
           locale={doc.locale}
           onClose={closeForm}
           onSuccess={handleFormSuccess}
+          open={!!formData}
           selectedText={formData.text}
           startOffset={formData.startOffset}
         />
@@ -707,7 +708,7 @@ function TranslationsSection({
               key={t.locale}
               params={{ documentId }}
               search={{ locale: t.locale }}
-              to="/documents/$documentId"
+              to="/$documentId"
             >
               {t.locale.toUpperCase()}
               {isCanonical ? (

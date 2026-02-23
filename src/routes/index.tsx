@@ -94,7 +94,7 @@ function LeadArticleCard({ article }: { article: ArticleResult }) {
       className="group -mx-3 block rounded-sm px-3 py-3 outline-none transition-colors duration-75 hover:bg-accent focus-visible:shadow-[0_0_0_2px] focus-visible:shadow-ring"
       params={{ documentId: article.id }}
       search={{ locale: undefined }}
-      to="/documents/$documentId"
+      to="/$documentId"
     >
       <span className="mb-2 inline-block font-medium text-muted-foreground text-xs tracking-wide">
         {home_recent()}
@@ -123,7 +123,7 @@ function SideArticleCard({ article }: { article: ArticleResult }) {
       className="group -mx-3 block rounded-sm px-3 py-2 outline-none transition-colors duration-75 hover:bg-accent focus-visible:shadow-[0_0_0_2px] focus-visible:shadow-ring"
       params={{ documentId: article.id }}
       search={{ locale: undefined }}
-      to="/documents/$documentId"
+      to="/$documentId"
     >
       <h3 className="mb-1 font-medium text-base text-foreground">
         {article.title || untitled()}
@@ -144,7 +144,7 @@ function ArticleCard({ article }: { article: ArticleResult }) {
         className="group -mx-3 block rounded-sm px-3 py-2 outline-none transition-colors duration-75 hover:bg-accent focus-visible:shadow-[0_0_0_2px] focus-visible:shadow-ring"
         params={{ documentId: article.id }}
         search={{ locale: undefined }}
-        to="/documents/$documentId"
+        to="/$documentId"
       >
         <h3 className="mb-1 truncate font-medium text-base text-foreground">
           {article.title || untitled()}

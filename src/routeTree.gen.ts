@@ -12,8 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as DocumentIdRouteImport } from './routes/$documentId'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DocumentsDocumentIdRouteImport } from './routes/documents/$documentId'
 import { Route as ApiSearchRouteImport } from './routes/api/search'
 import { Route as ApiInngestRouteImport } from './routes/api/inngest'
 import { Route as ApiDocumentsRequestRouteImport } from './routes/api/documents/request'
@@ -36,14 +36,14 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DocumentIdRoute = DocumentIdRouteImport.update({
+  id: '/$documentId',
+  path: '/$documentId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DocumentsDocumentIdRoute = DocumentsDocumentIdRouteImport.update({
-  id: '/documents/$documentId',
-  path: '/documents/$documentId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiSearchRoute = ApiSearchRouteImport.update({
@@ -80,12 +80,12 @@ const ApiDocumentsDocumentIdRefuteRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/$documentId': typeof DocumentIdRoute
   '/login': typeof LoginRoute
   '/search': typeof SearchRoute
   '/signup': typeof SignupRoute
   '/api/inngest': typeof ApiInngestRoute
   '/api/search': typeof ApiSearchRoute
-  '/documents/$documentId': typeof DocumentsDocumentIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/documents/$documentId': typeof ApiDocumentsDocumentIdRouteWithChildren
   '/api/documents/request': typeof ApiDocumentsRequestRoute
@@ -93,12 +93,12 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$documentId': typeof DocumentIdRoute
   '/login': typeof LoginRoute
   '/search': typeof SearchRoute
   '/signup': typeof SignupRoute
   '/api/inngest': typeof ApiInngestRoute
   '/api/search': typeof ApiSearchRoute
-  '/documents/$documentId': typeof DocumentsDocumentIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/documents/$documentId': typeof ApiDocumentsDocumentIdRouteWithChildren
   '/api/documents/request': typeof ApiDocumentsRequestRoute
@@ -107,12 +107,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/$documentId': typeof DocumentIdRoute
   '/login': typeof LoginRoute
   '/search': typeof SearchRoute
   '/signup': typeof SignupRoute
   '/api/inngest': typeof ApiInngestRoute
   '/api/search': typeof ApiSearchRoute
-  '/documents/$documentId': typeof DocumentsDocumentIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/documents/$documentId': typeof ApiDocumentsDocumentIdRouteWithChildren
   '/api/documents/request': typeof ApiDocumentsRequestRoute
@@ -122,12 +122,12 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/$documentId'
     | '/login'
     | '/search'
     | '/signup'
     | '/api/inngest'
     | '/api/search'
-    | '/documents/$documentId'
     | '/api/auth/$'
     | '/api/documents/$documentId'
     | '/api/documents/request'
@@ -135,12 +135,12 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/$documentId'
     | '/login'
     | '/search'
     | '/signup'
     | '/api/inngest'
     | '/api/search'
-    | '/documents/$documentId'
     | '/api/auth/$'
     | '/api/documents/$documentId'
     | '/api/documents/request'
@@ -148,12 +148,12 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/$documentId'
     | '/login'
     | '/search'
     | '/signup'
     | '/api/inngest'
     | '/api/search'
-    | '/documents/$documentId'
     | '/api/auth/$'
     | '/api/documents/$documentId'
     | '/api/documents/request'
@@ -162,12 +162,12 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DocumentIdRoute: typeof DocumentIdRoute
   LoginRoute: typeof LoginRoute
   SearchRoute: typeof SearchRoute
   SignupRoute: typeof SignupRoute
   ApiInngestRoute: typeof ApiInngestRoute
   ApiSearchRoute: typeof ApiSearchRoute
-  DocumentsDocumentIdRoute: typeof DocumentsDocumentIdRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiDocumentsDocumentIdRoute: typeof ApiDocumentsDocumentIdRouteWithChildren
   ApiDocumentsRequestRoute: typeof ApiDocumentsRequestRoute
@@ -196,18 +196,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/$documentId': {
+      id: '/$documentId'
+      path: '/$documentId'
+      fullPath: '/$documentId'
+      preLoaderRoute: typeof DocumentIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/documents/$documentId': {
-      id: '/documents/$documentId'
-      path: '/documents/$documentId'
-      fullPath: '/documents/$documentId'
-      preLoaderRoute: typeof DocumentsDocumentIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/search': {
@@ -271,12 +271,12 @@ const ApiDocumentsDocumentIdRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DocumentIdRoute: DocumentIdRoute,
   LoginRoute: LoginRoute,
   SearchRoute: SearchRoute,
   SignupRoute: SignupRoute,
   ApiInngestRoute: ApiInngestRoute,
   ApiSearchRoute: ApiSearchRoute,
-  DocumentsDocumentIdRoute: DocumentsDocumentIdRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiDocumentsDocumentIdRoute: ApiDocumentsDocumentIdRouteWithChildren,
   ApiDocumentsRequestRoute: ApiDocumentsRequestRoute,
