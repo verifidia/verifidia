@@ -10,6 +10,7 @@ import {
   IconGlobeOutline24,
   IconNewspaperOutline24,
 } from 'nucleo-core-outline-24'
+import { getApiUrl } from '#/lib/get-api-url'
 
 type ArticleResult = {
   id: string
@@ -22,7 +23,7 @@ type ArticleResult = {
 
 export const Route = createFileRoute('/')({
   loader: async () => {
-    const res = await fetch('/api/search?q=&locale=en&limit=20')
+    const res = await fetch(getApiUrl('/api/search?q=&locale=en&limit=20'))
     if (!res.ok) {
       return { results: [] as ArticleResult[] }
     }

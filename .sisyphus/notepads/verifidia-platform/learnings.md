@@ -402,3 +402,9 @@
 - Added translation-in-progress edge case handling: when requested translation entry exists with `status === 'translating'`, page shows `m.doc_translation_in_progress()` notice.
 - Updated Translations heading to `m.doc_available_in()` while preserving the existing locale links section behavior.
 - Added `doc_fallback_notice` and `doc_translation_in_progress` to all 23 locale files in `messages/`; build triggers Paraglide compile and validates message function generation.
+
+## SSR API Fetch URL Fix (2026-02-23)
+- TanStack Router loaders run during SSR and client navigation, so plain `fetch('/api/...')` can fail on SSR when no base URL is available.
+- A shared helper (`src/lib/get-api-url.ts`) keeps loader callsites clean and centralizes SSR-vs-client URL behavior.
+- For SSR in this repo, using `process.env.BETTER_AUTH_URL` as origin keeps internal API calls absolute without introducing framework-specific server imports into route modules.
+- Changing loaders to `fetch(getApiUrl(...))` removes direct relative `/api` usage and keeps behavior consistent across all three affected routes.

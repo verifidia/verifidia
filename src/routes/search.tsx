@@ -10,6 +10,7 @@ import {
   IconChevronRightOutline24,
   IconGlobeOutline24,
 } from 'nucleo-core-outline-24'
+import { getApiUrl } from '#/lib/get-api-url'
 
 const LIMIT = 20
 
@@ -39,7 +40,7 @@ export const Route = createFileRoute('/search')({
       limit: String(LIMIT),
       offset: String(offset),
     })
-    const res = await fetch(`/api/search?${params.toString()}`)
+    const res = await fetch(getApiUrl(`/api/search?${params.toString()}`))
     if (!res.ok) {
       return { results: [] as SearchResult[] }
     }
@@ -241,9 +242,9 @@ function SearchSkeleton() {
       </div>
       <div className="h-6 w-36 bg-muted rounded mb-6 animate-pulse" />
       <div className="flex flex-col gap-3">
-        {Array.from({ length: 5 }).map((_, i) => (
+        {Array.from({ length: 5 }, (_, i) => i + 1).map((id) => (
           <div
-            key={`skeleton-${i}`}
+            key={`skeleton-${id}`}
             className="rounded-lg border border-border bg-card p-5"
           >
             <div className="h-5 w-2/3 bg-muted rounded mb-2 animate-pulse" />

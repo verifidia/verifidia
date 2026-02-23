@@ -16,6 +16,7 @@ import {
   IconQuoteOutline24,
   IconFlagOutline24,
 } from 'nucleo-core-outline-24'
+import { getApiUrl } from '#/lib/get-api-url'
 
 interface Source {
   url: string
@@ -140,9 +141,10 @@ export const Route = createFileRoute('/documents/$documentId')({
   loaderDeps: ({ search }) => ({ locale: search.locale }),
   loader: async ({ params, deps }) => {
     const locale = deps.locale || getLocale()
-    const res = await fetch(
+    const url = getApiUrl(
       `/api/documents/${params.documentId}?locale=${locale}`,
     )
+    const res = await fetch(url)
     if (res.status === 404) {
       return { notFound: true as const }
     }
