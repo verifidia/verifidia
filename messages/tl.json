@@ -85,5 +85,10 @@
   "doc_available_in": "Magagamit sa",
   "doc_canonical_label": "Orihinal",
   "doc_fallback_notice": "Ang dokumentong ito ay ipinapakita sa {shownLocale}. Isinasagawa ang pagsasalin sa {requestedLocale}.",
-  "doc_translation_in_progress": "Isinasagawa ang pagsasalin"
+  "doc_translation_in_progress": "Isinasagawa ang pagsasalin",
+  "auth_otp_heading": "Verify your email",
+  "auth_otp_subheading": "We sent a 6-digit code to {email}",
+  "auth_otp_label": "Verification code",
+  "auth_otp_verify": "Verify",
+  "auth_otp_resend": "Resend code"
 }

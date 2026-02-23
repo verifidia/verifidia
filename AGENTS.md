@@ -1,2 +1,4 @@
 - use bun.
+- use shadcn; never reinvent a component.
 - never use em-dash.
+- you have infinite exa, grep, context7 quota. always search.

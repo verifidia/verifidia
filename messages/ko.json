@@ -85,5 +85,10 @@
   "doc_available_in": "이용 가능한 언어",
   "doc_canonical_label": "원본",
   "doc_fallback_notice": "이 문서는 {shownLocale}(으)로 표시됩니다. {requestedLocale}(으)로의 번역이 진행 중입니다.",
-  "doc_translation_in_progress": "번역 진행 중"
+  "doc_translation_in_progress": "번역 진행 중",
+  "auth_otp_heading": "Verify your email",
+  "auth_otp_subheading": "We sent a 6-digit code to {email}",
+  "auth_otp_label": "Verification code",
+  "auth_otp_verify": "Verify",
+  "auth_otp_resend": "Resend code"
 }

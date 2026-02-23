@@ -85,5 +85,10 @@
   "doc_available_in": "Mevcut diller",
   "doc_canonical_label": "Orijinal",
   "doc_fallback_notice": "Bu belge {shownLocale} dilinde görüntülenmektedir. {requestedLocale} diline çeviri devam etmektedir.",
-  "doc_translation_in_progress": "Çeviri devam ediyor"
+  "doc_translation_in_progress": "Çeviri devam ediyor",
+  "auth_otp_heading": "Verify your email",
+  "auth_otp_subheading": "We sent a 6-digit code to {email}",
+  "auth_otp_label": "Verification code",
+  "auth_otp_verify": "Verify",
+  "auth_otp_resend": "Resend code"
 }

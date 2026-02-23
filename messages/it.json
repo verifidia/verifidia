@@ -85,5 +85,10 @@
   "doc_available_in": "Disponibile in",
   "doc_canonical_label": "Originale",
   "doc_fallback_notice": "Questo documento è visualizzato in {shownLocale}. La traduzione in {requestedLocale} è in corso.",
-  "doc_translation_in_progress": "Traduzione in corso"
+  "doc_translation_in_progress": "Traduzione in corso",
+  "auth_otp_heading": "Verify your email",
+  "auth_otp_subheading": "We sent a 6-digit code to {email}",
+  "auth_otp_label": "Verification code",
+  "auth_otp_verify": "Verify",
+  "auth_otp_resend": "Resend code"
 }

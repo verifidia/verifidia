@@ -85,5 +85,10 @@
   "doc_available_in": "Verfügbar in",
   "doc_canonical_label": "Original",
   "doc_fallback_notice": "Dieses Dokument wird in {shownLocale} angezeigt. Die Übersetzung nach {requestedLocale} ist in Arbeit.",
-  "doc_translation_in_progress": "Übersetzung in Arbeit"
+  "doc_translation_in_progress": "Übersetzung in Arbeit",
+  "auth_otp_heading": "Verify your email",
+  "auth_otp_subheading": "We sent a 6-digit code to {email}",
+  "auth_otp_label": "Verification code",
+  "auth_otp_verify": "Verify",
+  "auth_otp_resend": "Resend code"
 }

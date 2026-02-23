@@ -85,5 +85,10 @@
   "doc_available_in": "มีให้บริการใน",
   "doc_canonical_label": "ต้นฉบับ",
   "doc_fallback_notice": "เอกสารนี้แสดงเป็นภาษา {shownLocale} การแปลเป็น {requestedLocale} กำลังดำเนินการ",
-  "doc_translation_in_progress": "กำลังแปล"
+  "doc_translation_in_progress": "กำลังแปล",
+  "auth_otp_heading": "Verify your email",
+  "auth_otp_subheading": "We sent a 6-digit code to {email}",
+  "auth_otp_label": "Verification code",
+  "auth_otp_verify": "Verify",
+  "auth_otp_resend": "Resend code"
 }

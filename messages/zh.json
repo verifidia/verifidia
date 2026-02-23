@@ -85,5 +85,10 @@
   "doc_available_in": "可用语言",
   "doc_canonical_label": "原文",
   "doc_fallback_notice": "本文档以{shownLocale}显示。正在翻译为{requestedLocale}。",
-  "doc_translation_in_progress": "翻译进行中"
+  "doc_translation_in_progress": "翻译进行中",
+  "auth_otp_heading": "Verify your email",
+  "auth_otp_subheading": "We sent a 6-digit code to {email}",
+  "auth_otp_label": "Verification code",
+  "auth_otp_verify": "Verify",
+  "auth_otp_resend": "Resend code"
 }

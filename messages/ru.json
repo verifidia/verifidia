@@ -85,5 +85,10 @@
   "doc_available_in": "Доступно на",
   "doc_canonical_label": "Оригинал",
   "doc_fallback_notice": "Этот документ отображается на {shownLocale}. Перевод на {requestedLocale} выполняется.",
-  "doc_translation_in_progress": "Перевод выполняется"
+  "doc_translation_in_progress": "Перевод выполняется",
+  "auth_otp_heading": "Verify your email",
+  "auth_otp_subheading": "We sent a 6-digit code to {email}",
+  "auth_otp_label": "Verification code",
+  "auth_otp_verify": "Verify",
+  "auth_otp_resend": "Resend code"
 }

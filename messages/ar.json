@@ -85,5 +85,10 @@
   "doc_available_in": "متوفر بـ",
   "doc_canonical_label": "الأصل",
   "doc_fallback_notice": "يتم عرض هذا المستند باللغة {shownLocale}. الترجمة إلى {requestedLocale} قيد التنفيذ.",
-  "doc_translation_in_progress": "الترجمة قيد التنفيذ"
+  "doc_translation_in_progress": "الترجمة قيد التنفيذ",
+  "auth_otp_heading": "Verify your email",
+  "auth_otp_subheading": "We sent a 6-digit code to {email}",
+  "auth_otp_label": "Verification code",
+  "auth_otp_verify": "Verify",
+  "auth_otp_resend": "Resend code"
 }

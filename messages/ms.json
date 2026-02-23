@@ -85,5 +85,10 @@
   "doc_available_in": "Tersedia dalam",
   "doc_canonical_label": "Asal",
   "doc_fallback_notice": "Dokumen ini dipaparkan dalam {shownLocale}. Terjemahan ke {requestedLocale} sedang dijalankan.",
-  "doc_translation_in_progress": "Terjemahan sedang dijalankan"
+  "doc_translation_in_progress": "Terjemahan sedang dijalankan",
+  "auth_otp_heading": "Verify your email",
+  "auth_otp_subheading": "We sent a 6-digit code to {email}",
+  "auth_otp_label": "Verification code",
+  "auth_otp_verify": "Verify",
+  "auth_otp_resend": "Resend code"
 }

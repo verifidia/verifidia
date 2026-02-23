@@ -85,5 +85,10 @@
   "doc_available_in": "Có sẵn bằng",
   "doc_canonical_label": "Bản gốc",
   "doc_fallback_notice": "Tài liệu này được hiển thị bằng {shownLocale}. Bản dịch sang {requestedLocale} đang được thực hiện.",
-  "doc_translation_in_progress": "Bản dịch đang được thực hiện"
+  "doc_translation_in_progress": "Bản dịch đang được thực hiện",
+  "auth_otp_heading": "Verify your email",
+  "auth_otp_subheading": "We sent a 6-digit code to {email}",
+  "auth_otp_label": "Verification code",
+  "auth_otp_verify": "Verify",
+  "auth_otp_resend": "Resend code"
 }

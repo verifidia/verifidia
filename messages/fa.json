@@ -85,5 +85,10 @@
   "doc_available_in": "موجود به زبان",
   "doc_canonical_label": "اصلی",
   "doc_fallback_notice": "این سند به زبان {shownLocale} نمایش داده می‌شود. ترجمه به {requestedLocale} در حال انجام است.",
-  "doc_translation_in_progress": "ترجمه در حال انجام است"
+  "doc_translation_in_progress": "ترجمه در حال انجام است",
+  "auth_otp_heading": "Verify your email",
+  "auth_otp_subheading": "We sent a 6-digit code to {email}",
+  "auth_otp_label": "Verification code",
+  "auth_otp_verify": "Verify",
+  "auth_otp_resend": "Resend code"
 }

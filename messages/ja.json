@@ -85,5 +85,10 @@
   "doc_available_in": "利用可能な言語",
   "doc_canonical_label": "原文",
   "doc_fallback_notice": "このドキュメントは{shownLocale}で表示されています。{requestedLocale}への翻訳は進行中です。",
-  "doc_translation_in_progress": "翻訳中"
+  "doc_translation_in_progress": "翻訳中",
+  "auth_otp_heading": "Verify your email",
+  "auth_otp_subheading": "We sent a 6-digit code to {email}",
+  "auth_otp_label": "Verification code",
+  "auth_otp_verify": "Verify",
+  "auth_otp_resend": "Resend code"
 }

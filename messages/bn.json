@@ -85,5 +85,10 @@
   "doc_available_in": "উপলব্ধ ভাষা",
   "doc_canonical_label": "মূল",
   "doc_fallback_notice": "এই নথিটি {shownLocale} ভাষায় প্রদর্শিত হচ্ছে। {requestedLocale} ভাষায় অনুবাদ চলছে।",
-  "doc_translation_in_progress": "অনুবাদ চলছে"
+  "doc_translation_in_progress": "অনুবাদ চলছে",
+  "auth_otp_heading": "Verify your email",
+  "auth_otp_subheading": "We sent a 6-digit code to {email}",
+  "auth_otp_label": "Verification code",
+  "auth_otp_verify": "Verify",
+  "auth_otp_resend": "Resend code"
 }
