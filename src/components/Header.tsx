@@ -22,31 +22,27 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background">
-      <div className="px-4 sm:px-6 lg:px-8 h-11 flex items-center justify-between gap-4">
+      <div className="grid grid-cols-[1fr_2fr_1fr] h-11 items-center px-4 sm:px-6 lg:px-8 gap-4">
         {/* Left: Logo */}
-        <div className="flex items-center shrink-0">
+        <div className="flex items-center">
           <Link to="/" className="text-sm font-medium tracking-tight text-foreground hover:opacity-80 transition-opacity">
             Verifidia
           </Link>
         </div>
 
-        {/* Center: Search */}
-        <div className="flex-1 max-w-xl mx-4">
-          <form onSubmit={handleSearch} className="relative w-full">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none text-muted-foreground">
-              <IconMagnifierOutline24 className="w-3.5 h-3.5" />
-            </div>
-            <Input 
-              type="search" 
-              name="q"
-              placeholder={m.search_placeholder()} 
-              className="w-full h-8 text-sm pl-8 bg-muted/40 border-transparent focus-visible:bg-background focus-visible:border-ring shadow-none rounded-sm transition-colors"
-            />
-          </form>
-        </div>
-
-        {/* Right: Actions */}
-        <div className="flex items-center gap-2 shrink-0">
+        {/* Center: Search — always centered via equal 1fr side columns */}
+        <form onSubmit={handleSearch} className="relative w-full max-w-xl mx-auto">
+          <div className="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none text-muted-foreground">
+            <IconMagnifierOutline24 className="w-3.5 h-3.5" />
+          </div>
+          <Input
+            type="search"
+            name="q"
+            placeholder={m.search_placeholder()}
+            className="w-full h-8 text-sm pl-8 bg-muted/40 border-transparent focus-visible:bg-background focus-visible:border-ring shadow-none rounded-sm transition-colors"
+          />
+        </form>
+        <div className="flex items-center justify-end gap-2">
           <ParaglideLocaleSwitcher />
           <BetterAuthHeader />
         </div>
