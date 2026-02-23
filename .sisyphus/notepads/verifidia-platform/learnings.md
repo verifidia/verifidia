@@ -79,3 +79,65 @@
 - OpenAI for AI features
 - Exa for search functionality
 - Nucleo for icon system
+
+## T5: Inngest Client Module and API Route (2026-02-23)
+
+### Completed
+- ✅ Created `src/lib/inngest.ts` with Inngest client instance and event type map
+- ✅ Created `src/routes/api/inngest.ts` with API route serving Inngest handlers
+- ✅ Added `"inngest:dev": "npx inngest-cli@latest dev"` script to package.json
+- ✅ `bun run build` passes with exit code 0
+
+### Key Implementation Details
+- Inngest client initialized with `id: 'verifidia'` and `schemas: new EventSchemas().fromRecord<Events>()`
+- Events type map defines 4 event types: document/generation.requested, document/verification.requested, document/translation.requested, refutation/submitted
+- API route uses `createFileRoute` pattern (same as auth route) with `server.handlers` for GET, POST, PUT
+- Serve function imported from `inngest/edge` (works as generic HTTP handler for TanStack Start)
+- Handler signature: `({ request }) => handler(request)` matches TanStack Start pattern
+- Functions array is empty (functions defined in T10-T14)
+
+### Pattern Notes
+- TanStack Start API routes use `createFileRoute` with `server.handlers`, NOT `createAPIFileRoute`
+- Inngest serve function returns handler that accepts Request and returns Response
+- EventSchemas.fromRecord<T>() provides type-safe event definitions
+- Path alias `#/lib/inngest` resolves to `./src/lib/inngest`
+
+### Build Status
+- No TypeScript errors in new files
+- Build output shows inngest.mjs (246.19 kB) bundled successfully
+- All warnings are pre-existing (Tailwind syntax, unused imports in dependencies)
+
+## Drizzle Schema Rewrite (2026-02-23)
+- Replaced `src/db/schema.ts` todo stub with full Verifidia schema: Better Auth (`user`, `session`, `account`, `verification`) plus `documents`, `document_translations`, `document_revisions`, `refutations`, `generation_jobs`.
+- Better Auth compatibility: all primary keys use `text` with `.$defaultFn(() => crypto.randomUUID())`, and all timestamps use `timestamp(..., { withTimezone: true })`.
+- Implemented PostgreSQL full text search via `customType` for `tsvector` and `generatedAlwaysAs(sql\`to_tsvector(...)\`)` on `document_translations.search_vector`.
+- Added required constraints and indexes: unique `documents.slug`, unique `(document_id, locale)` on `document_translations`, and GIN index on `document_translations.search_vector`.
+- `drizzle-kit push` is interactive when existing tables are present; automation required confirming each create vs rename prompt.
+- Verified tables in Postgres public schema after push: `account`, `document_revisions`, `document_translations`, `documents`, `generation_jobs`, `refutations`, `session`, `user`, `verification`.
+
+
+## T3: AI Service Module (src/lib/ai.ts) (2026-02-23)
+
+### Completed
+ Created `src/lib/ai.ts` with 6 exports: `openai`, `exa`, `AI_MODEL`, `searchWeb()`, `generateStructured()`, `researchAndSynthesize()`
+ Build passes cleanly, no @tanstack/ai imports
+
+### API Details (openai v6.22.0)
+ `zodResponseFormat` and `zodFunction` import from `'openai/helpers/zod'`
+ `zodFunction` accepts `{ name, parameters, function?, description? }` - the `function` prop makes it usable with `runTools()`
+ `chat.completions.parse()` returns `ParsedChatCompletion` with `message.parsed` and `message.refusal`
+ `chat.completions.runTools()` returns a runner; use `runner.finalContent()` for the final string response
+ openai helpers support both zod v3 (`zod/v3`) and zod v4 (`zod/v4`) via `InferZodType<T>` union
+
+### API Details (exa-js v2.4.0)
+ `searchAndContents()` is deprecated in favor of `search()` with `contents` option, but still works
+ For `searchAndContents`: options are `RegularSearchOptions & ContentsOptions` (merged at top level)
+ Text content: `text: { maxCharacters: N }` or `text: true`
+ `livecrawl` is a top-level ContentsOptions property: 'never' | 'fallback' | 'always' | 'auto' | 'preferred'
+ `type` accepts: 'keyword' | 'neural' | 'auto' | 'hybrid' | 'fast' | 'instant' | 'deep'
+ `numResults` is from BaseSearchOptions
+
+### Key Patterns
+ OpenAI client auto-reads OPENAI_API_KEY from env (no explicit config needed)
+ Exa client needs explicit `process.env.EXA_API_KEY` passed to constructor
+ All AI calls are async/await (non-streaming) as required by project conventions

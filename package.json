@@ -15,7 +15,8 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:pull": "drizzle-kit pull",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "inngest:dev": "npx inngest-cli@latest dev"
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.13.8",

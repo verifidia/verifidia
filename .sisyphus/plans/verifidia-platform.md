@@ -483,7 +483,7 @@ Max Concurrent: 6 (Wave 3)
 
 ### Wave 2: Data + Infrastructure
 
-- [ ] 5. Complete Database Schema
+ [x] 5. Complete Database Schema
 
   **What to do**:
   - Rewrite `src/db/schema.ts` with the complete Verifidia schema. Remove the `todos` table.
@@ -550,7 +550,7 @@ Max Concurrent: 6 (Wave 3)
   **Commit**: YES (group with Wave 2)
   - Message: `feat(db): add complete schema, auth adapter, inngest route, ai service`
 
-- [ ] 6. Configure Better Auth with Drizzle Adapter
+ [x] 6. Configure Better Auth with Drizzle Adapter
 
   **What to do**:
   - Update `src/lib/auth.ts` to add the Drizzle adapter:
@@ -607,7 +607,7 @@ Max Concurrent: 6 (Wave 3)
 
   **Commit**: YES (group with Wave 2)
 
-- [ ] 7. Inngest Client and Serve Route
+ [x] 7. Inngest Client and Serve Route
 
   **What to do**:
   - Create `src/lib/inngest.ts`:
@@ -664,7 +664,7 @@ Max Concurrent: 6 (Wave 3)
 
   **Commit**: YES (group with Wave 2)
 
-- [ ] 8. OpenAI + Exa AI Service Module
+ [x] 8. OpenAI + Exa AI Service Module
 
   **What to do**:
   - Create `src/lib/ai.ts` with the following exports:
@@ -721,7 +721,7 @@ Max Concurrent: 6 (Wave 3)
 
   **Commit**: YES (group with Wave 2)
 
-- [ ] 9. App Shell: Root Layout, Header, Navigation
+ [x] 9. App Shell: Root Layout, Header, Navigation
 
   **What to do**:
   - Rewrite `src/routes/__root.tsx`:
