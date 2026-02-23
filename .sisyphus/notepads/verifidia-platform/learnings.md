@@ -258,3 +258,140 @@
 4. checkStaleDocuments (check-stale-documents)
 5. refreshDocument (refresh-document)
 6. processRefutation (process-refutation)
+
+## T9: App Shell Rewrite (Fixes)
+- Replaced remaining `lucide-react` imports in `src/components/ui/select.tsx` with `nucleo-core-outline-24` equivalents (`IconCheckOutline24`, `IconChevronDownOutline24`, `IconChevronUpOutline24`).
+- Verified zero `lucide-react` imports in `src/`.
+- Verified `bun run build` succeeds.
+- `src/routes/index.tsx` and `src/components/LocaleSwitcher.tsx` were already correctly rewritten in a previous step.
+
+
+## T16: Search Page (src/routes/search.tsx) (2026-02-23)
+
+### Completed
+ Created `src/routes/search.tsx` with TanStack Router file route `/search`
+ Added 7 new i18n keys to `messages/en.json`: search_results_title, search_no_results, search_no_results_hint, search_verification_score, page_previous, page_next, page_indicator
+ LSP diagnostics clean, `bun run build` passes
+
+### Implementation Details
+ Route uses `validateSearch` with zod schema for `q`, `locale`, `page` search params
+ `loaderDeps` extracts search params for the loader (required for TanStack Router to re-run loader on search param changes)
+ Loader fetches `GET /api/search?q=...&locale=...&limit=20&offset=...` and returns `{ results }` 
+ Pagination based on `results.length === LIMIT` (has more) vs `< LIMIT` (last page) since API has no `total` field
+ `pendingComponent: SearchSkeleton` shows skeleton cards during loading
+ All visible text uses Paraglide `m.*()` messages
+ Icons: IconMagnifierOutline24, IconShieldCheckOutline24, IconChevronLeftOutline24, IconChevronRightOutline24, IconGlobeOutline24
+ Results link to `/documents/$documentId` using TanStack Router `<Link>` with `params`
+ Search input uses uncontrolled form with `defaultValue` and `FormData` on submit
+
+### Key Patterns
+ `z.string().optional().default('')` for optional search params with defaults in zod schema
+ `loaderDeps` is essential: without it, the loader won't re-run when search params change
+ `pendingComponent` shows during route transitions (loader running)
+ TanStack Router `<Link search={{ ... }}>` for pagination links that update search params
+ `useNavigate()` with `{ to: '/search', search: { q: value } }` for programmatic search navigation
+
+
+## T16: Auth Pages (Login + Signup) (2026-02-23)
+
+### Completed
+ Created `src/routes/login.tsx` with email/password sign-in form
+ Created `src/routes/signup.tsx` with name/email/password/confirm registration form
+ Fixed `src/integrations/better-auth/header-user.tsx`: changed link from `/demo/better-auth` to `/login`, replaced hardcoded strings with Paraglide messages
+ Added 18 new i18n keys to `messages/en.json` for auth forms
+ LSP diagnostics clean on all changed files, `bun run build` passes
+
+### Key Patterns
+ Better Auth client API: `authClient.signIn.email({ email, password })` and `authClient.signUp.email({ email, password, name })` both return `{ data, error }`
+ `authClient.useSession()` returns `{ data: session, isPending }` for reactive session state
+ TanStack Router navigation: `useNavigate()` hook, `void navigate({ to: '/' })` for redirect after auth
+ Form submission: `onSubmit={(e) => void handleSubmit(e)}` pattern for async handlers in JSX
+ Client-side validation before API call: password min length, password confirmation match
+ Error display: `authError.message` from Better Auth or fallback to i18n generic error message
+ All visible strings use Paraglide `m.key()` calls, zero hardcoded English
+ Centered form layout: `min-h-[calc(100vh-4rem)]` accounts for sticky header height
+ Signup name field is optional (`name: name || undefined`)
+
+## App Shell & UI Foundation (Newspaper Layout)
+- **Icons**: Transitioned from `lucide-react` to `nucleo-core-outline-24`. Standardized on Nucleo icons (e.g., `IconGlobeOutline24`, `IconMagnifierOutline24`) for a professional look.
+- **Locale Switching**: Implemented a native HTML `<select>` element for the `LocaleSwitcher` to efficiently handle the large number of supported locales (23 languages) without heavy custom dropdown components.
+- **i18n**: Integrated Paraglide i18n messages (`#/paraglide/messages`) directly into the app shell components (`Header`, `index.tsx`) for localized text (e.g., `m.site_title()`, `m.search_placeholder()`).
+- **Design Language**: Established a clean, text-focused, newspaper-like foundation. Avoided gradients, badges, and unnecessary decorative elements to maintain a serious, professional aesthetic.
+
+
+## T16: Home Page Newspaper Layout (2026-02-23)
+
+### Completed
+ Rewrote `src/routes/index.tsx` with newspaper-style layout
+ Loader fetches from `/api/search?q=&locale=en&limit=20` using `fetch()` directly in TanStack Router loader
+ Newspaper grid: lead article (60% via lg:col-span-3) + side stack (40% via lg:col-span-2) + 3-column below-fold grid
+ Empty state when no articles exist
+ Responsive: single column mobile, 2-col tablet, full newspaper desktop
+
+### Key Patterns
+ `fetch('/api/search?...')` works directly in TanStack Router loaders (Nitro handles internal routing during SSR)
+ Link to `/documents/$documentId` requires `search={{ locale: undefined }}` because the document route has `validateSearch` with a locale param
+ Nucleo icons used: `IconMagnifierOutline24`, `IconShieldCheckOutline24`, `IconClockOutline24`, `IconGlobeOutline24`, `IconNewspaperOutline24`
+ `gap-px bg-border` pattern creates 1px separator lines between grid cells (newspaper column dividers)
+ `border-b-[3px] border-double` creates newspaper masthead double-rule effect
+ Build requires `rm -rf .output` before rebuild to avoid Nitro ENOENT race condition on asset files
+
+
+## T17: Document Viewer Page (2026-02-23)
+
+### Completed
+ Created `src/routes/documents/$documentId.tsx` with full document viewer
+ Added 21 new i18n keys to `messages/en.json`
+ Added Streamdown `@source` directive to `src/styles.css`
+ Build passes cleanly (all 3 phases: client, SSR, Nitro)
+
+### Implementation Details
+ TanStack Router `createFileRoute('/documents/$documentId')` with `validateSearch` for `?locale=` param
+ `loaderDeps` + `loader` pattern: loader depends on search params via `loaderDeps`
+ Loader returns discriminated union: `{ notFound: true } | { notFound: false, document: DocumentResponse }`
+ Streamdown usage: `<Streamdown>{markdownString}</Streamdown>` - children prop is the markdown string
+ Content container uses `data-document-content` attribute for T19 (refutation text selection)
+ Status-specific views: generating (pulsing dot), failed (alert icon), verified (green badge), flagged (yellow warning with collapsible claims)
+ Sources section is collapsible (toggled with useState)
+ Translations use plain `<a>` tags with href (not TanStack Link) to avoid route tree type issues during incremental builds
+ Nucleo icons used: CircleCheck, AlertWarning, ExternalLink, Globe, ChevronDown/Up, Clock, Shield, Quote, Flag
+ `parseSources()` and `parseFlaggedClaims()` handle both string and object JSON safely
+ Date formatting via `Intl.DateTimeFormat` with fallback
+
+### Streamdown Integration
+ Requires `@source "../node_modules/streamdown/dist/*.js";` in CSS for Tailwind class scanning
+ Component accepts `className`, `mode` ('static'|'streaming'), `shikiTheme`, `mermaid`, `controls` props
+ Default mode is fine for static document rendering
+
+### Key Patterns
+ Paraglide messages: `import { m } from '#/paraglide/messages'` (named export) or `import * as m` (namespace)
+ TanStack Router route tree regenerates at build time - LSP errors about route paths resolve after build
+ Array keys: use `source.url`, `claim.text`, `t.locale`, `r.id` instead of array indices
+
+## T19: Refutation UI - Text Selection + Form (2026-02-23)
+
+### Completed
+ Created `src/components/RefutationForm.tsx` standalone component
+ Added text selection detection to `DocumentView` in `$documentId.tsx`
+ Added 4 new i18n keys to `messages/en.json`: `refute_success`, `refute_error`, `refute_min_explanation`, `refute_select_category`
+ LSP diagnostics clean on all changed files, `bun run build` passes
+
+### Implementation Details
+ Text selection uses `mouseup` event on `[data-document-content]` article element with `useRef`
+ Selection offsets calculated via `document.createRange()` + `selectNodeContents()` + `setEnd()` to get character offset relative to container text
+ Floating "Refute this" button positioned absolutely within the article element, using `getBoundingClientRect()` delta from container
+ Form renders as inline panel below the article (not a modal), consistent with task spec
+ `authClient.useSession()` returns `{ data: session }` where `data` is null when unauthenticated
+ Unauthenticated users see a link to `/login` instead of the submit button
+ Form POSTs to `/api/documents/{documentId}/refute` with JSON body matching the Zod schema in the API route
+ Success state auto-dismisses after 1.5s via `setTimeout`
+ Category selector uses shadcn Select (Radix primitive-based) with 4 options
+ Validation: category required, note optional but if provided must be >= 20 chars
+
+### Key Patterns
+ `useCallback` with `formData` dependency prevents text selection handler from running while form is open
+ `handleClickOutside` on `document mousedown` dismisses the floating button, but checks if click is on the button itself to avoid premature dismissal
+ `useEffect` cleanup properly removes both mouseup and mousedown listeners
+ `window.getSelection()?.removeAllRanges()` clears browser selection when opening the form
+ Floating button uses `Math.min()` to prevent overflow past container right edge
+ `npx @inlang/paraglide-js compile` regenerates message functions after adding new keys to `messages/en.json`

@@ -1316,7 +1316,7 @@ Max Concurrent: 6 (Wave 3)
 
 ### Wave 4: Frontend Pages (T16-T20)
 
-- [ ] 16. Home Page: Newspaper Layout
+ [x] 16. Home Page: Newspaper Layout
 
   **What to do**:
   - Replace `src/routes/index.tsx` with the Verifidia home page
@@ -1415,7 +1415,7 @@ Max Concurrent: 6 (Wave 3)
   **Commit**: YES (group with Wave 4)
   - Message: `feat(ui): add home, search, document viewer, refutation, and auth pages`
 
-- [ ] 17. Search Page + Results
+ [x] 17. Search Page + Results
 
   **What to do**:
   - Create `src/routes/search.tsx` with search functionality
@@ -1498,7 +1498,7 @@ Max Concurrent: 6 (Wave 3)
   **Commit**: YES (group with Wave 4)
   - Message: `feat(ui): add home, search, document viewer, refutation, and auth pages`
 
-- [ ] 18. Document Viewer + Streamdown Rendering
+ [x] 18. Document Viewer + Streamdown Rendering
 
   **What to do**:
   - Create `src/routes/documents/$documentId.tsx` for viewing a single document
@@ -1590,7 +1590,7 @@ Max Concurrent: 6 (Wave 3)
   **Commit**: YES (group with Wave 4)
   - Message: `feat(ui): add home, search, document viewer, refutation, and auth pages`
 
-- [ ] 19. Refutation UI: Text Selection + Form
+ [x] 19. Refutation UI: Text Selection + Form
 
   **What to do**:
   - Add refutation functionality to the document viewer (`src/routes/documents/$documentId.tsx` or a co-located component)
@@ -1689,7 +1689,7 @@ Max Concurrent: 6 (Wave 3)
   **Commit**: YES (group with Wave 4)
   - Message: `feat(ui): add home, search, document viewer, refutation, and auth pages`
 
-- [ ] 20. Auth Pages + Route Protection
+ [x] 20. Auth Pages + Route Protection
 
   **What to do**:
   - Create `src/routes/login.tsx`: Email + password login form

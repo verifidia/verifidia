@@ -9,7 +9,11 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SearchRouteImport } from './routes/search'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DocumentsDocumentIdRouteImport } from './routes/documents/$documentId'
 import { Route as ApiSearchRouteImport } from './routes/api/search'
 import { Route as ApiInngestRouteImport } from './routes/api/inngest'
 import { Route as ApiDocumentsRequestRouteImport } from './routes/api/documents/request'
@@ -17,9 +21,29 @@ import { Route as ApiDocumentsDocumentIdRouteImport } from './routes/api/documen
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as ApiDocumentsDocumentIdRefuteRouteImport } from './routes/api/documents/$documentId/refute'
 
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocumentsDocumentIdRoute = DocumentsDocumentIdRouteImport.update({
+  id: '/documents/$documentId',
+  path: '/documents/$documentId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiSearchRoute = ApiSearchRouteImport.update({
@@ -56,8 +80,12 @@ const ApiDocumentsDocumentIdRefuteRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/search': typeof SearchRoute
+  '/signup': typeof SignupRoute
   '/api/inngest': typeof ApiInngestRoute
   '/api/search': typeof ApiSearchRoute
+  '/documents/$documentId': typeof DocumentsDocumentIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/documents/$documentId': typeof ApiDocumentsDocumentIdRouteWithChildren
   '/api/documents/request': typeof ApiDocumentsRequestRoute
@@ -65,8 +93,12 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/search': typeof SearchRoute
+  '/signup': typeof SignupRoute
   '/api/inngest': typeof ApiInngestRoute
   '/api/search': typeof ApiSearchRoute
+  '/documents/$documentId': typeof DocumentsDocumentIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/documents/$documentId': typeof ApiDocumentsDocumentIdRouteWithChildren
   '/api/documents/request': typeof ApiDocumentsRequestRoute
@@ -75,8 +107,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/search': typeof SearchRoute
+  '/signup': typeof SignupRoute
   '/api/inngest': typeof ApiInngestRoute
   '/api/search': typeof ApiSearchRoute
+  '/documents/$documentId': typeof DocumentsDocumentIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/documents/$documentId': typeof ApiDocumentsDocumentIdRouteWithChildren
   '/api/documents/request': typeof ApiDocumentsRequestRoute
@@ -86,8 +122,12 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/login'
+    | '/search'
+    | '/signup'
     | '/api/inngest'
     | '/api/search'
+    | '/documents/$documentId'
     | '/api/auth/$'
     | '/api/documents/$documentId'
     | '/api/documents/request'
@@ -95,8 +135,12 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/login'
+    | '/search'
+    | '/signup'
     | '/api/inngest'
     | '/api/search'
+    | '/documents/$documentId'
     | '/api/auth/$'
     | '/api/documents/$documentId'
     | '/api/documents/request'
@@ -104,8 +148,12 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/login'
+    | '/search'
+    | '/signup'
     | '/api/inngest'
     | '/api/search'
+    | '/documents/$documentId'
     | '/api/auth/$'
     | '/api/documents/$documentId'
     | '/api/documents/request'
@@ -114,8 +162,12 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LoginRoute: typeof LoginRoute
+  SearchRoute: typeof SearchRoute
+  SignupRoute: typeof SignupRoute
   ApiInngestRoute: typeof ApiInngestRoute
   ApiSearchRoute: typeof ApiSearchRoute
+  DocumentsDocumentIdRoute: typeof DocumentsDocumentIdRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiDocumentsDocumentIdRoute: typeof ApiDocumentsDocumentIdRouteWithChildren
   ApiDocumentsRequestRoute: typeof ApiDocumentsRequestRoute
@@ -123,11 +175,39 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/documents/$documentId': {
+      id: '/documents/$documentId'
+      path: '/documents/$documentId'
+      fullPath: '/documents/$documentId'
+      preLoaderRoute: typeof DocumentsDocumentIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/search': {
@@ -191,8 +271,12 @@ const ApiDocumentsDocumentIdRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LoginRoute: LoginRoute,
+  SearchRoute: SearchRoute,
+  SignupRoute: SignupRoute,
   ApiInngestRoute: ApiInngestRoute,
   ApiSearchRoute: ApiSearchRoute,
+  DocumentsDocumentIdRoute: DocumentsDocumentIdRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiDocumentsDocumentIdRoute: ApiDocumentsDocumentIdRouteWithChildren,
   ApiDocumentsRequestRoute: ApiDocumentsRequestRoute,
