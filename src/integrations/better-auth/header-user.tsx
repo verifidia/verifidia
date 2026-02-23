@@ -1,4 +1,5 @@
 import { authClient } from '#/lib/auth-client'
+import { Button } from '#/components/ui/button'
 import { Link } from '@tanstack/react-router'
 import * as m from '#/paraglide/messages'
 
@@ -14,14 +15,16 @@ export default function BetterAuthHeader() {
   if (session?.user) {
     return (
       <div className="flex items-center gap-1">
-        <button
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={() => {
             void authClient.signOut()
           }}
           className="h-7 px-2.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-sm transition-colors"
         >
           {m.auth_sign_out()}
-        </button>
+        </Button>
         {session.user.image ? (
           <img src={session.user.image} alt="" className="h-7 w-7 rounded-full object-cover" />
         ) : (
@@ -36,11 +39,13 @@ export default function BetterAuthHeader() {
   }
 
   return (
-    <Link
-      to="/login"
+    <Button
+      variant="ghost"
+      size="sm"
+      asChild
       className="h-7 px-2.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-sm transition-colors inline-flex items-center"
     >
-      {m.auth_sign_in()}
-    </Link>
+      <Link to="/login">{m.auth_sign_in()}</Link>
+    </Button>
   )
 }

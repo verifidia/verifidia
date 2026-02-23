@@ -1,4 +1,5 @@
 import { getLocale, locales, setLocale } from '#/paraglide/runtime'
+import { Button } from '#/components/ui/button'
 import { m } from '#/paraglide/messages'
 import {
   DropdownMenu,
@@ -70,15 +71,16 @@ export default function ParaglideLocaleSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button
-          type="button"
+        <Button
+          variant="ghost"
+          size="sm"
           aria-label={m.locale_label()}
           className="inline-flex items-center gap-1 h-7 px-1.5 text-xs text-muted-foreground hover:text-foreground hover:bg-accent rounded-sm transition-colors font-medium"
         >
           {CurrentFlag && <CurrentFlag className="w-4 h-3 shrink-0" />}
           <span className="hidden sm:inline">{current?.label}</span>
           <IconChevronDownOutline18 className="w-3 h-3 opacity-50" />
-        </button>
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="max-h-72 overflow-y-auto">
         {locales.map((locale: string) => {

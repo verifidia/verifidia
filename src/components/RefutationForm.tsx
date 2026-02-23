@@ -3,6 +3,11 @@ import { Link } from '@tanstack/react-router'
 import { m } from '#/paraglide/messages'
 import { authClient } from '#/lib/auth-client'
 import { Button } from '#/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+} from '#/components/ui/card'
 import { Textarea } from '#/components/ui/textarea'
 import { Input } from '#/components/ui/input'
 import { Label } from '#/components/ui/label'
@@ -114,32 +119,35 @@ export function RefutationForm({
 
   if (status === 'success') {
     return (
-      <div className="border border-border rounded-md bg-card p-6 mt-6 shadow-sm">
-        <div className="flex items-center gap-2 text-chart-2">
-          <IconCircleCheckOutline18 className="w-5 h-5" />
-          <p className="text-sm font-medium">{m.refute_success()}</p>
-        </div>
-      </div>
+      <Card className="mt-6">
+        <CardContent className="p-6">
+          <div className="flex items-center gap-2 text-chart-2">
+            <IconCircleCheckOutline18 className="w-5 h-5" />
+            <p className="text-sm font-medium">{m.refute_success()}</p>
+          </div>
+        </CardContent>
+      </Card>
     )
   }
 
   return (
-    <div className="border border-border rounded-md bg-card mt-6 shadow-sm">
-      <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+    <Card className="mt-6">
+      <CardHeader className="flex flex-row items-center justify-between px-4 py-3 border-b border-border space-y-0">
         <div className="flex items-center gap-2 text-sm font-medium text-foreground">
           <IconFlagOutline18 className="w-4 h-4" />
           {m.doc_refute_button()}
         </div>
-        <button
-          type="button"
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={onClose}
-          className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+          className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
         >
           <IconXmarkOutline18 className="w-4 h-4" />
-        </button>
-      </div>
+        </Button>
+      </CardHeader>
 
-      <div className="p-4 space-y-4">
+      <CardContent className="p-4 space-y-4">
         <div className="flex gap-2 rounded-md bg-muted/50 p-3 border-l-2 border-muted-foreground/30">
           <IconQuoteOutline18 className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
           <p className="text-sm text-foreground/80 italic line-clamp-4">
@@ -223,7 +231,7 @@ export function RefutationForm({
             </div>
           )}
         </form>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   )
 }
