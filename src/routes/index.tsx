@@ -53,13 +53,13 @@ function HomePage() {
       <HeroSection />
 
       <section className="grid grid-cols-1 lg:grid-cols-5 gap-px bg-border mb-10">
-        <div className="lg:col-span-3 bg-background">
+        <article className="lg:col-span-3 bg-background">
           <LeadArticleCard article={leadArticle} />
-        </div>
+        </article>
 
         <div className="lg:col-span-2 bg-background flex flex-col">
           {sideArticles.map((article, i) => (
-            <div
+            <article
               key={article.id}
               className={
                 i < sideArticles.length - 1
@@ -68,12 +68,12 @@ function HomePage() {
               }
             >
               <SideArticleCard article={article} />
-            </div>
+            </article>
           ))}
         </div>
       </section>
 
-      {belowFoldArticles.length > 0 && (
+      {belowFoldArticles.length > 0 ? (
         <section className="mt-10">
           <div className="flex items-center gap-3 mb-6 border-b-2 border-foreground pb-2">
             <h2 className="text-xl font-bold tracking-tight uppercase text-foreground">
@@ -87,7 +87,7 @@ function HomePage() {
             ))}
           </div>
         </section>
-      )}
+      ) : null}
     </div>
   )
 }
@@ -117,7 +117,7 @@ function HeroSection() {
       <form onSubmit={handleSubmit} className="flex gap-2 max-w-xl">
         <div className="relative flex-1">
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
-            <IconMagnifierOutline24 className="w-4 h-4" />
+            <IconMagnifierOutline24 className="w-4 h-4" aria-hidden="true" />
           </div>
           <Input
             type="search"
@@ -144,7 +144,7 @@ function LeadArticleCard({ article }: { article: ArticleResult }) {
       to="/documents/$documentId"
       params={{ documentId: article.id }}
       search={{ locale: undefined }}
-      className="group block p-6 lg:p-8 h-full"
+      className="group block p-6 lg:p-8 h-full rounded-sm outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
     >
       <span className="inline-block text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">
         {m.home_recent()}
@@ -154,11 +154,11 @@ function LeadArticleCard({ article }: { article: ArticleResult }) {
         {article.title || m.untitled()}
       </h2>
 
-      {excerpt && (
+      {excerpt ? (
         <p className="text-base text-muted-foreground leading-relaxed mb-5 max-w-prose">
           {excerpt}
         </p>
-      )}
+      ) : null}
 
       <ArticleMeta article={article} formattedDate={formattedDate} />
     </Link>
@@ -173,26 +173,26 @@ function SideArticleCard({ article }: { article: ArticleResult }) {
       to="/documents/$documentId"
       params={{ documentId: article.id }}
       search={{ locale: undefined }}
-      className="group block px-5 py-4 lg:pl-6"
+      className="group block px-5 py-4 lg:pl-6 rounded-sm outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
     >
       <h3 className="text-sm font-semibold leading-snug text-foreground group-hover:text-primary/80 transition-colors mb-1.5 line-clamp-2">
         {article.title || m.untitled()}
       </h3>
 
       <div className="flex items-center gap-3 text-xs text-muted-foreground">
-        {article.verificationScore != null && (
+        {article.verificationScore != null ? (
           <span className="inline-flex items-center gap-1">
-            <IconShieldCheckOutline24 className="w-3 h-3" />
+            <IconShieldCheckOutline24 className="w-3 h-3" aria-hidden="true" />
             {article.verificationScore}/100
           </span>
-        )}
+        ) : null}
 
-        {formattedDate && (
+        {formattedDate ? (
           <span className="inline-flex items-center gap-1">
-            <IconClockOutline24 className="w-3 h-3" />
+            <IconClockOutline24 className="w-3 h-3" aria-hidden="true" />
             {formattedDate}
           </span>
-        )}
+        ) : null}
       </div>
     </Link>
   )
@@ -203,24 +203,26 @@ function ArticleCard({ article }: { article: ArticleResult }) {
   const excerpt = stripMarkdown(article.snippet).slice(0, 150)
 
   return (
-    <Link
-      to="/documents/$documentId"
-      params={{ documentId: article.id }}
-      search={{ locale: undefined }}
-      className="group block border-t border-border pt-4"
-    >
-      <h3 className="text-base font-semibold leading-snug text-foreground group-hover:text-primary/80 transition-colors mb-1.5 line-clamp-2">
-        {article.title || m.untitled()}
-      </h3>
+    <article>
+      <Link
+        to="/documents/$documentId"
+        params={{ documentId: article.id }}
+        search={{ locale: undefined }}
+        className="group block border-t border-border pt-4 rounded-sm outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+      >
+        <h3 className="text-base font-semibold leading-snug text-foreground group-hover:text-primary/80 transition-colors mb-1.5 line-clamp-2">
+          {article.title || m.untitled()}
+        </h3>
 
-      {excerpt && (
-        <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 mb-3">
-          {excerpt}
-        </p>
-      )}
+        {excerpt ? (
+          <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 mb-3">
+            {excerpt}
+          </p>
+        ) : null}
 
-      <ArticleMeta article={article} formattedDate={formattedDate} size="sm" />
-    </Link>
+        <ArticleMeta article={article} formattedDate={formattedDate} size="sm" />
+      </Link>
+    </article>
   )
 }
 
@@ -237,24 +239,24 @@ function ArticleMeta({
 
   return (
     <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-      {article.verificationScore != null && (
+      {article.verificationScore != null ? (
         <span className="inline-flex items-center gap-1">
-          <IconShieldCheckOutline24 className={iconClass} />
+          <IconShieldCheckOutline24 className={iconClass} aria-hidden="true" />
           {article.verificationScore}/100
         </span>
-      )}
+      ) : null}
 
       <span className="inline-flex items-center gap-1">
-        <IconGlobeOutline24 className={iconClass} />
+        <IconGlobeOutline24 className={iconClass} aria-hidden="true" />
         {article.locale.toUpperCase()}
       </span>
 
-      {formattedDate && (
+      {formattedDate ? (
         <span className="inline-flex items-center gap-1">
-          <IconClockOutline24 className={iconClass} />
+          <IconClockOutline24 className={iconClass} aria-hidden="true" />
           {m.doc_last_updated({ date: formattedDate })}
         </span>
-      )}
+      ) : null}
     </div>
   )
 }
@@ -263,7 +265,7 @@ function EmptyState() {
   return (
     <div className="text-center py-20">
       <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-muted mb-5">
-        <IconNewspaperOutline24 className="w-6 h-6 text-muted-foreground" />
+        <IconNewspaperOutline24 className="w-6 h-6 text-muted-foreground" aria-hidden="true" />
       </div>
       <p className="text-base font-medium text-foreground mb-1.5">
         {m.home_empty_title()}

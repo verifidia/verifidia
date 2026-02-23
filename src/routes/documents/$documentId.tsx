@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Streamdown } from 'streamdown'
 import { m } from '#/paraglide/messages'
@@ -190,7 +190,7 @@ function NotFoundView() {
       </p>
       <Link
         to="/"
-        className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md border border-border bg-card text-card-foreground hover:bg-accent transition-colors"
+        className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md border border-border bg-card text-card-foreground hover:bg-accent transition-colors outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
       >
         {m.site_title()}
       </Link>
@@ -239,8 +239,11 @@ function DocumentView({
   document: DocumentResponse
   requestedLocale: string
 }) {
-  const sources = parseSources(doc.sources)
-  const flaggedClaims = parseFlaggedClaims(doc.verificationDetails)
+  const sources = useMemo(() => parseSources(doc.sources), [doc.sources])
+  const flaggedClaims = useMemo(
+    () => parseFlaggedClaims(doc.verificationDetails),
+    [doc.verificationDetails],
+  )
   const requestedTranslation = doc.translations.find(
     (translation) => translation.locale === requestedLocale,
   )
@@ -356,17 +359,17 @@ function DocumentView({
       </h1>
 
       <MetadataBar document={doc} />
-      {(hasLocaleFallback || isTranslationInProgress) && (
+      {hasLocaleFallback || isTranslationInProgress ? (
         <LocaleNotice
           shownLocale={doc.locale}
           requestedLocale={requestedLocale}
           hasLocaleFallback={hasLocaleFallback}
           isTranslationInProgress={isTranslationInProgress}
         />
-      )}
-      {doc.status === 'flagged' && flaggedClaims.length > 0 && (
+      ) : null}
+      {doc.status === 'flagged' && flaggedClaims.length > 0 ? (
         <FlaggedWarning claims={flaggedClaims} />
-      )}
+      ) : null}
       <article
         ref={contentRef}
         data-document-content
@@ -380,12 +383,12 @@ function DocumentView({
           </p>
         )}
 
-        {selectionData && !formData && (
+        {selectionData && !formData ? (
           <button
             ref={floatingBtnRef}
             type="button"
             onClick={openForm}
-            className="absolute z-10 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full border border-border bg-card text-card-foreground shadow-md hover:bg-accent transition-colors"
+            className="absolute z-10 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full border border-border bg-card text-card-foreground shadow-md hover:bg-accent transition-colors outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
             style={{
               top: selectionData.rect.top,
               left: selectionData.rect.left,
@@ -394,9 +397,9 @@ function DocumentView({
             <IconFlagOutline24 className="w-3.5 h-3.5" />
             {m.doc_refute_button()}
           </button>
-        )}
+        ) : null}
       </article>
-      {formData && (
+      {formData ? (
         <RefutationForm
           documentId={doc.id}
           locale={doc.locale}
@@ -406,18 +409,18 @@ function DocumentView({
           onClose={closeForm}
           onSuccess={handleFormSuccess}
         />
-      )}
+      ) : null}
 
-      {sources.length > 0 && <SourcesSection sources={sources} />}
+      {sources.length > 0 ? <SourcesSection sources={sources} /> : null}
       <TranslationsSection
         translations={doc.translations}
         currentLocale={doc.locale}
         canonicalLocale={doc.canonicalLocale}
         documentId={doc.id}
       />
-      {doc.refutations.length > 0 && (
+      {doc.refutations.length > 0 ? (
         <RefutationsSection refutations={doc.refutations} />
-      )}
+      ) : null}
     </div>
   )
 }
@@ -427,12 +430,12 @@ function MetadataBar({ document: doc }: { document: DocumentResponse }) {
     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground border-b border-border pb-4">
       <StatusBadge status={doc.status} />
 
-      {doc.verificationScore !== null && (
+      {doc.verificationScore !== null ? (
         <span className="inline-flex items-center gap-1.5">
           <IconShieldOutline24 className="w-4 h-4" />
           {m.doc_verification_score({ score: String(doc.verificationScore) })}
         </span>
-      )}
+      ) : null}
 
       <span className="inline-flex items-center gap-1.5">
         <IconGlobeOutline24 className="w-4 h-4" />
@@ -535,7 +538,8 @@ function FlaggedWarning({ claims }: { claims: FlaggedClaim[] }) {
           <button
             type="button"
             onClick={() => setOpen(!open)}
-            className="mt-1 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+            aria-expanded={open}
+            className="mt-1 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors rounded-sm outline-none focus-visible:ring-ring/50 focus-visible:ring-[3px]"
           >
             {m.doc_flagged_claims()} ({claims.length})
             {open ? (
@@ -544,7 +548,7 @@ function FlaggedWarning({ claims }: { claims: FlaggedClaim[] }) {
               <IconChevronDownOutline24 className="w-3 h-3" />
             )}
           </button>
-          {open && (
+          {open ? (
             <ul className="mt-3 space-y-2">
               {claims.map((claim) => (
                 <li
@@ -552,15 +556,15 @@ function FlaggedWarning({ claims }: { claims: FlaggedClaim[] }) {
                   className="text-sm text-muted-foreground pl-3 border-l-2 border-chart-4/40"
                 >
                   {claim.text}
-                  {claim.notes && (
+                  {claim.notes ? (
                     <span className="block text-xs mt-0.5 opacity-70">
                       {claim.notes}
                     </span>
-                  )}
+                  ) : null}
                 </li>
               ))}
             </ul>
-          )}
+          ) : null}
         </div>
       </div>
     </div>
@@ -572,22 +576,25 @@ function SourcesSection({ sources }: { sources: Source[] }) {
 
   return (
     <section className="mt-10 border-t border-border pt-6">
-      <button
-        type="button"
-        onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 text-base font-semibold text-foreground hover:text-foreground/80 transition-colors w-full text-left"
-      >
-        <IconExternalLinkOutline24 className="w-5 h-5" />
-        {m.doc_sources()} ({sources.length})
-        <span className="ml-auto">
-          {open ? (
-            <IconChevronUpOutline24 className="w-4 h-4 text-muted-foreground" />
-          ) : (
-            <IconChevronDownOutline24 className="w-4 h-4 text-muted-foreground" />
-          )}
-        </span>
-      </button>
-      {open && (
+      <h2 className="text-base font-semibold text-foreground">
+        <button
+          type="button"
+          onClick={() => setOpen(!open)}
+          aria-expanded={open}
+          className="flex items-center gap-2 w-full text-left hover:text-foreground/80 transition-colors rounded-sm outline-none focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+        >
+          <IconExternalLinkOutline24 className="w-5 h-5" />
+          {m.doc_sources()} ({sources.length})
+          <span className="ml-auto">
+            {open ? (
+              <IconChevronUpOutline24 className="w-4 h-4 text-muted-foreground" />
+            ) : (
+              <IconChevronDownOutline24 className="w-4 h-4 text-muted-foreground" />
+            )}
+          </span>
+        </button>
+      </h2>
+      {open ? (
         <ol className="mt-4 space-y-3">
           {sources.map((source) => (
             <li key={source.url} className="flex gap-3 text-sm">
@@ -600,16 +607,16 @@ function SourcesSection({ sources }: { sources: Source[] }) {
                 >
                   {source.title || source.url}
                 </a>
-                {source.snippet && (
+                {source.snippet ? (
                   <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
                     {source.snippet}
                   </p>
-                )}
+                ) : null}
               </div>
             </li>
           ))}
         </ol>
-      )}
+      ) : null}
     </section>
   )
 }
@@ -632,7 +639,7 @@ function TranslationsSection({
   ]
 
   return (
-    <section className="mt-8 border-t border-border pt-6">
+    <section className="mt-10 border-t border-border pt-6">
       <h2 className="flex items-center gap-2 text-base font-semibold text-foreground mb-3">
         <IconGlobeOutline24 className="w-5 h-5" />
         {m.doc_available_in()}
@@ -642,20 +649,22 @@ function TranslationsSection({
           const isCurrent = t.locale === currentLocale
           const isCanonical = t.status === 'canonical'
           return (
-            <a
+            <Link
               key={t.locale}
-              href={`/documents/${documentId}?locale=${t.locale}`}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-md border transition-colors ${
+              to="/documents/$documentId"
+              params={{ documentId }}
+              search={{ locale: t.locale }}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-md border transition-colors outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] ${
                 isCurrent
                   ? 'border-foreground/20 bg-foreground/5 text-foreground font-medium'
                   : 'border-border bg-card text-muted-foreground hover:text-foreground hover:border-foreground/20'
               }`}
             >
               {t.locale.toUpperCase()}
-              {isCanonical && (
+              {isCanonical ? (
                 <span className="text-xs opacity-60">({m.doc_canonical_label()})</span>
-              )}
-            </a>
+              ) : null}
+            </Link>
           )
         })}
       </div>
@@ -669,7 +678,7 @@ function RefutationsSection({
   refutations: DocRefutation[]
 }) {
   return (
-    <section className="mt-8 border-t border-border pt-6">
+    <section className="mt-10 border-t border-border pt-6">
       <h2 className="flex items-center gap-2 text-base font-semibold text-foreground mb-4">
         <IconFlagOutline24 className="w-5 h-5" />
         {m.doc_refutations()} ({refutations.length})
@@ -704,7 +713,7 @@ function RefutationCard({ refutation: r }: { refutation: DocRefutation }) {
           {refutationStatusLabel(r.status)}
         </span>
 
-        {verdict && (
+        {verdict ? (
           <span
             className={`px-2 py-0.5 rounded font-medium ${
               r.verdict === 'upheld'
@@ -716,7 +725,7 @@ function RefutationCard({ refutation: r }: { refutation: DocRefutation }) {
           >
             {verdict}
           </span>
-        )}
+        ) : null}
 
         <span className="text-muted-foreground ml-auto">
           {formatDate(r.createdAt)}

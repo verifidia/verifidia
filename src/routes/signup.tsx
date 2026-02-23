@@ -85,6 +85,8 @@ function SignupPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
               autoComplete="email"
+              aria-invalid={error ? true : undefined}
+              aria-describedby={error ? "signup-error" : undefined}
             />
           </div>
 
@@ -97,6 +99,8 @@ function SignupPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="new-password"
+              aria-invalid={error ? true : undefined}
+              aria-describedby={error ? "signup-error" : undefined}
             />
           </div>
 
@@ -109,14 +113,18 @@ function SignupPage() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
               autoComplete="new-password"
+              aria-invalid={error ? true : undefined}
+              aria-describedby={error ? "signup-error" : undefined}
             />
           </div>
 
-          {error && (
-            <p className="text-sm text-destructive" role="alert">
-              {error}
-            </p>
-          )}
+          <div aria-live="polite">
+            {error ? (
+              <p id="signup-error" className="text-sm text-destructive" role="alert">
+                {error}
+              </p>
+            ) : null}
+          </div>
 
           <Button
             type="submit"
@@ -132,7 +140,7 @@ function SignupPage() {
           {m.auth_has_account()}{' '}
           <Link
             to="/login"
-            className="font-medium text-foreground underline-offset-4 hover:underline"
+            className="rounded-sm font-medium text-foreground underline-offset-4 outline-none hover:underline focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
           >
             {m.auth_has_account_link()}
           </Link>

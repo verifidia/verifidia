@@ -59,11 +59,11 @@ function SearchPage() {
     <div className="max-w-3xl mx-auto px-4 py-10">
       <SearchInput defaultValue={q} />
 
-      {q.trim() && (
+      {q.trim() ? (
         <h2 className="text-lg font-semibold tracking-tight text-foreground mb-6">
           {m.search_results_title()}
         </h2>
-      )}
+      ) : null}
 
       {results.length === 0 && q.trim() ? (
         <EmptyState />
@@ -75,9 +75,9 @@ function SearchPage() {
         </div>
       )}
 
-      {results.length > 0 && (
+      {results.length > 0 ? (
         <Pagination page={page} hasMore={hasMore} q={q} locale={locale} />
-      )}
+      ) : null}
     </div>
   )
 }
@@ -93,25 +93,28 @@ function SearchInput({ defaultValue }: { defaultValue: string }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mb-8">
-      <div className="flex gap-2">
-        <div className="relative flex-1">
-          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
-            <IconMagnifierOutline24 className="w-4 h-4" />
+    <search className="mb-8">
+      <form onSubmit={handleSubmit}>
+        <div className="flex gap-2">
+          <div className="relative flex-1">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground">
+              <IconMagnifierOutline24 className="w-4 h-4" />
+            </div>
+            <Input
+              type="search"
+              name="q"
+              defaultValue={defaultValue}
+              placeholder={m.search_placeholder()}
+              aria-label={m.search_placeholder()}
+              className="pl-10 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+            />
           </div>
-          <Input
-            type="search"
-            name="q"
-            defaultValue={defaultValue}
-            placeholder={m.search_placeholder()}
-            className="pl-10"
-          />
+          <Button type="submit" variant="default">
+            {m.search_button()}
+          </Button>
         </div>
-        <Button type="submit" variant="default">
-          {m.search_button()}
-        </Button>
-      </div>
-    </form>
+      </form>
+    </search>
   )
 }
 
@@ -129,34 +132,34 @@ function ResultCard({ result }: { result: SearchResult }) {
       to="/documents/$documentId"
       params={{ documentId: result.id }}
       search={{ locale: undefined }}
-      className="group block rounded-lg border border-border bg-card p-5 transition-colors hover:border-ring/50 hover:bg-accent/30"
+      className="group block rounded-lg border border-border bg-card p-5 transition-colors hover:border-ring/50 hover:bg-accent/30 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
     >
       <h3 className="text-base font-semibold text-foreground group-hover:text-primary transition-colors mb-1.5">
         {result.title || m.untitled()}
       </h3>
 
-      {result.snippet && (
+      {result.snippet ? (
         <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-3">
           {result.snippet}
         </p>
-      )}
+      ) : null}
 
       <div className="flex items-center gap-4 text-xs text-muted-foreground">
-        {result.verificationScore != null && (
+        {result.verificationScore != null ? (
           <span className="inline-flex items-center gap-1">
             <IconShieldCheckOutline24 className="w-3.5 h-3.5" />
             {m.search_verification_score({ score: String(result.verificationScore) })}
           </span>
-        )}
+        ) : null}
 
         <span className="inline-flex items-center gap-1">
           <IconGlobeOutline24 className="w-3.5 h-3.5" />
           {result.locale.toUpperCase()}
         </span>
 
-        {formattedDate && (
+        {formattedDate ? (
           <span>{m.doc_last_updated({ date: formattedDate })}</span>
-        )}
+        ) : null}
       </div>
     </Link>
   )
@@ -174,12 +177,12 @@ function Pagination({
   locale: string
 }) {
   return (
-    <div className="flex items-center justify-between mt-8 pt-6 border-t border-border">
+    <nav aria-label="Pagination" className="flex items-center justify-between mt-8 pt-6 border-t border-border">
       {page > 1 ? (
         <Link
           to="/search"
           search={{ q, locale, page: page - 1 }}
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+          className="inline-flex items-center gap-1.5 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground transition-colors outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
         >
           <IconChevronLeftOutline24 className="w-4 h-4" />
           {m.page_previous()}
@@ -196,7 +199,7 @@ function Pagination({
         <Link
           to="/search"
           search={{ q, locale, page: page + 1 }}
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+          className="inline-flex items-center gap-1.5 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground transition-colors outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
         >
           {m.page_next()}
           <IconChevronRightOutline24 className="w-4 h-4" />
@@ -204,13 +207,13 @@ function Pagination({
       ) : (
         <div />
       )}
-    </div>
+    </nav>
   )
 }
 
 function EmptyState() {
   return (
-    <div className="text-center py-16">
+    <output className="block text-center py-16">
       <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-muted mb-4">
         <IconMagnifierOutline24 className="w-5 h-5 text-muted-foreground" />
       </div>
@@ -223,13 +226,13 @@ function EmptyState() {
       <Button variant="outline" asChild>
         <Link to="/">{m.request_button()}</Link>
       </Button>
-    </div>
+    </output>
   )
 }
 
 function SearchSkeleton() {
   return (
-    <div className="max-w-3xl mx-auto px-4 py-10">
+    <div className="max-w-3xl mx-auto px-4 py-10" aria-busy="true">
       <div className="mb-8">
         <div className="flex gap-2">
           <div className="flex-1 h-9 bg-muted rounded-md animate-pulse" />
@@ -240,7 +243,7 @@ function SearchSkeleton() {
       <div className="flex flex-col gap-3">
         {Array.from({ length: 5 }).map((_, i) => (
           <div
-            key={i}
+            key={`skeleton-${i}`}
             className="rounded-lg border border-border bg-card p-5"
           >
             <div className="h-5 w-2/3 bg-muted rounded mb-2 animate-pulse" />

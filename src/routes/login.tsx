@@ -59,6 +59,8 @@ function LoginPage() {
               required
               autoComplete="email"
               autoFocus
+              aria-invalid={error ? true : undefined}
+              aria-describedby={error ? "login-error" : undefined}
             />
           </div>
 
@@ -71,14 +73,18 @@ function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="current-password"
+              aria-invalid={error ? true : undefined}
+              aria-describedby={error ? "login-error" : undefined}
             />
           </div>
 
-          {error && (
-            <p className="text-sm text-destructive" role="alert">
-              {error}
-            </p>
-          )}
+          <div aria-live="polite">
+            {error ? (
+              <p id="login-error" className="text-sm text-destructive" role="alert">
+                {error}
+              </p>
+            ) : null}
+          </div>
 
           <Button
             type="submit"
@@ -94,7 +100,7 @@ function LoginPage() {
           {m.auth_no_account()}{' '}
           <Link
             to="/signup"
-            className="font-medium text-foreground underline-offset-4 hover:underline"
+            className="rounded-sm font-medium text-foreground underline-offset-4 outline-none hover:underline focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
           >
             {m.auth_no_account_link()}
           </Link>
