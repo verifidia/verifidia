@@ -75,6 +75,7 @@ export const Route = createFileRoute('/api/documents/$documentId')({
             title,
             content,
             locale: activeLocale,
+            requestedLocale: locale,
             canonicalLocale: doc.canonicalLocale,
             status: doc.status,
             verificationScore: doc.verificationScore,

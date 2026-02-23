@@ -49,10 +49,11 @@ interface DocumentResponse {
   title: string | null
   content: string | null
   locale: string
+  requestedLocale: string
   canonicalLocale: string
   status: 'queued' | 'generating' | 'generated' | 'verified' | 'flagged' | 'failed'
   verificationScore: number | null
-  verificationDetails: Record<string, unknown> | FlaggedClaim[] | null
+  verificationDetails: Record<string, {}> | FlaggedClaim[] | null
   sources: string | Source[] | null
   translations: Translation[]
   refutations: DocRefutation[]
@@ -156,6 +157,7 @@ export const Route = createFileRoute('/documents/$documentId')({
 
 function DocumentPage() {
   const data = Route.useLoaderData()
+  const search = Route.useSearch()
 
   if (data.notFound) {
     return <NotFoundView />
@@ -172,7 +174,9 @@ function DocumentPage() {
     return <FailedView title={doc.title} topic={doc.topic} />
   }
 
-  return <DocumentView document={doc} />
+  const requestedLocale = search.locale || getLocale()
+
+  return <DocumentView document={doc} requestedLocale={requestedLocale} />
 }
 
 function NotFoundView() {
@@ -228,9 +232,20 @@ function FailedView({ title, topic }: { title: string | null; topic: string }) {
   )
 }
 
-function DocumentView({ document: doc }: { document: DocumentResponse }) {
+function DocumentView({
+  document: doc,
+  requestedLocale,
+}: {
+  document: DocumentResponse
+  requestedLocale: string
+}) {
   const sources = parseSources(doc.sources)
   const flaggedClaims = parseFlaggedClaims(doc.verificationDetails)
+  const requestedTranslation = doc.translations.find(
+    (translation) => translation.locale === requestedLocale,
+  )
+  const hasLocaleFallback = doc.locale !== requestedLocale
+  const isTranslationInProgress = requestedTranslation?.status === 'translating'
   const contentRef = useRef<HTMLElement>(null)
   const floatingBtnRef = useRef<HTMLButtonElement>(null)
 
@@ -341,6 +356,14 @@ function DocumentView({ document: doc }: { document: DocumentResponse }) {
       </h1>
 
       <MetadataBar document={doc} />
+      {(hasLocaleFallback || isTranslationInProgress) && (
+        <LocaleNotice
+          shownLocale={doc.locale}
+          requestedLocale={requestedLocale}
+          hasLocaleFallback={hasLocaleFallback}
+          isTranslationInProgress={isTranslationInProgress}
+        />
+      )}
       {doc.status === 'flagged' && flaggedClaims.length > 0 && (
         <FlaggedWarning claims={flaggedClaims} />
       )}
@@ -386,13 +409,12 @@ function DocumentView({ document: doc }: { document: DocumentResponse }) {
       )}
 
       {sources.length > 0 && <SourcesSection sources={sources} />}
-      {doc.translations.length > 0 && (
-        <TranslationsSection
-          translations={doc.translations}
-          currentLocale={doc.locale}
-          documentId={doc.id}
-        />
-      )}
+      <TranslationsSection
+        translations={doc.translations}
+        currentLocale={doc.locale}
+        canonicalLocale={doc.canonicalLocale}
+        documentId={doc.id}
+      />
       {doc.refutations.length > 0 && (
         <RefutationsSection refutations={doc.refutations} />
       )}
@@ -421,6 +443,35 @@ function MetadataBar({ document: doc }: { document: DocumentResponse }) {
         <IconClockOutline24 className="w-4 h-4" />
         {m.doc_last_updated({ date: formatDate(doc.updatedAt) })}
       </span>
+    </div>
+  )
+}
+
+function LocaleNotice({
+  shownLocale,
+  requestedLocale,
+  hasLocaleFallback,
+  isTranslationInProgress,
+}: {
+  shownLocale: string
+  requestedLocale: string
+  hasLocaleFallback: boolean
+  isTranslationInProgress: boolean
+}) {
+  if (!hasLocaleFallback && !isTranslationInProgress) {
+    return null
+  }
+  return (
+    <div className="mt-4 rounded-lg border border-primary/20 bg-primary/5 p-3 text-sm text-foreground">
+      <p className="inline-flex items-center gap-2">
+        <IconGlobeOutline24 className="h-4 w-4 shrink-0" />
+        {isTranslationInProgress
+          ? m.doc_translation_in_progress()
+          : m.doc_fallback_notice({
+              shownLocale: shownLocale.toUpperCase(),
+              requestedLocale: requestedLocale.toUpperCase(),
+            })}
+      </p>
     </div>
   )
 }
@@ -566,32 +617,44 @@ function SourcesSection({ sources }: { sources: Source[] }) {
 function TranslationsSection({
   translations,
   currentLocale,
+  canonicalLocale,
   documentId,
 }: {
   translations: Translation[]
   currentLocale: string
+  canonicalLocale: string
   documentId: string
 }) {
+  // Build list: canonical locale first, then translations (excluding canonical)
+  const allLocales = [
+    { locale: canonicalLocale, status: 'canonical' },
+    ...translations.filter((t) => t.locale !== canonicalLocale),
+  ]
+
   return (
     <section className="mt-8 border-t border-border pt-6">
       <h2 className="flex items-center gap-2 text-base font-semibold text-foreground mb-3">
         <IconGlobeOutline24 className="w-5 h-5" />
-        {m.doc_translations()}
+        {m.doc_available_in()}
       </h2>
       <div className="flex flex-wrap gap-2">
-        {translations.map((t) => {
+        {allLocales.map((t) => {
           const isCurrent = t.locale === currentLocale
+          const isCanonical = t.status === 'canonical'
           return (
             <a
               key={t.locale}
               href={`/documents/${documentId}?locale=${t.locale}`}
-              className={`inline-flex items-center px-3 py-1.5 text-sm rounded-md border transition-colors ${
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-md border transition-colors ${
                 isCurrent
                   ? 'border-foreground/20 bg-foreground/5 text-foreground font-medium'
                   : 'border-border bg-card text-muted-foreground hover:text-foreground hover:border-foreground/20'
               }`}
             >
               {t.locale.toUpperCase()}
+              {isCanonical && (
+                <span className="text-xs opacity-60">({m.doc_canonical_label()})</span>
+              )}
             </a>
           )
         })}
