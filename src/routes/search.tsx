@@ -1,6 +1,8 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { useState } from 'react'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { z } from 'zod'
 import * as m from '#/paraglide/messages'
+import { authClient } from '#/lib/auth-client'
 import { Button } from '#/components/ui/button'
 import {
   IconMagnifierOutline18,
@@ -64,7 +66,7 @@ function SearchPage() {
       ) : null}
 
       {results.length === 0 && q.trim() ? (
-        <EmptyState />
+        <EmptyState query={q} locale={locale} />
       ) : (
         <div className="flex flex-col gap-1">
           {results.map((result) => (
@@ -173,7 +175,44 @@ function Pagination({
   )
 }
 
-function EmptyState() {
+function EmptyState({ query, locale }: { query: string; locale: string }) {
+  const { data: session } = authClient.useSession()
+  const navigate = useNavigate()
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'error'>('idle')
+  const [errorMessage, setErrorMessage] = useState('')
+
+  const handleRequest = async () => {
+    setStatus('submitting')
+    setErrorMessage('')
+
+    try {
+      const res = await fetch('/api/documents/request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic: query, locale }),
+      })
+
+      const data = await res.json().catch(() => null)
+
+      if (res.ok && data?.documentId) {
+        void navigate({
+          to: '/documents/$documentId',
+          params: { documentId: data.documentId },
+        })
+        return
+      }
+
+      const msg =
+        data && typeof data === 'object' && 'error' in data
+          ? String(data.error)
+          : 'Failed to request article.'
+      setErrorMessage(msg)
+      setStatus('error')
+    } catch {
+      setErrorMessage('Failed to request article.')
+      setStatus('error')
+    }
+  }
   return (
     <output className="block text-center py-20 mt-10">
       <div className="inline-flex items-center justify-center w-12 h-12 rounded-sm bg-muted mb-4">
@@ -185,9 +224,23 @@ function EmptyState() {
       <p className="text-sm text-muted-foreground mb-6">
         {m.search_no_results_hint()}
       </p>
-      <Button variant="outline" asChild className="rounded-sm">
-        <Link to="/">{m.request_button()}</Link>
-      </Button>
+      {session ? (
+        <Button
+          variant="outline"
+          className="rounded-sm"
+          disabled={status === 'submitting'}
+          onClick={() => void handleRequest()}
+        >
+          {status === 'submitting' ? m.request_generating() : m.request_button()}
+        </Button>
+      ) : (
+        <Button variant="outline" asChild className="rounded-sm">
+          <Link to="/login">{m.auth_sign_in()}</Link>
+        </Button>
+      )}
+      {status === 'error' && errorMessage ? (
+        <p className="text-sm text-destructive mt-3">{errorMessage}</p>
+      ) : null}
     </output>
   )
 }

@@ -1,0 +1,2 @@
+- use bun.
+- never use em-dash.

@@ -13,7 +13,7 @@ const TranslationSchema = z.object({
 })
 
 export const translateDocument = inngest.createFunction(
-  { id: 'translate-document', concurrency: { limit: 5 } },
+  { id: 'translate-document', idempotency: 'event.data.documentId + "-" + event.data.locale', concurrency: { limit: 5 } },
   { event: 'document/translation.requested' },
   async ({ event, step }) => {
     const { documentId } = event.data

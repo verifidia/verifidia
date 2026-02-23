@@ -5,16 +5,16 @@ export type Events = {
     data: { topic: string; locale: string; documentId: string }
   }
   'document/verification.requested': {
-    data: { documentId: string }
+    data: { documentId: string; locale: string }
   }
   'document/translation.requested': {
-    data: { documentId: string; targetLocale: string }
+    data: { documentId: string; locale: string; targetLocale: string }
   }
   'refutation/submitted': {
-    data: { refutationId: string; documentId: string }
+    data: { refutationId: string; documentId: string; locale: string }
   }
   'document/refresh.requested': {
-    data: { documentId: string }
+    data: { documentId: string; locale: string }
   }
 }
 

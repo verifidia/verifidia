@@ -27,7 +27,7 @@ const CATEGORY_CONTEXT: Record<string, string> = {
 }
 
 export const processRefutation = inngest.createFunction(
-  { id: 'process-refutation' },
+  { id: 'process-refutation', idempotency: 'event.data.documentId + "-" + event.data.locale' },
   { event: 'refutation/submitted' },
   async ({ event, step }) => {
     const { refutationId, documentId } = event.data
@@ -174,11 +174,11 @@ export const processRefutation = inngest.createFunction(
     if (applyResult.applied) {
       await step.sendEvent('request-verification', {
         name: 'document/verification.requested',
-        data: { documentId },
+        data: { documentId, locale: context.refutation.locale },
       })
       await step.sendEvent('request-translation', {
         name: 'document/translation.requested',
-        data: { documentId, targetLocale: context.refutation.locale },
+        data: { documentId, locale: context.refutation.locale, targetLocale: context.refutation.locale },
       })
     }
 

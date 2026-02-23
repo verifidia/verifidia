@@ -38,7 +38,7 @@ const WRITER_SYSTEM_PROMPT =
   'You are an encyclopedic writer. Write in neutral, factual tone. Use short, clear sentences. Cite sources inline as [1], [2]. Do not use em-dashes. Do not use marketing language or superlatives unless directly sourced.'
 
 export const generateDocument = inngest.createFunction(
-  { id: 'generate-document' },
+  { id: 'generate-document', idempotency: 'event.data.documentId + "-" + event.data.locale' },
   { event: 'document/generation.requested' },
   async ({ event, step }) => {
     const { topic, locale, documentId } = event.data
@@ -169,7 +169,7 @@ export const generateDocument = inngest.createFunction(
 
     await step.sendEvent('fan-out-verification', {
       name: 'document/verification.requested',
-      data: { documentId },
+      data: { documentId, locale },
     })
 
     return {

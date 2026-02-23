@@ -27,7 +27,7 @@ export const checkStaleDocuments = inngest.createFunction(
   async ({ step }) => {
     const staleDocuments = await step.run('find-stale-documents', async () => {
       return db
-        .select({ id: documents.id, topic: documents.topic })
+        .select({ id: documents.id, topic: documents.topic, canonicalLocale: documents.canonicalLocale })
         .from(documents)
         .where(
           and(
@@ -45,7 +45,7 @@ export const checkStaleDocuments = inngest.createFunction(
       'fan-out-refresh',
       staleDocuments.map((doc) => ({
         name: 'document/refresh.requested' as const,
-        data: { documentId: doc.id },
+        data: { documentId: doc.id, locale: doc.canonicalLocale },
       })),
     )
 
@@ -56,7 +56,7 @@ export const checkStaleDocuments = inngest.createFunction(
 // -- Function B: Per-document refresh triggered by fan-out event --
 
 export const refreshDocument = inngest.createFunction(
-  { id: 'refresh-document' },
+  { id: 'refresh-document', idempotency: 'event.data.documentId + "-" + event.data.locale' },
   { event: 'document/refresh.requested' },
   async ({ event, step }) => {
     const { documentId } = event.data
@@ -173,7 +173,7 @@ export const refreshDocument = inngest.createFunction(
     // Step 4: Re-verify the updated document
     await step.sendEvent('re-verify', {
       name: 'document/verification.requested',
-      data: { documentId },
+      data: { documentId, locale: event.data.locale },
     })
 
     // Step 5: Re-translate existing translations
@@ -189,7 +189,7 @@ export const refreshDocument = inngest.createFunction(
         're-translate',
         existingTranslations.map((t) => ({
           name: 'document/translation.requested' as const,
-          data: { documentId, targetLocale: t.locale },
+          data: { documentId, locale: event.data.locale, targetLocale: t.locale },
         })),
       )
     }

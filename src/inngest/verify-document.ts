@@ -58,6 +58,7 @@ function parseSourceUrls(rawSources: unknown): string[] {
 export const verifyDocument = inngest.createFunction(
   {
     id: 'verify-document',
+    idempotency: 'event.data.documentId + "-" + event.data.locale',
     concurrency: { limit: 3 },
   },
   { event: 'document/verification.requested' },
