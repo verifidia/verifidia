@@ -17,6 +17,7 @@ import { citationComponents, SourcesContext } from '#/components/citation-chip'
 import { RefutationForm } from '#/components/refutation-form'
 import { getApiUrl } from '#/lib/get-api-url'
 import { rehypeCitationChips } from '#/lib/rehype-citation-chips'
+import { rehypeHeadingIds } from '#/lib/rehype-heading-ids'
 import { m } from '#/paraglide/messages'
 import { getLocale } from '#/paraglide/runtime'
 
@@ -264,6 +265,52 @@ function FailedView({ title, topic }: { title: string | null; topic: string }) {
   )
 }
 
+interface TocItem {
+  id: string
+  text: string
+  level: number
+}
+
+function extractHeadings(markdown: string): TocItem[] {
+  const headings: TocItem[] = []
+  const regex = /^(#{2,4})\s+(.+)$/gm
+  let match: RegExpExecArray | null
+  while ((match = regex.exec(markdown)) !== null) {
+    const level = match[1].length
+    const text = match[2].trim()
+    // Must match slugify logic in rehype-heading-ids.ts exactly:
+    const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+    headings.push({ id, text, level })
+  }
+  return headings
+}
+
+function TableOfContents({ content }: { content: string }) {
+  const headings = useMemo(() => extractHeadings(content), [content])
+
+  if (headings.length === 0) return null
+
+  return (
+    <nav aria-label={m.doc_toc()}>
+      <h2 className="mb-3 font-semibold text-muted-foreground text-xs uppercase tracking-wider">
+        {m.doc_toc()}
+      </h2>
+      <ul className="space-y-1">
+        {headings.map((h) => (
+          <li key={h.id}>
+            <a
+              className="block truncate text-muted-foreground text-sm transition-colors hover:text-foreground"
+              href={`#${h.id}`}
+              style={{ paddingLeft: `${(h.level - 2) * 12}px` }}
+            >
+              {h.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
 function DocumentView({
   document: doc,
   requestedLocale,
@@ -395,82 +442,110 @@ function DocumentView({
     setFormData(null)
   }
   return (
-    <div className="mx-auto max-w-5xl px-6 py-8 md:px-10 md:py-12">
-      <h1 className="mb-2 font-bold text-4xl text-foreground leading-tight tracking-tight">
-        {doc.title ?? doc.topic}
-      </h1>
-
-      <MetadataBar document={doc} />
-      {hasLocaleFallback || isTranslationInProgress ? (
-        <LocaleNotice
-          hasLocaleFallback={hasLocaleFallback}
-          isTranslationInProgress={isTranslationInProgress}
-          requestedLocale={requestedLocale}
-          shownLocale={doc.locale}
-        />
-      ) : null}
-      {doc.status === 'flagged' && flaggedClaims.length > 0 ? (
-        <FlaggedWarning claims={flaggedClaims} />
-      ) : null}
-      <article
-        className="prose prose-neutral dark:prose-invert relative mt-8 max-w-none"
-        data-document-content
-        ref={contentRef}
-      >
+    <div className="mx-auto w-full max-w-7xl px-4 py-8 md:px-6 md:py-12 xl:grid xl:doc-grid xl:gap-8">
+      {/* Left: Table of Contents - hidden below xl */}
+      <aside className="hidden xl:block">
         {doc.content ? (
-          <SourcesContext value={sources}>
-            <Streamdown
-              components={citationComponents}
-              rehypePlugins={[rehypeCitationChips]}
-            >
-              {doc.content}
-            </Streamdown>
-          </SourcesContext>
-        ) : (
-          <p className="text-muted-foreground italic">
-            {m.doc_generating_message()}
-          </p>
-        )}
-
-        {selectionData && !formData ? (
-          <button
-            className="absolute z-10 inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 font-medium text-foreground text-xs shadow-sm outline-none transition-colors hover:bg-accent focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
-            onClick={openForm}
-            ref={floatingBtnRef}
-            style={{
-              top: selectionData.rect.top,
-              left: selectionData.rect.left,
-            }}
-            type="button"
-          >
-            <IconFlagOutline18 className="h-3.5 w-3.5" />
-            {m.doc_refute_button()}
-          </button>
+          <div className="sticky top-8">
+            <TableOfContents content={doc.content} />
+          </div>
         ) : null}
-      </article>
-      {formData ? (
-        <RefutationForm
-          documentId={doc.id}
-          endOffset={formData.endOffset}
-          locale={doc.locale}
-          onClose={closeForm}
-          onSuccess={handleFormSuccess}
-          open={!!formData}
-          selectedText={formData.text}
-          startOffset={formData.startOffset}
-        />
-      ) : null}
+      </aside>
 
-      {sources.length > 0 ? <SourcesSection sources={sources} /> : null}
-      <TranslationsSection
-        canonicalLocale={doc.canonicalLocale}
-        currentLocale={doc.locale}
-        documentId={doc.id}
-        translations={doc.translations}
-      />
-      {doc.refutations.length > 0 ? (
-        <RefutationsSection refutations={doc.refutations} />
-      ) : null}
+      {/* Center: Main content */}
+      <div className="min-w-0">
+        <h1 className="mb-2 font-bold text-4xl text-foreground leading-tight tracking-tight">
+          {doc.title ?? doc.topic}
+        </h1>
+        <MetadataBar document={doc} />
+        {hasLocaleFallback || isTranslationInProgress ? (
+          <LocaleNotice
+            hasLocaleFallback={hasLocaleFallback}
+            isTranslationInProgress={isTranslationInProgress}
+            requestedLocale={requestedLocale}
+            shownLocale={doc.locale}
+          />
+        ) : null}
+        {doc.status === 'flagged' && flaggedClaims.length > 0 ? (
+          <FlaggedWarning claims={flaggedClaims} />
+        ) : null}
+        <article
+          className="prose prose-neutral dark:prose-invert relative mt-8 max-w-none"
+          data-document-content
+          ref={contentRef}
+        >
+          {doc.content ? (
+            <SourcesContext value={sources}>
+              <Streamdown
+                components={citationComponents}
+                rehypePlugins={[rehypeHeadingIds, rehypeCitationChips]}
+              >
+                {doc.content}
+              </Streamdown>
+            </SourcesContext>
+          ) : (
+            <p className="text-muted-foreground italic">
+              {m.doc_generating_message()}
+            </p>
+          )}
+        {selectionData && !formData ? (
+            <button
+              className="absolute z-10 inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 font-medium text-foreground text-xs shadow-sm outline-none transition-colors hover:bg-accent focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+              onClick={openForm}
+              ref={floatingBtnRef}
+              style={{
+                top: selectionData.rect.top,
+                left: selectionData.rect.left,
+              }}
+              type="button"
+            >
+              <IconFlagOutline18 className="h-3.5 w-3.5" />
+              {m.doc_refute_button()}
+            </button>
+          ) : null}
+        </article>
+        {formData ? (
+          <RefutationForm
+            documentId={doc.id}
+            endOffset={formData.endOffset}
+            locale={doc.locale}
+            onClose={closeForm}
+            onSuccess={handleFormSuccess}
+            open={!!formData}
+            selectedText={formData.text}
+            startOffset={formData.startOffset}
+          />
+        ) : null}
+
+        {/* On mobile/tablet, show sources/translations/refutations inline below content */}
+        <div className="xl:hidden">
+          {sources.length > 0 ? <SourcesSection sources={sources} /> : null}
+          <TranslationsSection
+            canonicalLocale={doc.canonicalLocale}
+            currentLocale={doc.locale}
+            documentId={doc.id}
+            translations={doc.translations}
+          />
+          {doc.refutations.length > 0 ? (
+            <RefutationsSection refutations={doc.refutations} />
+          ) : null}
+        </div>
+      </div>
+      {/* Right: Sidebar - hidden below xl */}
+      <aside className="hidden xl:block">
+        <div className="sticky top-8 space-y-6">
+          {sources.length > 0 ? <SourcesSection sources={sources} /> : null}
+          <TranslationsSection
+            canonicalLocale={doc.canonicalLocale}
+            currentLocale={doc.locale}
+            documentId={doc.id}
+            translations={doc.translations}
+          />
+          {doc.refutations.length > 0 ? (
+            <RefutationsSection refutations={doc.refutations} />
+          ) : null}
+        </div>
+      </aside>
     </div>
   )
 }

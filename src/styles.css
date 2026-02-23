@@ -194,3 +194,7 @@ code {
     @apply transition-colors duration-100;
   }
 }
+
+@utility doc-grid {
+  grid-template-columns: 220px 1fr 260px;
+}
