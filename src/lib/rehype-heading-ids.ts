@@ -1,5 +1,5 @@
 import type { Element, Properties } from 'hast'
-import { toString } from 'hast-util-to-string'
+import { toString as hastToString } from 'hast-util-to-string'
 import { visit } from 'unist-util-visit'
 
 function slugify(text: string): string {
@@ -13,7 +13,7 @@ export function rehypeHeadingIds() {
   return (tree: Element) => {
     visit(tree, 'element', (node: Element) => {
       if (['h1', 'h2', 'h3', 'h4'].includes(node.tagName)) {
-        const text = toString(node)
+        const text = hastToString(node)
         const id = slugify(text)
         node.properties = (node.properties ?? {}) as Properties
         node.properties.id = id

@@ -356,20 +356,11 @@ export const generateDocument = inngest.createFunction(
         return `## ${draft.heading}\n\n${remappedBody}`.trim()
       })
 
-      // Build source list for the markdown footer
-      const sourceListMarkdown = globalSources
-        .map(
-          (source, index) => `${index + 1}. [${source.title}](${source.url})`
-        )
-        .join('\n')
-
-      // Assemble full document
+      // Assemble full document (sources stored separately, not in markdown)
       const markdown = [
         `# ${outline.title}`,
         outline.summary,
         ...orderedSections,
-        '## Sources',
-        sourceListMarkdown,
       ].join('\n\n')
 
       return {
