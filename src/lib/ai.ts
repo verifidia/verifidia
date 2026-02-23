@@ -12,7 +12,7 @@ export const exa = new Exa(process.env.EXA_API_KEY)
 
 // -- Constants --
 
-export const AI_MODEL = process.env.OPENAI_MODEL || 'gpt-4.1'
+export const AI_MODEL = process.env.OPENAI_MODEL || 'gpt-5.2'
 
 // -- Exa search wrapper --
 

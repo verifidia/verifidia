@@ -151,7 +151,7 @@ function LeadArticleCard({ article }: { article: ArticleResult }) {
       </span>
 
       <h2 className="text-2xl sm:text-3xl font-bold leading-tight text-foreground group-hover:text-primary/80 transition-colors mb-3">
-        {article.title || 'Untitled'}
+        {article.title || m.untitled()}
       </h2>
 
       {excerpt && (
@@ -176,7 +176,7 @@ function SideArticleCard({ article }: { article: ArticleResult }) {
       className="group block px-5 py-4 lg:pl-6"
     >
       <h3 className="text-sm font-semibold leading-snug text-foreground group-hover:text-primary/80 transition-colors mb-1.5 line-clamp-2">
-        {article.title || 'Untitled'}
+        {article.title || m.untitled()}
       </h3>
 
       <div className="flex items-center gap-3 text-xs text-muted-foreground">
@@ -210,7 +210,7 @@ function ArticleCard({ article }: { article: ArticleResult }) {
       className="group block border-t border-border pt-4"
     >
       <h3 className="text-base font-semibold leading-snug text-foreground group-hover:text-primary/80 transition-colors mb-1.5 line-clamp-2">
-        {article.title || 'Untitled'}
+        {article.title || m.untitled()}
       </h3>
 
       {excerpt && (

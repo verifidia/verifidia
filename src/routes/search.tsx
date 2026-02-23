@@ -132,7 +132,7 @@ function ResultCard({ result }: { result: SearchResult }) {
       className="group block rounded-lg border border-border bg-card p-5 transition-colors hover:border-ring/50 hover:bg-accent/30"
     >
       <h3 className="text-base font-semibold text-foreground group-hover:text-primary transition-colors mb-1.5">
-        {result.title || 'Untitled'}
+        {result.title || m.untitled()}
       </h3>
 
       {result.snippet && (
