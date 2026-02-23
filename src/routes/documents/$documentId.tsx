@@ -417,7 +417,9 @@ function DocumentView({
         ref={contentRef}
       >
         {doc.content ? (
-          <Streamdown rehypePlugins={[rehypeCitationChips]}>{doc.content}</Streamdown>
+          <Streamdown rehypePlugins={[rehypeCitationChips]}>
+            {doc.content}
+          </Streamdown>
         ) : (
           <p className="text-muted-foreground italic">
             {m.doc_generating_message()}
