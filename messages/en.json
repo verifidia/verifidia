@@ -79,5 +79,11 @@
   "refute_success": "Refutation submitted successfully.",
   "refute_error": "Failed to submit refutation. Please try again.",
   "refute_min_explanation": "Explanation must be at least 20 characters.",
-  "refute_select_category": "Select a category"
+  "refute_select_category": "Select a category",
+  "doc_locale_fallback": "This document is shown in {locale}. Translation to your language is not yet available.",
+  "doc_locale_translating": "Translation to your language is in progress. Showing the original version.",
+  "doc_available_in": "Available in",
+  "doc_canonical_label": "Original",
+  "doc_fallback_notice": "This document is displayed in {shownLocale}. Translation to {requestedLocale} is in progress.",
+  "doc_translation_in_progress": "Translation in progress"
 }
