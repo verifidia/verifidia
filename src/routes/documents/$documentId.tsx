@@ -13,6 +13,7 @@ import {
 } from 'nucleo-ui-outline-18'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Streamdown } from 'streamdown'
+import { citationComponents, SourcesContext } from '#/components/citation-chip'
 import { RefutationForm } from '#/components/refutation-form'
 import { getApiUrl } from '#/lib/get-api-url'
 import { rehypeCitationChips } from '#/lib/rehype-citation-chips'
@@ -417,9 +418,14 @@ function DocumentView({
         ref={contentRef}
       >
         {doc.content ? (
-          <Streamdown rehypePlugins={[rehypeCitationChips]}>
-            {doc.content}
-          </Streamdown>
+          <SourcesContext value={sources}>
+            <Streamdown
+              components={citationComponents}
+              rehypePlugins={[rehypeCitationChips]}
+            >
+              {doc.content}
+            </Streamdown>
+          </SourcesContext>
         ) : (
           <p className="text-muted-foreground italic">
             {m.doc_generating_message()}

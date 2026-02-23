@@ -90,5 +90,6 @@
   "auth_otp_subheading": "We sent a 6-digit code to {email}",
   "auth_otp_label": "Verification code",
   "auth_otp_verify": "Verify",
-  "auth_otp_resend": "Resend code"
+  "auth_otp_resend": "Resend code",
+  "doc_toc": "Table of contents"
 }

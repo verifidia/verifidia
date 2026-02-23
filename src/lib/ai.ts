@@ -26,7 +26,6 @@ interface SearchResult {
   url: string
 }
 
-
 function stripLLMTracking(url: string): string {
   try {
     const parsed = new URL(url)
