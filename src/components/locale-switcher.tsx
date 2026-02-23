@@ -1,38 +1,38 @@
-import { getLocale, locales, setLocale } from '#/paraglide/runtime'
+import {
+  IconBangladesh,
+  IconChina,
+  IconFrance,
+  IconGermany,
+  IconIndia,
+  IconIndonesia,
+  IconIran,
+  IconItaly,
+  IconJapan,
+  IconMalaysia,
+  IconNetherlands,
+  IconPhilippines,
+  IconPoland,
+  IconPortugal,
+  IconRussia,
+  IconSaudiArabia,
+  IconSouthKorea,
+  IconSpain,
+  IconThailand,
+  IconTurkey,
+  IconUkraine,
+  IconUnitedStates,
+  IconVietnam,
+} from 'nucleo-flags'
+import { IconChevronDownOutline18 } from 'nucleo-ui-outline-18'
 import { Button } from '#/components/ui/button'
-import { m } from '#/paraglide/messages'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '#/components/ui/dropdown-menu'
-import { IconChevronDownOutline18 } from 'nucleo-ui-outline-18'
-import {
-  IconUnitedStates,
-  IconGermany,
-  IconSpain,
-  IconFrance,
-  IconPortugal,
-  IconRussia,
-  IconJapan,
-  IconSouthKorea,
-  IconChina,
-  IconSaudiArabia,
-  IconIndia,
-  IconBangladesh,
-  IconIndonesia,
-  IconMalaysia,
-  IconTurkey,
-  IconVietnam,
-  IconThailand,
-  IconPoland,
-  IconUkraine,
-  IconNetherlands,
-  IconItaly,
-  IconIran,
-  IconPhilippines,
-} from 'nucleo-flags'
+import { m } from '#/paraglide/messages'
+import { getLocale, locales, setLocale } from '#/paraglide/runtime'
 
 const LOCALE_CONFIG: Record<
   string,
@@ -72,31 +72,31 @@ export default function ParaglideLocaleSwitcher() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          variant="ghost"
-          size="sm"
           aria-label={m.locale_label()}
-          className="inline-flex items-center gap-1 h-7 px-1.5 text-xs text-muted-foreground hover:text-foreground hover:bg-accent rounded-sm transition-colors font-medium"
+          className="inline-flex h-7 items-center gap-1 rounded-sm px-1.5 font-medium text-muted-foreground text-xs transition-colors hover:bg-accent hover:text-foreground"
+          size="sm"
+          variant="ghost"
         >
-          {CurrentFlag && <CurrentFlag className="w-4 h-3 shrink-0" />}
+          {CurrentFlag && <CurrentFlag className="h-3 w-4 shrink-0" />}
           <span className="hidden sm:inline">{current?.label}</span>
-          <IconChevronDownOutline18 className="w-3 h-3 opacity-50" />
+          <IconChevronDownOutline18 className="h-3 w-3 opacity-50" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="max-h-72 overflow-y-auto">
         {locales.map((locale: string) => {
           const config = LOCALE_CONFIG[locale]
-          if (!config) return null
+          if (!config) {
+            return null
+          }
           const Flag = config.flag
           const isActive = locale === currentLocale
           return (
             <DropdownMenuItem
-              key={locale}
-              onSelect={() =>
-                setLocale(locale as (typeof locales)[number])
-              }
               className={isActive ? 'bg-accent' : ''}
+              key={locale}
+              onSelect={() => setLocale(locale as (typeof locales)[number])}
             >
-              <Flag className="w-4 h-3 shrink-0" />
+              <Flag className="h-3 w-4 shrink-0" />
               <span>{config.label}</span>
             </DropdownMenuItem>
           )

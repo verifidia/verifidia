@@ -4,10 +4,23 @@
     "ultracite/biome/core",
     "ultracite/biome/remix",
     "ultracite/biome/react"
-  ], "javascript": {
+  ],
+  "javascript": {
     "formatter": {
       "semicolons": "asNeeded",
       "quoteStyle": "single"
+    }
+  },
+  "linter": {
+    "rules": {
+      "correctness": {
+        "noUnknownProperty": {
+          "level": "error",
+          "options": {
+            "ignore": ["corner-shape"]
+          }
+        }
+      }
     }
   }
 }

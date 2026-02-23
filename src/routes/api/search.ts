@@ -17,16 +17,19 @@ export const Route = createFileRoute('/api/search')({
           const url = new URL(request.url)
           const q = url.searchParams.get('q') ?? ''
           const locale = url.searchParams.get('locale') ?? 'en'
-          const limitRaw = parseInt(url.searchParams.get('limit') ?? '20', 10)
+          const limitRaw = Number.parseInt(
+            url.searchParams.get('limit') ?? '20',
+            10
+          )
           const limit = Math.min(
             Math.max(Number.isNaN(limitRaw) ? 20 : limitRaw, 1),
-            100,
+            100
           )
-          const offsetRaw = parseInt(url.searchParams.get('offset') ?? '0', 10)
-          const offset = Math.max(
-            Number.isNaN(offsetRaw) ? 0 : offsetRaw,
-            0,
+          const offsetRaw = Number.parseInt(
+            url.searchParams.get('offset') ?? '0',
+            10
           )
+          const offset = Math.max(Number.isNaN(offsetRaw) ? 0 : offsetRaw, 0)
 
           if (!q.trim()) {
             const results = await db
@@ -67,13 +70,13 @@ export const Route = createFileRoute('/api/search')({
             .from(documentTranslations)
             .innerJoin(
               documents,
-              eq(documentTranslations.documentId, documents.id),
+              eq(documentTranslations.documentId, documents.id)
             )
             .where(
-              sql`${documentTranslations.searchVector} @@ plainto_tsquery('simple', ${q}) AND ${documentTranslations.locale} = ${locale}`,
+              sql`${documentTranslations.searchVector} @@ plainto_tsquery('simple', ${q}) AND ${documentTranslations.locale} = ${locale}`
             )
             .orderBy(
-              sql`ts_rank(${documentTranslations.searchVector}, plainto_tsquery('simple', ${q})) desc`,
+              sql`ts_rank(${documentTranslations.searchVector}, plainto_tsquery('simple', ${q})) desc`
             )
             .limit(limit)
             .offset(offset)

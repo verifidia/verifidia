@@ -1,5 +1,5 @@
-import { z } from 'zod'
 import { eq } from 'drizzle-orm'
+import { z } from 'zod'
 
 import { db } from '#/db'
 import { documents } from '#/db/schema'
@@ -18,7 +18,7 @@ const OutlineSchema = z.object({
     z.object({
       heading: z.string(),
       keyPoints: z.array(z.string()),
-    }),
+    })
   ),
   estimatedLength: z.number().int().positive(),
 })
@@ -28,7 +28,7 @@ const DraftSchema = z.object({
     z.object({
       heading: z.string(),
       body: z.string(),
-    }),
+    })
   ),
 })
 
@@ -38,7 +38,10 @@ const WRITER_SYSTEM_PROMPT =
   'You are an encyclopedic writer. Write in neutral, factual tone. Use short, clear sentences. Cite sources inline as [1], [2]. Do not use em-dashes. Do not use marketing language or superlatives unless directly sourced.'
 
 export const generateDocument = inngest.createFunction(
-  { id: 'generate-document', idempotency: 'event.data.documentId + "-" + event.data.locale' },
+  {
+    id: 'generate-document',
+    idempotency: 'event.data.documentId + "-" + event.data.locale',
+  },
   { event: 'document/generation.requested' },
   async ({ event, step }) => {
     const { topic, locale, documentId } = event.data
@@ -61,7 +64,7 @@ export const generateDocument = inngest.createFunction(
             title: result.title ?? 'Untitled source',
             snippet: (result.text ?? '').slice(0, 500),
           }))
-        }),
+        })
       )
 
       const deduped = new Map<string, Source>()
@@ -89,7 +92,7 @@ export const generateDocument = inngest.createFunction(
       }
     })
 
-    const outline = await step.run('outline', async () => {
+    const outline = await step.run('outline', () => {
       return generateStructured(
         OutlineSchema,
         WRITER_SYSTEM_PROMPT,
@@ -102,11 +105,11 @@ export const generateDocument = inngest.createFunction(
           'Research sources:',
           JSON.stringify(research.sources, null, 2),
         ].join('\n\n'),
-        'document_outline',
+        'document_outline'
       )
     })
 
-    const draft = await step.run('draft', async () => {
+    const draft = await step.run('draft', () => {
       return generateStructured(
         DraftSchema,
         WRITER_SYSTEM_PROMPT,
@@ -126,15 +129,17 @@ export const generateDocument = inngest.createFunction(
               ...source,
             })),
             null,
-            2,
+            2
           ),
         ].join('\n\n'),
-        'document_draft',
+        'document_draft'
       )
     })
 
-    const assembledDocument = await step.run('assemble', async () => {
-      const sectionLookup = new Map(draft.sections.map((section) => [section.heading, section.body]))
+    const assembledDocument = await step.run('assemble', () => {
+      const sectionLookup = new Map(
+        draft.sections.map((section) => [section.heading, section.body])
+      )
       const orderedSections = outline.sections.map((section) => {
         const body = sectionLookup.get(section.heading)
         return `## ${section.heading}\n\n${body ?? ''}`.trim()
@@ -144,7 +149,12 @@ export const generateDocument = inngest.createFunction(
         .map((source, index) => `${index + 1}. ${source.url}`)
         .join('\n')
 
-      const markdown = [`# ${outline.title}`, ...orderedSections, '## Sources', sourceList].join('\n\n')
+      const markdown = [
+        `# ${outline.title}`,
+        ...orderedSections,
+        '## Sources',
+        sourceList,
+      ].join('\n\n')
 
       return {
         title: outline.title,
@@ -177,5 +187,5 @@ export const generateDocument = inngest.createFunction(
       title: assembledDocument.title,
       sourceCount: assembledDocument.sources.length,
     }
-  },
+  }
 )

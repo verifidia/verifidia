@@ -1,17 +1,17 @@
-import { useState } from 'react'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
-import { z } from 'zod'
-import * as m from '#/paraglide/messages'
-import { authClient } from '#/lib/auth-client'
-import { Button } from '#/components/ui/button'
 import {
-  IconMagnifierOutline18,
-  IconShieldCheckOutline18,
   IconChevronLeftOutline18,
   IconChevronRightOutline18,
   IconGlobeOutline18,
+  IconMagnifierOutline18,
+  IconShieldCheckOutline18,
 } from 'nucleo-ui-outline-18'
+import { useState } from 'react'
+import { z } from 'zod'
+import { Button } from '#/components/ui/button'
+import { authClient } from '#/lib/auth-client'
 import { getApiUrl } from '#/lib/get-api-url'
+import { m } from '#/paraglide/messages'
 
 const LIMIT = 20
 
@@ -21,18 +21,22 @@ const searchSchema = z.object({
   page: z.number().optional().default(1),
 })
 
-type SearchResult = {
+interface SearchResult {
   id: string
-  title: string
-  snippet: string
   locale: string
-  verificationScore: number | null
+  snippet: string
+  title: string
   updatedAt: string | null
+  verificationScore: number | null
 }
 
 export const Route = createFileRoute('/search')({
   validateSearch: searchSchema,
-  loaderDeps: ({ search }) => ({ q: search.q, locale: search.locale, page: search.page }),
+  loaderDeps: ({ search }) => ({
+    q: search.q,
+    locale: search.locale,
+    page: search.page,
+  }),
   loader: async ({ deps: { q, locale, page } }) => {
     const offset = (page - 1) * LIMIT
     const params = new URLSearchParams({
@@ -58,15 +62,15 @@ function SearchPage() {
   const hasMore = results.length === LIMIT
 
   return (
-    <div className="max-w-[900px] mx-auto px-6 md:px-16 lg:px-24 py-10 md:py-16">
+    <div className="mx-auto max-w-[900px] px-6 py-10 md:px-16 md:py-16 lg:px-24">
       {q.trim() ? (
-        <h2 className="text-lg font-semibold text-foreground mb-4 mt-10">
+        <h2 className="mt-10 mb-4 font-semibold text-foreground text-lg">
           {m.search_results_title()}
         </h2>
       ) : null}
 
       {results.length === 0 && q.trim() ? (
-        <EmptyState query={q} locale={locale} />
+        <EmptyState locale={locale} query={q} />
       ) : (
         <div className="flex flex-col gap-1">
           {results.map((result) => (
@@ -76,7 +80,7 @@ function SearchPage() {
       )}
 
       {results.length > 0 ? (
-        <Pagination page={page} hasMore={hasMore} q={q} locale={locale} />
+        <Pagination hasMore={hasMore} locale={locale} page={page} q={q} />
       ) : null}
     </div>
   )
@@ -93,31 +97,33 @@ function ResultCard({ result }: { result: SearchResult }) {
 
   return (
     <Link
-      to="/documents/$documentId"
+      className="group -mx-3 block rounded-sm px-3 py-2 outline-none transition-colors duration-75 hover:bg-accent focus-visible:shadow-[0_0_0_2px] focus-visible:shadow-ring"
       params={{ documentId: result.id }}
       search={{ locale: undefined }}
-      className="group block py-2 px-3 -mx-3 rounded-sm transition-colors duration-75 hover:bg-accent outline-none focus-visible:shadow-[0_0_0_2px] focus-visible:shadow-ring"
+      to="/documents/$documentId"
     >
-      <h3 className="text-base font-medium text-foreground mb-1">
+      <h3 className="mb-1 font-medium text-base text-foreground">
         {result.title || m.untitled()}
       </h3>
 
       {result.snippet ? (
-        <p className="text-base text-muted-foreground leading-relaxed line-clamp-2 mb-2">
+        <p className="mb-2 line-clamp-2 text-base text-muted-foreground leading-relaxed">
           {result.snippet}
         </p>
       ) : null}
 
-      <div className="flex items-center gap-4 text-xs text-muted-foreground">
+      <div className="flex items-center gap-4 text-muted-foreground text-xs">
         {result.verificationScore != null ? (
           <span className="inline-flex items-center gap-1.5">
-            <IconShieldCheckOutline18 className="w-3.5 h-3.5" />
-            {m.search_verification_score({ score: String(result.verificationScore) })}
+            <IconShieldCheckOutline18 className="h-3.5 w-3.5" />
+            {m.search_verification_score({
+              score: String(result.verificationScore),
+            })}
           </span>
         ) : null}
 
         <span className="inline-flex items-center gap-1.5">
-          <IconGlobeOutline18 className="w-3.5 h-3.5" />
+          <IconGlobeOutline18 className="h-3.5 w-3.5" />
           {result.locale.toUpperCase()}
         </span>
 
@@ -141,32 +147,35 @@ function Pagination({
   locale: string
 }) {
   return (
-    <nav aria-label="Pagination" className="flex items-center justify-between mt-10 pt-6 border-t border-border">
+    <nav
+      aria-label="Pagination"
+      className="mt-10 flex items-center justify-between border-border border-t pt-6"
+    >
       {page > 1 ? (
         <Link
-          to="/search"
+          className="-ml-2 inline-flex items-center gap-1.5 rounded-sm px-2 py-1 font-medium text-muted-foreground text-sm outline-none transition-colors hover:text-foreground focus-visible:shadow-[0_0_0_2px] focus-visible:shadow-ring"
           search={{ q, locale, page: page - 1 }}
-          className="inline-flex items-center gap-1.5 rounded-sm text-sm font-medium text-muted-foreground hover:text-foreground transition-colors outline-none focus-visible:shadow-[0_0_0_2px] focus-visible:shadow-ring py-1 px-2 -ml-2"
+          to="/search"
         >
-          <IconChevronLeftOutline18 className="w-4 h-4" />
+          <IconChevronLeftOutline18 className="h-4 w-4" />
           {m.page_previous()}
         </Link>
       ) : (
         <div />
       )}
 
-      <span className="text-sm text-muted-foreground">
+      <span className="text-muted-foreground text-sm">
         {m.page_indicator({ page: String(page) })}
       </span>
 
       {hasMore ? (
         <Link
-          to="/search"
+          className="-mr-2 inline-flex items-center gap-1.5 rounded-sm px-2 py-1 font-medium text-muted-foreground text-sm outline-none transition-colors hover:text-foreground focus-visible:shadow-[0_0_0_2px] focus-visible:shadow-ring"
           search={{ q, locale, page: page + 1 }}
-          className="inline-flex items-center gap-1.5 rounded-sm text-sm font-medium text-muted-foreground hover:text-foreground transition-colors outline-none focus-visible:shadow-[0_0_0_2px] focus-visible:shadow-ring py-1 px-2 -mr-2"
+          to="/search"
         >
           {m.page_next()}
-          <IconChevronRightOutline18 className="w-4 h-4" />
+          <IconChevronRightOutline18 className="h-4 w-4" />
         </Link>
       ) : (
         <div />
@@ -195,7 +204,7 @@ function EmptyState({ query, locale }: { query: string; locale: string }) {
       const data = await res.json().catch(() => null)
 
       if (res.ok && data?.documentId) {
-        void navigate({
+        navigate({
           to: '/documents/$documentId',
           params: { documentId: data.documentId },
         })
@@ -214,32 +223,36 @@ function EmptyState({ query, locale }: { query: string; locale: string }) {
     }
   }
   return (
-    <output className="block text-center py-20 mt-10">
-      <div className="inline-flex items-center justify-center w-12 h-12 rounded-sm bg-muted mb-4">
-        <IconMagnifierOutline18 className="w-5 h-5 text-muted-foreground" />
+    <output className="mt-10 block py-20 text-center">
+      <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-sm bg-muted">
+        <IconMagnifierOutline18 className="h-5 w-5 text-muted-foreground" />
       </div>
-      <p className="text-base font-medium text-foreground mb-1">
+      <p className="mb-1 font-medium text-base text-foreground">
         {m.search_no_results()}
       </p>
-      <p className="text-sm text-muted-foreground mb-6">
+      <p className="mb-6 text-muted-foreground text-sm">
         {m.search_no_results_hint()}
       </p>
       {session ? (
         <Button
-          variant="outline"
           className="rounded-sm"
           disabled={status === 'submitting'}
-          onClick={() => void handleRequest()}
+          onClick={() => {
+            handleRequest()
+          }}
+          variant="outline"
         >
-          {status === 'submitting' ? m.request_generating() : m.request_button()}
+          {status === 'submitting'
+            ? m.request_generating()
+            : m.request_button()}
         </Button>
       ) : (
-        <Button variant="outline" asChild className="rounded-sm">
+        <Button asChild className="rounded-sm" variant="outline">
           <Link to="/login">{m.auth_sign_in()}</Link>
         </Button>
       )}
       {status === 'error' && errorMessage ? (
-        <p className="text-sm text-destructive mt-3">{errorMessage}</p>
+        <p className="mt-3 text-destructive text-sm">{errorMessage}</p>
       ) : null}
     </output>
   )
@@ -247,21 +260,21 @@ function EmptyState({ query, locale }: { query: string; locale: string }) {
 
 function SearchSkeleton() {
   return (
-    <div className="max-w-[900px] mx-auto px-6 md:px-16 lg:px-24 py-10 md:py-16" aria-busy="true">
-      <div className="h-6 w-36 bg-muted rounded-sm mb-4 mt-10 animate-pulse" />
+    <div
+      aria-busy="true"
+      className="mx-auto max-w-[900px] px-6 py-10 md:px-16 md:py-16 lg:px-24"
+    >
+      <div className="mt-10 mb-4 h-6 w-36 animate-pulse rounded-sm bg-muted" />
       <div className="flex flex-col gap-1">
         {Array.from({ length: 5 }, (_, i) => i + 1).map((id) => (
-          <div
-            key={`skeleton-${id}`}
-            className="rounded-sm py-2 px-3 -mx-3"
-          >
-            <div className="h-5 w-2/3 bg-muted rounded-sm mb-2 animate-pulse" />
-            <div className="h-4 w-full bg-muted rounded-sm mb-1 animate-pulse" />
-            <div className="h-4 w-4/5 bg-muted rounded-sm mb-3 animate-pulse" />
+          <div className="-mx-3 rounded-sm px-3 py-2" key={`skeleton-${id}`}>
+            <div className="mb-2 h-5 w-2/3 animate-pulse rounded-sm bg-muted" />
+            <div className="mb-1 h-4 w-full animate-pulse rounded-sm bg-muted" />
+            <div className="mb-3 h-4 w-4/5 animate-pulse rounded-sm bg-muted" />
             <div className="flex gap-4">
-              <div className="h-3.5 w-24 bg-muted rounded-sm animate-pulse" />
-              <div className="h-3.5 w-12 bg-muted rounded-sm animate-pulse" />
-              <div className="h-3.5 w-32 bg-muted rounded-sm animate-pulse" />
+              <div className="h-3.5 w-24 animate-pulse rounded-sm bg-muted" />
+              <div className="h-3.5 w-12 animate-pulse rounded-sm bg-muted" />
+              <div className="h-3.5 w-32 animate-pulse rounded-sm bg-muted" />
             </div>
           </div>
         ))}

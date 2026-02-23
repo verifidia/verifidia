@@ -1,5 +1,5 @@
-import { z } from 'zod'
 import { eq } from 'drizzle-orm'
+import { z } from 'zod'
 
 import { db } from '#/db'
 import { documents, refutations } from '#/db/schema'
@@ -15,7 +15,7 @@ const VerdictSchema = z.object({
     z.object({
       url: z.string(),
       relevance: z.string(),
-    }),
+    })
   ),
 })
 
@@ -23,11 +23,15 @@ const CATEGORY_CONTEXT: Record<string, string> = {
   factual_error: 'The user claims the text contains a factual inaccuracy.',
   outdated: 'The user claims the information is outdated or no longer current.',
   biased: 'The user claims the text exhibits bias or lacks neutrality.',
-  missing_context: 'The user claims important context is missing from this section.',
+  missing_context:
+    'The user claims important context is missing from this section.',
 }
 
 export const processRefutation = inngest.createFunction(
-  { id: 'process-refutation', idempotency: 'event.data.documentId + "-" + event.data.locale' },
+  {
+    id: 'process-refutation',
+    idempotency: 'event.data.documentId + "-" + event.data.locale',
+  },
   { event: 'refutation/submitted' },
   async ({ event, step }) => {
     const { refutationId, documentId } = event.data
@@ -49,7 +53,7 @@ export const processRefutation = inngest.createFunction(
         .where(eq(documents.id, documentId))
         .limit(1)
 
-      if (!document || !document.content) {
+      if (!document?.content) {
         throw new Error(`Document not found or has no content: ${documentId}`)
       }
 
@@ -59,7 +63,7 @@ export const processRefutation = inngest.createFunction(
       const sectionStart = Math.max(0, selectedIndex - contextRadius)
       const sectionEnd = Math.min(
         content.length,
-        selectedIndex + refutation.selectedText.length + contextRadius,
+        selectedIndex + refutation.selectedText.length + contextRadius
       )
       const sectionContent = content.slice(sectionStart, sectionEnd)
 
@@ -95,11 +99,12 @@ export const processRefutation = inngest.createFunction(
       }))
     })
 
-    const evaluation = await step.run('evaluate', async () => {
-      const categoryContext = CATEGORY_CONTEXT[context.refutation.category] ?? ''
+    const evaluation = await step.run('evaluate', () => {
+      const categoryContext =
+        CATEGORY_CONTEXT[context.refutation.category] ?? ''
 
       const userPrompt = [
-        `Evaluate this refutation of an encyclopedic document.`,
+        'Evaluate this refutation of an encyclopedic document.',
         `Category: ${context.refutation.category}. ${categoryContext}`,
         `The user claims the following text is problematic: '${context.refutation.selectedText}'.`,
         context.refutation.note
@@ -122,7 +127,7 @@ export const processRefutation = inngest.createFunction(
           'Never use em-dashes in your output. Use commas, semicolons, or separate sentences instead.',
         ].join(' '),
         userPrompt,
-        'refutation_verdict',
+        'refutation_verdict'
       )
     })
 
@@ -152,7 +157,7 @@ export const processRefutation = inngest.createFunction(
       }
       const updatedContent = context.documentContent.replace(
         context.refutation.selectedText,
-        evaluation.suggestedCorrection,
+        evaluation.suggestedCorrection
       )
 
       await db
@@ -178,7 +183,11 @@ export const processRefutation = inngest.createFunction(
       })
       await step.sendEvent('request-translation', {
         name: 'document/translation.requested',
-        data: { documentId, locale: context.refutation.locale, targetLocale: context.refutation.locale },
+        data: {
+          documentId,
+          locale: context.refutation.locale,
+          targetLocale: context.refutation.locale,
+        },
       })
     }
 
@@ -188,5 +197,5 @@ export const processRefutation = inngest.createFunction(
       verdict: evaluation.verdict,
       confidence: evaluation.confidence,
     }
-  },
+  }
 )

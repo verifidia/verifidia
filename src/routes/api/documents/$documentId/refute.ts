@@ -15,12 +15,7 @@ const bodySchema = z.object({
   selectedText: z.string().min(1),
   startOffset: z.number().int().nonnegative(),
   endOffset: z.number().int().nonnegative(),
-  category: z.enum([
-    'factual_error',
-    'outdated',
-    'biased',
-    'missing_context',
-  ]),
+  category: z.enum(['factual_error', 'outdated', 'biased', 'missing_context']),
   note: z.string().optional(),
   sourceUrl: z.string().optional(),
   locale: z.string().min(1),
@@ -54,7 +49,7 @@ export const Route = createFileRoute('/api/documents/$documentId/refute')({
           if (!parsed.success) {
             return json(
               { error: 'Validation failed', details: parsed.error.flatten() },
-              400,
+              400
             )
           }
 
@@ -81,12 +76,16 @@ export const Route = createFileRoute('/api/documents/$documentId/refute')({
 
           await inngest.send({
             name: 'refutation/submitted',
-            data: { refutationId: newRefutation.id, documentId },
+            data: {
+              refutationId: newRefutation.id,
+              documentId,
+              locale: body.locale,
+            },
           })
 
           return json(
             { refutationId: newRefutation.id, status: 'pending' },
-            201,
+            201
           )
         } catch (error) {
           const message =

@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react'
-import { IconSunOutline18, IconMoonOutline18 } from 'nucleo-ui-outline-18'
+import { IconMoonOutline18, IconSunOutline18 } from 'nucleo-ui-outline-18'
+import { useCallback, useEffect, useState } from 'react'
 import { Button } from '#/components/ui/button'
 
 export default function ThemeToggle() {
@@ -18,16 +18,16 @@ export default function ThemeToggle() {
 
   return (
     <Button
-      variant="ghost"
-      size="icon"
-      onClick={toggle}
       aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
-      className="h-7 w-7 text-muted-foreground hover:text-foreground hover:bg-accent rounded-sm transition-colors"
+      className="h-7 w-7 rounded-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+      onClick={toggle}
+      size="icon"
+      variant="ghost"
     >
       {dark ? (
-        <IconSunOutline18 className="w-3.5 h-3.5" />
+        <IconSunOutline18 className="h-3.5 w-3.5" />
       ) : (
-        <IconMoonOutline18 className="w-3.5 h-3.5" />
+        <IconMoonOutline18 className="h-3.5 w-3.5" />
       )}
     </Button>
   )

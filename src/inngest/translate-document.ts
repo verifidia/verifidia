@@ -1,11 +1,11 @@
-import { z } from 'zod'
 import { eq } from 'drizzle-orm'
+import { z } from 'zod'
 
 import { db } from '#/db'
 import { documents, documentTranslations } from '#/db/schema'
 import { generateStructured } from '#/lib/ai'
-import { inngest } from '#/lib/inngest'
 import { SUPPORTED_LOCALES } from '#/lib/i18n-config'
+import { inngest } from '#/lib/inngest'
 
 const TranslationSchema = z.object({
   title: z.string(),
@@ -13,7 +13,11 @@ const TranslationSchema = z.object({
 })
 
 export const translateDocument = inngest.createFunction(
-  { id: 'translate-document', idempotency: 'event.data.documentId + "-" + event.data.locale', concurrency: { limit: 5 } },
+  {
+    id: 'translate-document',
+    idempotency: 'event.data.documentId + "-" + event.data.locale',
+    concurrency: { limit: 5 },
+  },
   { event: 'document/translation.requested' },
   async ({ event, step }) => {
     const { documentId } = event.data
@@ -25,7 +29,7 @@ export const translateDocument = inngest.createFunction(
       if (!doc) {
         throw new Error(`Document not found: ${documentId}`)
       }
-      if (!doc.title || !doc.content) {
+      if (!(doc.title && doc.content)) {
         throw new Error(`Document ${documentId} has no content to translate`)
       }
       return {
@@ -35,9 +39,9 @@ export const translateDocument = inngest.createFunction(
       }
     })
 
-    const targetLocales = await step.run('determine-targets', async () => {
+    const targetLocales = await step.run('determine-targets', () => {
       return SUPPORTED_LOCALES.filter(
-        (locale) => locale !== sourceDoc.canonicalLocale,
+        (locale) => locale !== sourceDoc.canonicalLocale
       )
     })
 
@@ -58,7 +62,7 @@ export const translateDocument = inngest.createFunction(
             'Content:',
             sourceDoc.content,
           ].join('\n'),
-          'translation',
+          'translation'
         )
 
         await db
@@ -72,7 +76,10 @@ export const translateDocument = inngest.createFunction(
             translatedAt: new Date(),
           })
           .onConflictDoUpdate({
-            target: [documentTranslations.documentId, documentTranslations.locale],
+            target: [
+              documentTranslations.documentId,
+              documentTranslations.locale,
+            ],
             set: {
               title: translated.title,
               content: translated.content,
@@ -90,5 +97,5 @@ export const translateDocument = inngest.createFunction(
       documentId,
       translatedLocales: targetLocales,
     }
-  },
+  }
 )

@@ -1,11 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { serve } from 'inngest/edge'
-import { inngest } from '#/lib/inngest'
 import { generateDocument } from '#/inngest/generate-document'
-import { verifyDocument } from '#/inngest/verify-document'
-import { translateDocument } from '#/inngest/translate-document'
-import { checkStaleDocuments, refreshDocument } from '#/inngest/refresh-stale'
 import { processRefutation } from '#/inngest/process-refutation'
+import { checkStaleDocuments, refreshDocument } from '#/inngest/refresh-stale'
+import { translateDocument } from '#/inngest/translate-document'
+import { verifyDocument } from '#/inngest/verify-document'
+import { inngest } from '#/lib/inngest'
 
 const handler = serve({
   client: inngest,

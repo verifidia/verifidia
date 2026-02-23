@@ -1,27 +1,27 @@
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { Streamdown } from 'streamdown'
-import { m } from '#/paraglide/messages'
-import { getLocale } from '#/paraglide/runtime'
-import { RefutationForm } from '#/components/RefutationForm'
 import {
-  IconCircleCheckOutline18,
   IconAlertWarningOutline18,
-  IconExternalLinkOutline18,
-  IconGlobeOutline18,
   IconChevronDownOutline18,
   IconChevronUpOutline18,
+  IconCircleCheckOutline18,
   IconClockOutline18,
-  IconShieldOutline18,
-  IconQuoteOutline18,
+  IconExternalLinkOutline18,
   IconFlagOutline18,
+  IconGlobeOutline18,
+  IconQuoteOutline18,
+  IconShieldOutline18,
 } from 'nucleo-ui-outline-18'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Streamdown } from 'streamdown'
+import { RefutationForm } from '#/components/refutation-form'
 import { getApiUrl } from '#/lib/get-api-url'
+import { m } from '#/paraglide/messages'
+import { getLocale } from '#/paraglide/runtime'
 
 interface Source {
-  url: string
-  title?: string
   snippet?: string
+  title?: string
+  url: string
 }
 
 interface Translation {
@@ -30,60 +30,76 @@ interface Translation {
 }
 
 interface DocRefutation {
-  id: string
   category: string
+  createdAt: string
+  id: string
   selectedText: string
   status: string
   verdict: string | null
-  createdAt: string
 }
 
 interface FlaggedClaim {
-  text: string
   notes?: string
+  text: string
 }
 
 interface DocumentResponse {
-  id: string
-  slug: string
-  topic: string
-  title: string | null
-  content: string | null
-  locale: string
-  requestedLocale: string
   canonicalLocale: string
-  status: 'queued' | 'generating' | 'generated' | 'verified' | 'flagged' | 'failed'
-  verificationScore: number | null
-  verificationDetails: Record<string, {}> | FlaggedClaim[] | null
-  sources: string | Source[] | null
-  translations: Translation[]
-  refutations: DocRefutation[]
+  content: string | null
   createdAt: string
+  id: string
+  locale: string
+  refutations: DocRefutation[]
+  requestedLocale: string
+  slug: string
+  sources: string | Source[] | null
+  status:
+    | 'queued'
+    | 'generating'
+    | 'generated'
+    | 'verified'
+    | 'flagged'
+    | 'failed'
+  title: string | null
+  topic: string
+  translations: Translation[]
   updatedAt: string
+  verificationDetails: Record<string, unknown> | FlaggedClaim[] | null
+  verificationScore: number | null
 }
 
 function parseSources(raw: DocumentResponse['sources']): Source[] {
-  if (!raw) return []
+  if (!raw) {
+    return []
+  }
   try {
     const data = typeof raw === 'string' ? JSON.parse(raw) : raw
-    if (!Array.isArray(data)) return []
+    if (!Array.isArray(data)) {
+      return []
+    }
     return data.filter(
       (s: unknown): s is Source =>
-        typeof s === 'object' && s !== null && 'url' in s,
+        typeof s === 'object' && s !== null && 'url' in s
     )
   } catch {
     return []
   }
 }
 
-function parseFlaggedClaims(raw: DocumentResponse['verificationDetails']): FlaggedClaim[] {
-  if (!raw) return []
+function parseFlaggedClaims(
+  raw: DocumentResponse['verificationDetails']
+): FlaggedClaim[] {
+  if (!raw) {
+    return []
+  }
   try {
     const data = typeof raw === 'string' ? JSON.parse(raw as string) : raw
-    if (!Array.isArray(data)) return []
+    if (!Array.isArray(data)) {
+      return []
+    }
     return data.filter(
       (c: unknown): c is FlaggedClaim =>
-        typeof c === 'object' && c !== null && 'text' in c,
+        typeof c === 'object' && c !== null && 'text' in c
     )
   } catch {
     return []
@@ -114,8 +130,20 @@ function categoryLabel(category: string): string {
   return map[category]?.() ?? category
 }
 
+function verdictStyle(verdict: string | null): string {
+  if (verdict === 'upheld') {
+    return 'bg-[#dbeddb] text-[#1a7f37]'
+  }
+  if (verdict === 'rejected') {
+    return 'bg-muted text-muted-foreground'
+  }
+  return 'bg-[#fdecc8] text-[#9a6700]'
+}
+
 function verdictLabel(verdict: string | null): string | null {
-  if (!verdict) return null
+  if (!verdict) {
+    return null
+  }
   const map: Record<string, () => string> = {
     upheld: m.refute_verdict_upheld,
     partially_upheld: m.refute_verdict_partially_upheld,
@@ -142,7 +170,7 @@ export const Route = createFileRoute('/documents/$documentId')({
   loader: async ({ params, deps }) => {
     const locale = deps.locale || getLocale()
     const url = getApiUrl(
-      `/api/documents/${params.documentId}?locale=${locale}`,
+      `/api/documents/${params.documentId}?locale=${locale}`
     )
     const res = await fetch(url)
     if (res.status === 404) {
@@ -183,16 +211,14 @@ function DocumentPage() {
 
 function NotFoundView() {
   return (
-    <div className="max-w-3xl mx-auto px-4 py-20 text-center">
-      <h1 className="text-3xl font-bold tracking-tight mb-3 text-foreground">
+    <div className="mx-auto max-w-3xl px-4 py-20 text-center">
+      <h1 className="mb-3 font-bold text-3xl text-foreground tracking-tight">
         {m.doc_not_found()}
       </h1>
-      <p className="text-muted-foreground mb-8">
-        {m.doc_not_found_hint()}
-      </p>
+      <p className="mb-8 text-muted-foreground">{m.doc_not_found_hint()}</p>
       <Link
+        className="inline-flex items-center rounded-md border border-border bg-card px-4 py-2 font-medium text-card-foreground text-sm outline-none transition-colors hover:bg-accent focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
         to="/"
-        className="inline-flex items-center px-4 py-2 text-sm font-medium rounded-md border border-border bg-card text-card-foreground hover:bg-accent transition-colors outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
       >
         {m.site_title()}
       </Link>
@@ -200,36 +226,38 @@ function NotFoundView() {
   )
 }
 
-function GeneratingView({ title, topic }: { title: string | null; topic: string }) {
+function GeneratingView({
+  title,
+  topic,
+}: {
+  title: string | null
+  topic: string
+}) {
   return (
-    <div className="max-w-3xl mx-auto px-4 py-20 text-center">
-      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-muted text-muted-foreground text-sm mb-6">
-        <span className="w-2 h-2 rounded-full bg-chart-4 animate-pulse" />
+    <div className="mx-auto max-w-3xl px-4 py-20 text-center">
+      <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-muted px-3 py-1 text-muted-foreground text-sm">
+        <span className="h-2 w-2 animate-pulse rounded-full bg-chart-4" />
         {m.status_generating()}
       </div>
-      <h1 className="text-3xl font-bold tracking-tight mb-3 text-foreground">
+      <h1 className="mb-3 font-bold text-3xl text-foreground tracking-tight">
         {title ?? topic}
       </h1>
-      <p className="text-muted-foreground">
-        {m.doc_generating_message()}
-      </p>
+      <p className="text-muted-foreground">{m.doc_generating_message()}</p>
     </div>
   )
 }
 
 function FailedView({ title, topic }: { title: string | null; topic: string }) {
   return (
-    <div className="max-w-3xl mx-auto px-4 py-20 text-center">
-      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-destructive/10 text-destructive-foreground text-sm mb-6">
-        <IconAlertWarningOutline18 className="w-4 h-4" />
+    <div className="mx-auto max-w-3xl px-4 py-20 text-center">
+      <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-destructive/10 px-3 py-1 text-destructive-foreground text-sm">
+        <IconAlertWarningOutline18 className="h-4 w-4" />
         {m.status_failed()}
       </div>
-      <h1 className="text-3xl font-bold tracking-tight mb-3 text-foreground">
+      <h1 className="mb-3 font-bold text-3xl text-foreground tracking-tight">
         {title ?? topic}
       </h1>
-      <p className="text-muted-foreground">
-        {m.doc_failed_message()}
-      </p>
+      <p className="text-muted-foreground">{m.doc_failed_message()}</p>
     </div>
   )
 }
@@ -244,10 +272,10 @@ function DocumentView({
   const sources = useMemo(() => parseSources(doc.sources), [doc.sources])
   const flaggedClaims = useMemo(
     () => parseFlaggedClaims(doc.verificationDetails),
-    [doc.verificationDetails],
+    [doc.verificationDetails]
   )
   const requestedTranslation = doc.translations.find(
-    (translation) => translation.locale === requestedLocale,
+    (translation) => translation.locale === requestedLocale
   )
   const hasLocaleFallback = doc.locale !== requestedLocale
   const isTranslationInProgress = requestedTranslation?.status === 'translating'
@@ -268,7 +296,9 @@ function DocumentView({
   } | null>(null)
 
   const handleMouseUp = useCallback(() => {
-    if (formData) return
+    if (formData) {
+      return
+    }
 
     const sel = window.getSelection()
     if (!sel || sel.isCollapsed || !sel.rangeCount) {
@@ -278,7 +308,7 @@ function DocumentView({
 
     const range = sel.getRangeAt(0)
     const container = contentRef.current
-    if (!container || !container.contains(range.commonAncestorContainer)) {
+    if (!container?.contains(range.commonAncestorContainer)) {
       setSelectionData(null)
       return
     }
@@ -307,7 +337,7 @@ function DocumentView({
         top: rect.bottom - containerRect.top + 8,
         left: Math.min(
           rect.left - containerRect.left,
-          containerRect.width - 140,
+          containerRect.width - 140
         ),
       },
     })
@@ -315,17 +345,23 @@ function DocumentView({
 
   const handleClickOutside = useCallback(
     (e: MouseEvent) => {
-      if (!selectionData) return
+      if (!selectionData) {
+        return
+      }
       const target = e.target as Node
-      if (floatingBtnRef.current?.contains(target)) return
+      if (floatingBtnRef.current?.contains(target)) {
+        return
+      }
       setSelectionData(null)
     },
-    [selectionData],
+    [selectionData]
   )
 
   useEffect(() => {
     const container = contentRef.current
-    if (!container) return
+    if (!container) {
+      return
+    }
 
     container.addEventListener('mouseup', handleMouseUp)
     document.addEventListener('mousedown', handleClickOutside)
@@ -337,7 +373,9 @@ function DocumentView({
   }, [handleMouseUp, handleClickOutside])
 
   const openForm = () => {
-    if (!selectionData) return
+    if (!selectionData) {
+      return
+    }
     setFormData({
       text: selectionData.text,
       startOffset: selectionData.startOffset,
@@ -355,27 +393,27 @@ function DocumentView({
     setFormData(null)
   }
   return (
-    <div className="max-w-[720px] mx-auto px-6 md:px-16 lg:px-24 py-10 md:py-16">
-      <h1 className="text-[40px] font-bold leading-tight tracking-tight mb-2 text-foreground">
+    <div className="mx-auto max-w-[720px] px-6 py-10 md:px-16 md:py-16 lg:px-24">
+      <h1 className="mb-2 font-bold text-[40px] text-foreground leading-tight tracking-tight">
         {doc.title ?? doc.topic}
       </h1>
 
       <MetadataBar document={doc} />
       {hasLocaleFallback || isTranslationInProgress ? (
         <LocaleNotice
-          shownLocale={doc.locale}
-          requestedLocale={requestedLocale}
           hasLocaleFallback={hasLocaleFallback}
           isTranslationInProgress={isTranslationInProgress}
+          requestedLocale={requestedLocale}
+          shownLocale={doc.locale}
         />
       ) : null}
       {doc.status === 'flagged' && flaggedClaims.length > 0 ? (
         <FlaggedWarning claims={flaggedClaims} />
       ) : null}
       <article
-        ref={contentRef}
+        className="prose prose-neutral dark:prose-invert relative mt-8 max-w-none"
         data-document-content
-        className="relative mt-8 prose prose-neutral dark:prose-invert max-w-none"
+        ref={contentRef}
       >
         {doc.content ? (
           <Streamdown>{doc.content}</Streamdown>
@@ -387,16 +425,16 @@ function DocumentView({
 
         {selectionData && !formData ? (
           <button
-            ref={floatingBtnRef}
-            type="button"
+            className="absolute z-10 inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 font-medium text-foreground text-xs shadow-sm outline-none transition-colors hover:bg-accent focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
             onClick={openForm}
-            className="absolute z-10 inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full border border-border bg-card text-foreground shadow-sm hover:bg-accent transition-colors outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+            ref={floatingBtnRef}
             style={{
               top: selectionData.rect.top,
               left: selectionData.rect.left,
             }}
+            type="button"
           >
-            <IconFlagOutline18 className="w-3.5 h-3.5" />
+            <IconFlagOutline18 className="h-3.5 w-3.5" />
             {m.doc_refute_button()}
           </button>
         ) : null}
@@ -404,21 +442,21 @@ function DocumentView({
       {formData ? (
         <RefutationForm
           documentId={doc.id}
-          locale={doc.locale}
-          selectedText={formData.text}
-          startOffset={formData.startOffset}
           endOffset={formData.endOffset}
+          locale={doc.locale}
           onClose={closeForm}
           onSuccess={handleFormSuccess}
+          selectedText={formData.text}
+          startOffset={formData.startOffset}
         />
       ) : null}
 
       {sources.length > 0 ? <SourcesSection sources={sources} /> : null}
       <TranslationsSection
-        translations={doc.translations}
-        currentLocale={doc.locale}
         canonicalLocale={doc.canonicalLocale}
+        currentLocale={doc.locale}
         documentId={doc.id}
+        translations={doc.translations}
       />
       {doc.refutations.length > 0 ? (
         <RefutationsSection refutations={doc.refutations} />
@@ -429,23 +467,23 @@ function DocumentView({
 
 function MetadataBar({ document: doc }: { document: DocumentResponse }) {
   return (
-    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground text-xs">
       <StatusBadge status={doc.status} />
 
       {doc.verificationScore !== null ? (
         <span className="inline-flex items-center gap-1.5">
-          <IconShieldOutline18 className="w-4 h-4" />
+          <IconShieldOutline18 className="h-4 w-4" />
           {m.doc_verification_score({ score: String(doc.verificationScore) })}
         </span>
       ) : null}
 
       <span className="inline-flex items-center gap-1.5">
-        <IconGlobeOutline18 className="w-4 h-4" />
+        <IconGlobeOutline18 className="h-4 w-4" />
         {doc.locale.toUpperCase()}
       </span>
 
       <span className="inline-flex items-center gap-1.5">
-        <IconClockOutline18 className="w-4 h-4" />
+        <IconClockOutline18 className="h-4 w-4" />
         {m.doc_last_updated({ date: formatDate(doc.updatedAt) })}
       </span>
     </div>
@@ -463,11 +501,11 @@ function LocaleNotice({
   hasLocaleFallback: boolean
   isTranslationInProgress: boolean
 }) {
-  if (!hasLocaleFallback && !isTranslationInProgress) {
+  if (!(hasLocaleFallback || isTranslationInProgress)) {
     return null
   }
   return (
-    <div className="mt-4 rounded-lg border border-primary/20 bg-primary/5 p-3 text-sm text-foreground">
+    <div className="mt-4 rounded-lg border border-primary/20 bg-primary/5 p-3 text-foreground text-sm">
       <p className="inline-flex items-center gap-2">
         <IconGlobeOutline18 className="h-4 w-4 shrink-0" />
         {isTranslationInProgress
@@ -501,12 +539,12 @@ function StatusBadge({ status }: { status: DocumentResponse['status'] }) {
     verified: {
       label: m.doc_status_verified(),
       className: 'bg-[#dbeddb] text-[#1a7f37]',
-      icon: <IconCircleCheckOutline18 className="w-3.5 h-3.5" />,
+      icon: <IconCircleCheckOutline18 className="h-3.5 w-3.5" />,
     },
     flagged: {
       label: m.doc_status_flagged(),
       className: 'bg-[#fdecc8] text-[#9a6700]',
-      icon: <IconAlertWarningOutline18 className="w-3.5 h-3.5" />,
+      icon: <IconAlertWarningOutline18 className="h-3.5 w-3.5" />,
     },
     failed: {
       label: m.status_failed(),
@@ -518,7 +556,7 @@ function StatusBadge({ status }: { status: DocumentResponse['status'] }) {
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 px-1.5 py-0.5 rounded-sm text-xs font-medium ${c.className}`}
+      className={`inline-flex items-center gap-1.5 rounded-sm px-1.5 py-0.5 font-medium text-xs ${c.className}`}
     >
       {c.icon}
       {c.label}
@@ -532,34 +570,34 @@ function FlaggedWarning({ claims }: { claims: FlaggedClaim[] }) {
   return (
     <div className="mt-4 rounded-lg border border-chart-4/30 bg-chart-4/5 p-4">
       <div className="flex items-start gap-3">
-        <IconAlertWarningOutline18 className="w-5 h-5 text-chart-4 mt-0.5 shrink-0" />
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-foreground">
+        <IconAlertWarningOutline18 className="mt-0.5 h-5 w-5 shrink-0 text-chart-4" />
+        <div className="min-w-0 flex-1">
+          <p className="font-medium text-foreground text-sm">
             {m.doc_flagged_warning()}
           </p>
           <button
-            type="button"
-            onClick={() => setOpen(!open)}
             aria-expanded={open}
-            className="mt-1 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors rounded-sm outline-none focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+            className="mt-1 inline-flex items-center gap-1 rounded-sm text-muted-foreground text-xs outline-none transition-colors hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50"
+            onClick={() => setOpen(!open)}
+            type="button"
           >
             {m.doc_flagged_claims()} ({claims.length})
             {open ? (
-              <IconChevronUpOutline18 className="w-3 h-3" />
+              <IconChevronUpOutline18 className="h-3 w-3" />
             ) : (
-              <IconChevronDownOutline18 className="w-3 h-3" />
+              <IconChevronDownOutline18 className="h-3 w-3" />
             )}
           </button>
           {open ? (
             <ul className="mt-3 space-y-2">
               {claims.map((claim) => (
                 <li
+                  className="border-chart-4/40 border-l-2 pl-3 text-muted-foreground text-sm"
                   key={claim.text}
-                  className="text-sm text-muted-foreground pl-3 border-l-2 border-chart-4/40"
                 >
                   {claim.text}
                   {claim.notes ? (
-                    <span className="block text-xs mt-0.5 opacity-70">
+                    <span className="mt-0.5 block text-xs opacity-70">
                       {claim.notes}
                     </span>
                   ) : null}
@@ -577,21 +615,21 @@ function SourcesSection({ sources }: { sources: Source[] }) {
   const [open, setOpen] = useState(false)
 
   return (
-    <section className="mt-10 border-t border-border pt-6">
-      <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+    <section className="mt-10 border-border border-t pt-6">
+      <h2 className="font-semibold text-muted-foreground text-sm uppercase tracking-wider">
         <button
-          type="button"
-          onClick={() => setOpen(!open)}
           aria-expanded={open}
-          className="flex items-center gap-2 w-full text-left hover:text-foreground/80 transition-colors rounded-sm outline-none focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+          className="flex w-full items-center gap-2 rounded-sm text-left outline-none transition-colors hover:text-foreground/80 focus-visible:ring-[3px] focus-visible:ring-ring/50"
+          onClick={() => setOpen(!open)}
+          type="button"
         >
-          <IconExternalLinkOutline18 className="w-4 h-4" />
+          <IconExternalLinkOutline18 className="h-4 w-4" />
           {m.doc_sources()} ({sources.length})
           <span className="ml-auto">
             {open ? (
-              <IconChevronUpOutline18 className="w-4 h-4 text-muted-foreground" />
+              <IconChevronUpOutline18 className="h-4 w-4 text-muted-foreground" />
             ) : (
-              <IconChevronDownOutline18 className="w-4 h-4 text-muted-foreground" />
+              <IconChevronDownOutline18 className="h-4 w-4 text-muted-foreground" />
             )}
           </span>
         </button>
@@ -599,18 +637,18 @@ function SourcesSection({ sources }: { sources: Source[] }) {
       {open ? (
         <ol className="mt-4 space-y-3">
           {sources.map((source) => (
-            <li key={source.url} className="flex gap-3 text-sm">
+            <li className="flex gap-3 text-sm" key={source.url}>
               <div className="min-w-0">
                 <a
+                  className="break-all text-foreground underline decoration-border underline-offset-2 transition-colors hover:decoration-foreground"
                   href={source.url}
-                  target="_blank"
                   rel="noopener noreferrer"
-                  className="text-foreground underline underline-offset-2 decoration-border hover:decoration-foreground transition-colors break-all"
+                  target="_blank"
                 >
                   {source.title || source.url}
                 </a>
                 {source.snippet ? (
-                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+                  <p className="mt-0.5 line-clamp-2 text-muted-foreground text-xs">
                     {source.snippet}
                   </p>
                 ) : null}
@@ -641,9 +679,9 @@ function TranslationsSection({
   ]
 
   return (
-    <section className="mt-10 border-t border-border pt-6">
-      <h2 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-3">
-        <IconGlobeOutline18 className="w-4 h-4" />
+    <section className="mt-10 border-border border-t pt-6">
+      <h2 className="mb-3 flex items-center gap-2 font-semibold text-muted-foreground text-sm uppercase tracking-wider">
+        <IconGlobeOutline18 className="h-4 w-4" />
         {m.doc_available_in()}
       </h2>
       <div className="flex flex-wrap gap-2">
@@ -652,19 +690,21 @@ function TranslationsSection({
           const isCanonical = t.status === 'canonical'
           return (
             <Link
+              className={`inline-flex items-center gap-1.5 rounded-sm px-2 py-1 text-xs outline-none transition-colors focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 ${
+                isCurrent
+                  ? 'bg-accent font-medium text-foreground'
+                  : 'text-muted-foreground hover:bg-accent hover:text-foreground'
+              }`}
               key={t.locale}
-              to="/documents/$documentId"
               params={{ documentId }}
               search={{ locale: t.locale }}
-              className={`inline-flex items-center gap-1.5 px-2 py-1 text-xs rounded-sm transition-colors outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] ${
-                isCurrent
-                  ? 'bg-accent text-foreground font-medium'
-                  : 'text-muted-foreground hover:text-foreground hover:bg-accent'
-              }`}
+              to="/documents/$documentId"
             >
               {t.locale.toUpperCase()}
               {isCanonical ? (
-                <span className="text-xs opacity-60">({m.doc_canonical_label()})</span>
+                <span className="text-xs opacity-60">
+                  ({m.doc_canonical_label()})
+                </span>
               ) : null}
             </Link>
           )
@@ -674,15 +714,11 @@ function TranslationsSection({
   )
 }
 
-function RefutationsSection({
-  refutations,
-}: {
-  refutations: DocRefutation[]
-}) {
+function RefutationsSection({ refutations }: { refutations: DocRefutation[] }) {
   return (
-    <section className="mt-10 border-t border-border pt-6">
-      <h2 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">
-        <IconFlagOutline18 className="w-4 h-4" />
+    <section className="mt-10 border-border border-t pt-6">
+      <h2 className="mb-4 flex items-center gap-2 font-semibold text-muted-foreground text-sm uppercase tracking-wider">
+        <IconFlagOutline18 className="h-4 w-4" />
         {m.doc_refutations()} ({refutations.length})
       </h2>
       <div className="space-y-4">
@@ -699,37 +735,31 @@ function RefutationCard({ refutation: r }: { refutation: DocRefutation }) {
 
   return (
     <div className="rounded-sm bg-muted p-4">
-      <div className="flex gap-2 mb-3">
-        <IconQuoteOutline18 className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
-        <p className="text-sm text-foreground/80 italic line-clamp-3">
+      <div className="mb-3 flex gap-2">
+        <IconQuoteOutline18 className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+        <p className="line-clamp-3 text-foreground/80 text-sm italic">
           {r.selectedText}
         </p>
       </div>
 
       <div className="flex flex-wrap items-center gap-2 text-xs">
-        <span className="px-2 py-0.5 rounded bg-muted text-muted-foreground">
+        <span className="rounded bg-muted px-2 py-0.5 text-muted-foreground">
           {categoryLabel(r.category)}
         </span>
 
-        <span className="px-2 py-0.5 rounded bg-muted text-muted-foreground">
+        <span className="rounded bg-muted px-2 py-0.5 text-muted-foreground">
           {refutationStatusLabel(r.status)}
         </span>
 
         {verdict ? (
           <span
-            className={`px-2 py-0.5 rounded-sm font-medium ${
-              r.verdict === 'upheld'
-                ? 'bg-[#dbeddb] text-[#1a7f37]'
-                : r.verdict === 'rejected'
-                  ? 'bg-muted text-muted-foreground'
-                  : 'bg-[#fdecc8] text-[#9a6700]'
-            }`}
+            className={`rounded-sm px-2 py-0.5 font-medium ${verdictStyle(r.verdict)}`}
           >
             {verdict}
           </span>
         ) : null}
 
-        <span className="text-muted-foreground ml-auto">
+        <span className="ml-auto text-muted-foreground">
           {formatDate(r.createdAt)}
         </span>
       </div>

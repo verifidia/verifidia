@@ -11,7 +11,7 @@ const claimExtractionSchema = z.object({
       text: z.string(),
       sectionIndex: z.number(),
       confidence: z.enum(['high', 'medium', 'low']),
-    }),
+    })
   ),
 })
 
@@ -22,18 +22,18 @@ const crossReferenceSchema = z.object({
       claimIndex: z.number(),
       issue: z.string(),
       severity: z.enum(['critical', 'warning', 'info']),
-    }),
+    })
   ),
   summary: z.string(),
 })
 
 const SOURCE_BATCH_SIZE = 5
 
-type SourceVerificationResult = {
+interface SourceVerificationResult {
   claimIndex: number
-  verified: boolean
-  sources: string[]
   notes: string
+  sources: string[]
+  verified: boolean
 }
 
 function parseSourceUrls(rawSources: unknown): string[] {
@@ -89,7 +89,7 @@ export const verifyDocument = inngest.createFunction(
       }
     })
 
-    const extractionResult = await step.run('claim-extraction', async () => {
+    const extractionResult = await step.run('claim-extraction', () => {
       const systemPrompt = [
         'You extract verifiable factual claims from documents.',
         'Return only claims that are objective and can be supported or contradicted with evidence.',
@@ -109,7 +109,7 @@ export const verifyDocument = inngest.createFunction(
         claimExtractionSchema,
         systemPrompt,
         userPrompt,
-        'claim_extraction',
+        'claim_extraction'
       )
     })
 
@@ -122,7 +122,7 @@ export const verifyDocument = inngest.createFunction(
 
       const batchResults = await step.run(
         `source-verification-batch-${Math.floor(start / SOURCE_BATCH_SIZE) + 1}`,
-        async () => {
+        () => {
           return Promise.all(
             batch.map(async (claim, batchIndex) => {
               const claimIndex = start + batchIndex
@@ -134,7 +134,10 @@ export const verifyDocument = inngest.createFunction(
               const search = await searchWeb(query, { numResults: 5 })
               const urls = (search.results ?? [])
                 .map((result) => result.url)
-                .filter((url): url is string => typeof url === 'string' && url.length > 0)
+                .filter(
+                  (url): url is string =>
+                    typeof url === 'string' && url.length > 0
+                )
 
               const notes =
                 urls.length > 0
@@ -147,15 +150,15 @@ export const verifyDocument = inngest.createFunction(
                 sources: urls,
                 notes,
               }
-            }),
+            })
           )
-        },
+        }
       )
 
       verificationResults.push(...batchResults)
     }
 
-    const crossReference = await step.run('cross-reference', async () => {
+    const crossReference = await step.run('cross-reference', () => {
       const systemPrompt = [
         'You are a strict verification analyst.',
         'Evaluate evidence quality, identify unsupported claims, and note contradictions.',
@@ -178,12 +181,15 @@ export const verifyDocument = inngest.createFunction(
         crossReferenceSchema,
         systemPrompt,
         userPrompt,
-        'cross_reference',
+        'cross_reference'
       )
     })
 
     await step.run('update-status', async () => {
-      const boundedScore = Math.max(0, Math.min(100, Math.round(crossReference.overallScore)))
+      const boundedScore = Math.max(
+        0,
+        Math.min(100, Math.round(crossReference.overallScore))
+      )
       const status = boundedScore >= 70 ? 'verified' : 'flagged'
 
       await db
@@ -197,5 +203,5 @@ export const verifyDocument = inngest.createFunction(
         })
         .where(eq(documents.id, loadedDocument.documentId))
     })
-  },
+  }
 )

@@ -43,7 +43,7 @@ export const Route = createFileRoute('/api/documents/$documentId')({
             .where(eq(documentTranslations.documentId, documentId))
 
           const requestedTranslation = translations.find(
-            (t) => t.locale === locale,
+            (t) => t.locale === locale
           )
 
           const title = requestedTranslation

@@ -49,7 +49,7 @@ export const Route = createFileRoute('/api/documents/request')({
           if (!parsed.success) {
             return json(
               { error: 'Validation failed', details: parsed.error.flatten() },
-              400,
+              400
             )
           }
 

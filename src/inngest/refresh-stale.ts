@@ -1,10 +1,12 @@
+import { and, eq, lt, sql } from 'drizzle-orm'
 import { z } from 'zod'
-import { eq, and, lt, sql } from 'drizzle-orm'
 
 import { db } from '#/db'
 import { documents, documentTranslations } from '#/db/schema'
-import { searchWeb, generateStructured } from '#/lib/ai'
+import { generateStructured, searchWeb } from '#/lib/ai'
 import { inngest } from '#/lib/inngest'
+
+const SECTION_HEADING_RE = /^(?=## )/m
 
 // -- Schemas --
 
@@ -15,7 +17,7 @@ const UpdateComparisonSchema = z.object({
       sectionIndex: z.number().int().nonnegative(),
       newContent: z.string(),
       reason: z.string(),
-    }),
+    })
   ),
 })
 
@@ -25,15 +27,19 @@ export const checkStaleDocuments = inngest.createFunction(
   { id: 'check-stale-documents' },
   { cron: '0 0 * * 0' },
   async ({ step }) => {
-    const staleDocuments = await step.run('find-stale-documents', async () => {
+    const staleDocuments = await step.run('find-stale-documents', () => {
       return db
-        .select({ id: documents.id, topic: documents.topic, canonicalLocale: documents.canonicalLocale })
+        .select({
+          id: documents.id,
+          topic: documents.topic,
+          canonicalLocale: documents.canonicalLocale,
+        })
         .from(documents)
         .where(
           and(
             lt(documents.staleAt, sql`now()`),
-            eq(documents.status, 'verified'),
-          ),
+            eq(documents.status, 'verified')
+          )
         )
     })
 
@@ -46,17 +52,20 @@ export const checkStaleDocuments = inngest.createFunction(
       staleDocuments.map((doc) => ({
         name: 'document/refresh.requested' as const,
         data: { documentId: doc.id, locale: doc.canonicalLocale },
-      })),
+      }))
     )
 
     return { refreshed: staleDocuments.length }
-  },
+  }
 )
 
 // -- Function B: Per-document refresh triggered by fan-out event --
 
 export const refreshDocument = inngest.createFunction(
-  { id: 'refresh-document', idempotency: 'event.data.documentId + "-" + event.data.locale' },
+  {
+    id: 'refresh-document',
+    idempotency: 'event.data.documentId + "-" + event.data.locale',
+  },
   { event: 'document/refresh.requested' },
   async ({ event, step }) => {
     const { documentId } = event.data
@@ -68,8 +77,12 @@ export const refreshDocument = inngest.createFunction(
         .where(eq(documents.id, documentId))
         .limit(1)
 
-      if (!doc) throw new Error(`Document not found: ${documentId}`)
-      if (!doc.content) throw new Error(`Document has no content: ${documentId}`)
+      if (!doc) {
+        throw new Error(`Document not found: ${documentId}`)
+      }
+      if (!doc.content) {
+        throw new Error(`Document has no content: ${documentId}`)
+      }
 
       return doc
     })
@@ -90,10 +103,13 @@ export const refreshDocument = inngest.createFunction(
             title: r.title ?? 'Untitled',
             text: (r.text ?? '').slice(0, 2000),
           }))
-        }),
+        })
       )
 
-      const deduped = new Map<string, { url: string; title: string; text: string }>()
+      const deduped = new Map<
+        string,
+        { url: string; title: string; text: string }
+      >()
       for (const resultSet of results) {
         for (const result of resultSet) {
           if (result.url && !deduped.has(result.url)) {
@@ -106,8 +122,10 @@ export const refreshDocument = inngest.createFunction(
     })
 
     // Step 2: Compare existing content with new research
-    const comparison = await step.run('compare', async () => {
-      const sections = (document.content ?? '').split(/^(?=## )/m).filter(Boolean)
+    const comparison = await step.run('compare', () => {
+      const sections = (document.content ?? '')
+        .split(SECTION_HEADING_RE)
+        .filter(Boolean)
 
       return generateStructured(
         UpdateComparisonSchema,
@@ -128,12 +146,15 @@ export const refreshDocument = inngest.createFunction(
           'Determine if any sections need updating based on the new research.',
           'For each section that needs changes, provide the full updated section content (including the ## heading) and a brief reason.',
         ].join('\n'),
-        'update_comparison',
+        'update_comparison'
       )
     })
 
     // No significant updates found, just reset the stale timer
-    if (!comparison.hasSignificantUpdates || comparison.updatedSections.length === 0) {
+    if (
+      !comparison.hasSignificantUpdates ||
+      comparison.updatedSections.length === 0
+    ) {
       await step.run('reset-stale-timer', async () => {
         await db
           .update(documents)
@@ -149,7 +170,9 @@ export const refreshDocument = inngest.createFunction(
 
     // Step 3: Merge updated sections into document
     await step.run('update', async () => {
-      const sections = (document.content ?? '').split(/^(?=## )/m).filter(Boolean)
+      const sections = (document.content ?? '')
+        .split(SECTION_HEADING_RE)
+        .filter(Boolean)
 
       for (const update of comparison.updatedSections) {
         if (update.sectionIndex >= 0 && update.sectionIndex < sections.length) {
@@ -177,7 +200,7 @@ export const refreshDocument = inngest.createFunction(
     })
 
     // Step 5: Re-translate existing translations
-    const existingTranslations = await step.run('find-translations', async () => {
+    const existingTranslations = await step.run('find-translations', () => {
       return db
         .select({ locale: documentTranslations.locale })
         .from(documentTranslations)
@@ -189,8 +212,12 @@ export const refreshDocument = inngest.createFunction(
         're-translate',
         existingTranslations.map((t) => ({
           name: 'document/translation.requested' as const,
-          data: { documentId, locale: event.data.locale, targetLocale: t.locale },
-        })),
+          data: {
+            documentId,
+            locale: event.data.locale,
+            targetLocale: t.locale,
+          },
+        }))
       )
     }
 
@@ -199,5 +226,5 @@ export const refreshDocument = inngest.createFunction(
       updated: true,
       sectionsUpdated: comparison.updatedSections.length,
     }
-  },
+  }
 )

@@ -1,25 +1,20 @@
+import type { QueryClient } from '@tanstack/react-query'
 import {
+  createRootRouteWithContext,
   HeadContent,
   Scripts,
-  createRootRouteWithContext,
 } from '@tanstack/react-router'
-
-import Header from '../components/Header'
-
-import TanStackQueryProvider from '../integrations/tanstack-query/root-provider'
-
 import { getLocale } from '#/paraglide/runtime'
-
+import Header from '../components/header'
+import TanStackQueryProvider from '../integrations/tanstack-query/root-provider'
 import appCss from '../styles.css?url'
-
-import type { QueryClient } from '@tanstack/react-query'
 
 interface MyRouterContext {
   queryClient: QueryClient
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
-  beforeLoad: async () => {
+  beforeLoad: () => {
     // Other redirect strategies are possible; see
     // https://github.com/TanStack/router/tree/main/examples/react/i18n-paraglide#offline-redirect
     if (typeof document !== 'undefined') {
@@ -77,14 +72,14 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang={getLocale()} className="h-full">
+    <html className="h-full" lang={getLocale()}>
       <head>
         <HeadContent />
       </head>
-      <body className="h-full flex flex-col antialiased">
+      <body className="flex h-full flex-col antialiased">
         <TanStackQueryProvider>
           <Header />
-          <main className="flex flex-1 flex-col bg-background w-full">
+          <main className="flex w-full flex-1 flex-col bg-background">
             {children}
           </main>
         </TanStackQueryProvider>

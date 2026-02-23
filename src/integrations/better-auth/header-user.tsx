@@ -1,35 +1,39 @@
-import { authClient } from '#/lib/auth-client'
-import { Button } from '#/components/ui/button'
 import { Link } from '@tanstack/react-router'
-import * as m from '#/paraglide/messages'
+import { Button } from '#/components/ui/button'
+import { authClient } from '#/lib/auth-client'
+import { m } from '#/paraglide/messages'
 
 export default function BetterAuthHeader() {
   const { data: session, isPending } = authClient.useSession()
 
   if (isPending) {
-    return (
-      <div className="h-7 w-7 rounded-full bg-muted animate-pulse" />
-    )
+    return <div className="h-7 w-7 animate-pulse rounded-full bg-muted" />
   }
 
   if (session?.user) {
     return (
       <div className="flex items-center gap-1">
         <Button
-          variant="ghost"
-          size="sm"
+          className="h-7 rounded-sm px-2.5 font-medium text-muted-foreground text-xs transition-colors hover:bg-accent hover:text-foreground"
           onClick={() => {
-            void authClient.signOut()
+            authClient.signOut()
           }}
-          className="h-7 px-2.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-sm transition-colors"
+          size="sm"
+          variant="ghost"
         >
           {m.auth_sign_out()}
         </Button>
         {session.user.image ? (
-          <img src={session.user.image} alt="" className="h-7 w-7 rounded-full object-cover" />
+          <img
+            alt=""
+            className="h-7 w-7 rounded-full object-cover"
+            height={28}
+            src={session.user.image}
+            width={28}
+          />
         ) : (
-          <div className="h-7 w-7 rounded-full bg-accent flex items-center justify-center">
-            <span className="text-xs font-medium text-muted-foreground">
+          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-accent">
+            <span className="font-medium text-muted-foreground text-xs">
               {session.user.name?.charAt(0).toUpperCase() || 'U'}
             </span>
           </div>
@@ -40,10 +44,10 @@ export default function BetterAuthHeader() {
 
   return (
     <Button
-      variant="ghost"
-      size="sm"
       asChild
-      className="h-7 px-2.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent rounded-sm transition-colors inline-flex items-center"
+      className="inline-flex h-7 items-center rounded-sm px-2.5 font-medium text-muted-foreground text-xs transition-colors hover:bg-accent hover:text-foreground"
+      size="sm"
+      variant="ghost"
     >
       <Link to="/login">{m.auth_sign_in()}</Link>
     </Button>

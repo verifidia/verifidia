@@ -20,11 +20,16 @@ const RETRY_INSTRUCTIONS =
 
 // -- Citation extraction --
 
-type SearchResult = { url: string; title: string; text: string }
+interface SearchResult {
+  text: string
+  title: string
+  url: string
+}
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: citation extraction requires nested iteration over response structure
 export function extractCitations(
   response: OpenAI.Responses.Response,
-  limit: number,
+  limit: number
 ): SearchResult[] {
   const citationMap = new Map<string, SearchResult>()
 
@@ -39,8 +44,14 @@ export function extractCitations(
               annotation.type === 'url_citation' &&
               !citationMap.has(annotation.url)
             ) {
-              const start = Math.max(0, annotation.start_index - SNIPPET_CONTEXT_CHARS)
-              const end = Math.min(partText.length, annotation.end_index + SNIPPET_CONTEXT_CHARS)
+              const start = Math.max(
+                0,
+                annotation.start_index - SNIPPET_CONTEXT_CHARS
+              )
+              const end = Math.min(
+                partText.length,
+                annotation.end_index + SNIPPET_CONTEXT_CHARS
+              )
               const snippet = partText.slice(start, end).trim()
 
               citationMap.set(annotation.url, {
@@ -62,7 +73,7 @@ export function extractCitations(
 
 export async function searchWeb(
   query: string,
-  options?: { numResults?: number },
+  options?: { numResults?: number }
 ) {
   const limit = options?.numResults ?? 5
 
@@ -74,7 +85,9 @@ export async function searchWeb(
   })
 
   const results = extractCitations(response, limit)
-  if (results.length > 0) return { results }
+  if (results.length > 0) {
+    return { results }
+  }
 
   const retryResponse = await openai.responses.create({
     model: AI_MODEL,
@@ -90,7 +103,7 @@ export async function searchWeb(
 
 export async function searchWebDeep(
   query: string,
-  options?: { numResults?: number },
+  options?: { numResults?: number }
 ) {
   const limit = options?.numResults ?? 5
 
@@ -104,7 +117,9 @@ export async function searchWebDeep(
     })
 
     const results = extractCitations(response, limit)
-    if (results.length > 0) return { results }
+    if (results.length > 0) {
+      return { results }
+    }
   } catch {
     // reasoning param unsupported — fall through to retry without it
   }
@@ -125,7 +140,7 @@ export async function generateStructured<T>(
   schema: ZodType<T>,
   systemPrompt: string,
   userPrompt: string,
-  schemaName: string = 'response',
+  schemaName = 'response'
 ): Promise<T> {
   const completion = await openai.chat.completions.parse({
     model: AI_MODEL,
@@ -150,7 +165,7 @@ export async function generateStructured<T>(
 
 export async function researchAndSynthesize(
   query: string,
-  systemPrompt: string,
+  systemPrompt: string
 ): Promise<string> {
   const response = await openai.responses.create({
     model: AI_MODEL,
@@ -169,7 +184,7 @@ export async function researchAndSynthesize(
 
 export async function researchAndSynthesizeDeep(
   query: string,
-  systemPrompt: string,
+  systemPrompt: string
 ): Promise<string> {
   try {
     const response = await openai.responses.create({
@@ -180,7 +195,9 @@ export async function researchAndSynthesizeDeep(
       reasoning: { effort: 'high' },
     })
 
-    if (response.output_text) return response.output_text
+    if (response.output_text) {
+      return response.output_text
+    }
   } catch {
     // reasoning param unsupported — fall through
   }

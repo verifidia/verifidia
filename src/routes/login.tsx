@@ -1,10 +1,10 @@
-import { useState } from 'react'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
-import { authClient } from '#/lib/auth-client'
+import { useState } from 'react'
 import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
 import { Label } from '#/components/ui/label'
-import * as m from '#/paraglide/messages'
+import { authClient } from '#/lib/auth-client'
+import { m } from '#/paraglide/messages'
 
 export const Route = createFileRoute('/login')({ component: LoginPage })
 
@@ -31,7 +31,7 @@ function LoginPage() {
       return
     }
 
-    void navigate({ to: '/' })
+    navigate({ to: '/' })
   }
 
   return (
@@ -39,70 +39,89 @@ function LoginPage() {
       <div className="w-full max-w-[340px]">
         {/* Heading */}
         <div className="mb-8 text-center">
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">
+          <h1 className="font-bold text-2xl text-foreground tracking-tight">
             {m.auth_sign_in_heading()}
           </h1>
-          <p className="mt-2 text-sm text-muted-foreground">
+          <p className="mt-2 text-muted-foreground text-sm">
             {m.auth_sign_in_subheading()}
           </p>
         </div>
 
         {/* Form */}
-        <form onSubmit={(e) => void handleSubmit(e)} className="space-y-5">
+        <form
+          className="space-y-5"
+          onSubmit={(e) => {
+            handleSubmit(e)
+          }}
+        >
           <div className="space-y-1.5">
-            <Label htmlFor="email" className="text-xs font-medium text-muted-foreground">{m.auth_email()}</Label>
+            <Label
+              className="font-medium text-muted-foreground text-xs"
+              htmlFor="email"
+            >
+              {m.auth_email()}
+            </Label>
             <Input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+              aria-describedby={error ? 'login-error' : undefined}
+              aria-invalid={error ? true : undefined}
               autoComplete="email"
               autoFocus
-              className="h-9 bg-transparent border-input rounded-sm shadow-none focus-visible:ring-1 focus-visible:ring-ring"
-              aria-invalid={error ? true : undefined}
-              aria-describedby={error ? "login-error" : undefined}
+              className="h-9 rounded-sm border-input bg-transparent shadow-none focus-visible:ring-1 focus-visible:ring-ring"
+              id="email"
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              type="email"
+              value={email}
             />
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="password" className="text-xs font-medium text-muted-foreground">{m.auth_password()}</Label>
+            <Label
+              className="font-medium text-muted-foreground text-xs"
+              htmlFor="password"
+            >
+              {m.auth_password()}
+            </Label>
             <Input
+              aria-describedby={error ? 'login-error' : undefined}
+              aria-invalid={error ? true : undefined}
+              autoComplete="current-password"
+              className="h-9 rounded-sm border-input bg-transparent shadow-none focus-visible:ring-1 focus-visible:ring-ring"
               id="password"
-              type="password"
-              value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              autoComplete="current-password"
-              className="h-9 bg-transparent border-input rounded-sm shadow-none focus-visible:ring-1 focus-visible:ring-ring"
-              aria-invalid={error ? true : undefined}
-              aria-describedby={error ? "login-error" : undefined}
+              type="password"
+              value={password}
             />
           </div>
 
           <div aria-live="polite">
             {error ? (
-              <p id="login-error" className="text-xs text-destructive font-medium" role="alert">
+              <p
+                className="font-medium text-destructive text-xs"
+                id="login-error"
+                role="alert"
+              >
                 {error}
               </p>
             ) : null}
           </div>
 
           <Button
-            type="submit"
-            className="w-full h-9 rounded-sm shadow-none font-medium"
+            className="h-9 w-full rounded-sm font-medium shadow-none"
             disabled={submitting}
+            type="submit"
           >
             {submitting ? m.auth_submitting() : m.auth_sign_in()}
           </Button>
         </form>
 
         {/* Footer link */}
-        <p className="mt-6 text-center text-sm text-muted-foreground">
+        <p className="mt-6 text-center text-muted-foreground text-sm">
           {m.auth_no_account()}{' '}
           <Link
+            className="rounded-sm font-medium text-foreground underline decoration-border underline-offset-4 outline-none transition-colors hover:decoration-foreground focus-visible:ring-2 focus-visible:ring-ring"
             to="/signup"
-            className="font-medium text-foreground underline underline-offset-4 decoration-border hover:decoration-foreground transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
           >
             {m.auth_no_account_link()}
           </Link>

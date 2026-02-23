@@ -28,16 +28,24 @@ export const user = pgTable('user', {
   email: text('email').notNull().unique(),
   emailVerified: boolean('email_verified').notNull().default(false),
   image: text('image'),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
 })
 
 export const session = pgTable('session', {
   id: idColumn('id'),
   expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
   token: text('token').notNull().unique(),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   ipAddress: text('ip_address'),
   userAgent: text('user_agent'),
   userId: text('user_id')
@@ -55,12 +63,20 @@ export const account = pgTable('account', {
   accessToken: text('access_token'),
   refreshToken: text('refresh_token'),
   idToken: text('id_token'),
-  accessTokenExpiresAt: timestamp('access_token_expires_at', { withTimezone: true }),
-  refreshTokenExpiresAt: timestamp('refresh_token_expires_at', { withTimezone: true }),
+  accessTokenExpiresAt: timestamp('access_token_expires_at', {
+    withTimezone: true,
+  }),
+  refreshTokenExpiresAt: timestamp('refresh_token_expires_at', {
+    withTimezone: true,
+  }),
   scope: text('scope'),
   password: text('password'),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
 })
 
 export const verification = pgTable('verification', {
@@ -68,8 +84,12 @@ export const verification = pgTable('verification', {
   identifier: text('identifier').notNull(),
   value: text('value').notNull(),
   expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
 })
 
 export const documents = pgTable('documents', {
@@ -80,15 +100,23 @@ export const documents = pgTable('documents', {
   content: text('content'),
   title: text('title'),
   status: text('status')
-    .$type<'queued' | 'generating' | 'generated' | 'verified' | 'flagged' | 'failed'>()
+    .$type<
+      'queued' | 'generating' | 'generated' | 'verified' | 'flagged' | 'failed'
+    >()
     .notNull()
     .default('queued'),
   verificationScore: integer('verification_score'),
   verificationDetails: jsonb('verification_details'),
   sources: jsonb('sources'),
-  requestedBy: text('requested_by').references(() => user.id, { onDelete: 'set null' }),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  requestedBy: text('requested_by').references(() => user.id, {
+    onDelete: 'set null',
+  }),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   staleAt: timestamp('stale_at', { withTimezone: true })
     .notNull()
     .default(sql`now() + interval '30 days'`),
@@ -108,17 +136,30 @@ export const documentTranslations = pgTable(
       .notNull()
       .generatedAlwaysAs(
         () =>
-          sql`to_tsvector('simple', coalesce(title, '') || ' ' || coalesce(content, ''))`,
+          sql`to_tsvector('simple', coalesce(title, '') || ' ' || coalesce(content, ''))`
       ),
-    status: text('status').$type<'queued' | 'translating' | 'translated' | 'failed'>().notNull().default('queued'),
+    status: text('status')
+      .$type<'queued' | 'translating' | 'translated' | 'failed'>()
+      .notNull()
+      .default('queued'),
     translatedAt: timestamp('translated_at', { withTimezone: true }),
-    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
   },
   (table) => [
-    uniqueIndex('document_translations_document_id_locale_idx').on(table.documentId, table.locale),
-    index('document_translations_search_vector_gin_idx').using('gin', table.searchVector),
-  ],
+    uniqueIndex('document_translations_document_id_locale_idx').on(
+      table.documentId,
+      table.locale
+    ),
+    index('document_translations_search_vector_gin_idx').using(
+      'gin',
+      table.searchVector
+    ),
+  ]
 )
 
 export const documentRevisions = pgTable('document_revisions', {
@@ -131,9 +172,16 @@ export const documentRevisions = pgTable('document_revisions', {
   content: text('content').notNull(),
   revisionNumber: integer('revision_number').notNull(),
   reason: text('reason')
-    .$type<'initial_generation' | 'refutation_update' | 'stale_refresh' | 'translation'>()
+    .$type<
+      | 'initial_generation'
+      | 'refutation_update'
+      | 'stale_refresh'
+      | 'translation'
+    >()
     .notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   createdBy: text('created_by'),
 })
 
@@ -146,7 +194,9 @@ export const refutations = pgTable('refutations', {
   userId: text('user_id')
     .notNull()
     .references(() => user.id, { onDelete: 'cascade' }),
-  category: text('category').$type<'factual_error' | 'outdated' | 'biased' | 'missing_context'>().notNull(),
+  category: text('category')
+    .$type<'factual_error' | 'outdated' | 'biased' | 'missing_context'>()
+    .notNull(),
   selectedText: text('selected_text').notNull(),
   startOffset: integer('start_offset').notNull(),
   endOffset: integer('end_offset').notNull(),
@@ -157,23 +207,41 @@ export const refutations = pgTable('refutations', {
   reasoning: text('reasoning'),
   suggestedCorrection: text('suggested_correction'),
   researchSources: jsonb('research_sources'),
-  status: text('status').$type<'pending' | 'processing' | 'reviewed' | 'applied'>().notNull().default('pending'),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  status: text('status')
+    .$type<'pending' | 'processing' | 'reviewed' | 'applied'>()
+    .notNull()
+    .default('pending'),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   resolvedAt: timestamp('resolved_at', { withTimezone: true }),
 })
 
 export const generationJobs = pgTable('generation_jobs', {
   id: idColumn('id'),
-  documentId: text('document_id').references(() => documents.id, { onDelete: 'set null' }),
+  documentId: text('document_id').references(() => documents.id, {
+    onDelete: 'set null',
+  }),
   type: text('type')
-    .$type<'initial_generation' | 'translation' | 'fact_check' | 'refutation_review' | 'stale_refresh'>()
+    .$type<
+      | 'initial_generation'
+      | 'translation'
+      | 'fact_check'
+      | 'refutation_review'
+      | 'stale_refresh'
+    >()
     .notNull(),
-  status: text('status').$type<'queued' | 'running' | 'completed' | 'failed'>().notNull().default('queued'),
+  status: text('status')
+    .$type<'queued' | 'running' | 'completed' | 'failed'>()
+    .notNull()
+    .default('queued'),
   locale: text('locale').notNull(),
   inputData: jsonb('input_data').notNull(),
   outputData: jsonb('output_data'),
   error: text('error'),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
   completedAt: timestamp('completed_at', { withTimezone: true }),
 })
 
